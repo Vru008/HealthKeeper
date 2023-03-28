@@ -4,8 +4,15 @@ import './Pages/AboutUs/aboutUs.css'
 
 function App() {
   return (
+    <>
+    <Home/>
     <AboutUs/>
+    </>
+    
   );
 }
 
 export default App;
+ neel
+
+ develop
