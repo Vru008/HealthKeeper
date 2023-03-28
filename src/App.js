@@ -1,11 +1,13 @@
-import logo from './logo.svg';
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import AboutUs from './Pages/AboutUs/AboutUs';
-import './Pages/AboutUs/aboutUs.css'
+import './Pages/Home/home.css';
+import Home from './Pages/Home/Home';
 
 function App() {
   return (
     <>
-    <Home/>
+    <Home />
     <AboutUs/>
     </>
     
@@ -13,6 +15,3 @@ function App() {
 }
 
 export default App;
- neel
-
- develop
