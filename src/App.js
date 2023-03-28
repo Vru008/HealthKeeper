@@ -1,18 +1,14 @@
-import logo from './logo.svg';
-import AboutUs from './Pages/AboutUs/AboutUs';
-import './Pages/AboutUs/aboutUs.css'
+import AboutUs from "./Pages/AboutUs/AboutUs";
+import "./Pages/AboutUs/aboutUs.css";
+import Home from "./Pages/home/Home";
 
 function App() {
   return (
     <>
-    <Home/>
-    <AboutUs/>
+      {/* <Home/> */}
+      <AboutUs />
     </>
-    
   );
 }
 
 export default App;
- neel
-
- develop
