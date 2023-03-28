@@ -2,10 +2,11 @@ import React from 'react'
 
 const Home = () => {
   return (
-      <div className="container-fluid">
+
+  <div className="container-fluid">
     <div className="row header">
         <div className="col-md-3">
-          <img src ="logo.jpg" alt="about"/>
+          <img src ="/image/logo.jpg" alt="about"/>
         </div>
         <div className="col-md-9 navbar text-decoration-none " >
          <strong><a href="#home" className="text-decoration-none">Home</a></strong>
@@ -18,7 +19,7 @@ const Home = () => {
     </div>    
     <div className="row">
       <div className="column bg">
-        <img src="doctorbg.jpg" alt="sorry"/>
+        <img src="/image/doctorbg.jpg" alt="sorry"/>
           <div className="row">
             <div className="column centered">
               Making HealthCare<br/>Better Together
@@ -76,16 +77,16 @@ const Home = () => {
        </div>
       </div>
     <div className="col-md-6 dr">
-       <img src="ad6906c1-2863-4e45-92bc-633de4eea42f.jpg" />
+       <img src="/image/ad6906c1-2863-4e45-92bc-633de4eea42f.jpg"/>
         <h3>Dr.Aashish Sabharwal</h3>
-        {/* <strong><p>Urologist,Robotic surgeon<br>MBBS,M.S,General surgery,DNB<br>New Delhi</p></strong> */}
+        <strong><p>Urologist,Robotic surgeon<br/>MBBS,M.S,General surgery,DNB<br/>New Delhi</p></strong>
     </div>
     <div className="col-md-6">
-       <img src="eb2b4fde-cef3-44f0-ab60-a7ade286efb1.jpg"/>
+       <img src="/image/eb2b4fde-cef3-44f0-ab60-a7ade286efb1.jpg"/>
         <h3>Dr.Sanjay Sachdeva</h3>
-        {/* <strong><p>Director-ENT<br>MBBS,DCH,MS<BR>New Delhi,India</p></strong> */}
+        <strong><p>Director-ENT<br/>MBBS,DCH,MS<br/>New Delhi,India</p></strong>
     </div>
-  </div>  
+  </div> 
       <div className="row">
         <div className="col-md-4">
           <h1>Why<br/>we?</h1>
@@ -101,6 +102,7 @@ const Home = () => {
 
 <footer className="text-center text-lg-start bg-light text-muted">
   <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+  
     <div className="me-5 d-none d-lg-block">
       <span><strong> connected with us on social networks:</strong></span>
     </div>
@@ -112,7 +114,6 @@ const Home = () => {
 <a href="#" className="fa faaa fa-instagram"></a>
     </div>
   </section>
-
   <section className="">
     <div className="container text-center text-md-start mt-5">
       <div className="row mt-3">
@@ -120,8 +121,9 @@ const Home = () => {
           <h6 className="text-uppercase fw-bold mb-4">
           <strong><i className="fas fa-gem me-3"></i>Healthkeeper</strong>
             </h6>
-            <img src ="logo.jpg" alt="about" />
+            <img src ="/image/logo.jpg" alt="about"/>
         </div>
+
         <div className="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
           <h6 className="text-uppercase fw-bold mb-4">
           <strong>Services</strong>
@@ -136,7 +138,6 @@ const Home = () => {
             <a href="#!" className="text-reset">Online Appoinment</a>
           </p>
         </div>
-
         <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
           <h6 className="text-uppercase fw-bold mb-4">
           <strong>link</strong>
@@ -157,9 +158,11 @@ const Home = () => {
             <a href="#!" className="text-reset">Hospital</a>
           </p>
         </div>
+        
 
         <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-          <h6 className="text-uppercase fw-bold mb-4"><strong>Contact</strong></h6>
+       
+          {/* <h6 className="text-uppercase fw-bold mb-4"><strong>Contact</strong></h6> */}
           <p className="faa"><i className="fa fa-home me-3"></i> Ahmedabad, 382418, India</p>
           <p className="faa">
             <i className="fa fa-envelope me-3"></i>
@@ -167,18 +170,23 @@ const Home = () => {
           </p>
           <p className="faa"><i className="fa fa-phone me-3"></i> + 01 234 567 88</p>
         </div>
+       
       </div>
+    
     </div>
   </section>
 
-  <div className="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+
+  
+  <div className="text-center p-4">
     © 2021 Copyright:
     <a className="text-reset fw-bold" href="Healthkeeper.com">Healthkeeper.com</a>
   </div>
+ 
    </footer>
-  </div>
-  
-  )
+
+</div>
+)
 }
 
-export default Home
+export default Home;
