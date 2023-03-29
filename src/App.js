@@ -1,16 +1,12 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './Pages/Home/home.css';
-import Home from './Pages/Home/Home';
-import AboutUs from "./Pages/AboutUs/AboutUs";
-import "./Pages/AboutUs/aboutUs.css";
+import logo from './logo.svg';
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Hosp from './Pages/Hospital/Hosp'
+// import './Pages/Hospital/hosp.css'
 
 function App() {
   return (
-    <>
-    <Home />
-    <AboutUs/>
-    </>
+    <Hosp/>
   );
 }
 
