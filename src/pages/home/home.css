@@ -1,0 +1,175 @@
+.container-fluid{
+  }
+  .header {
+    }
+    .col-md-3 img {
+      height: 120px;
+      width: 180px;
+    }
+
+  .navbar  {
+    color:rgb(46, 162, 238);
+    font-size: 23px;
+    padding: 20px;
+    float: right;
+  }
+  .bg {
+    height: 600px;
+    width: 100%;
+  }
+  .bg img {
+    width :100%;
+    height :590px;
+    position: relative;
+  }
+  .btn-lg1 { 
+    position:absolute;
+    top: 80%;
+    left: 56%;
+    height: 50px;
+    width: 150px;
+  } 
+  .btn-lg2 { 
+    position:absolute;
+    top: 80%;
+    left:68%;
+    height: 50px;
+    width: 300px;
+  } 
+  .centered {
+    position: absolute;
+    top: 45%;
+    left: 56%;
+    font-size:70px;
+    color:rgb(52, 51, 51);
+    font-family:'Gill Sans';  
+  }
+   .find{ 
+    text-align: center;
+    height: 150px;
+    width: 100%;
+    font-size: 70px;
+    margin-top: 20px;
+    padding-top: 20px;
+    color:rgb(46, 162, 238);
+    font-family:'Gill Sans';
+  }
+  .choose {
+    border: 2px solid black;
+  }
+     .state {
+     height: 100px;
+     width: 100%;
+     font-size: 40px;
+     text-align: center;
+    color:rgb(46, 162, 238);
+     border: 4px solid rgb(46, 162, 238); 
+     font-family:'Gill Sans';  
+  } 
+  .disease {
+    height: 100px;
+    width: 100%;
+    font-size: 40px;
+    text-align: center;
+   color:rgb(46, 162, 238);
+    border: 4px solid rgb(46, 162, 238); 
+    font-family:'Gill Sans';
+  }
+   .box {
+    border: 2px solid black;
+    color: white;;
+    width: 100%;
+    height: 200px; 
+    margin: 20px;
+    padding: 15px;
+  }
+  .boxes {
+    background-color: rgb(46, 162, 238);
+    color: white;
+    font-size: 45px;
+  }  
+  .gb{
+    background-image:url('../../../public/image/doctorbg5.jpg');
+  }
+  .special{
+    color: rgb(7, 7, 7);
+    text-align: center;
+    margin-top: 20px;
+    font-size: 200px;
+    font-style:oblique;
+  }
+  .col-md-6 img{
+    height: 300px;
+    width: 40%;
+     margin-top: 100px;
+     margin-left: 250px;
+   }
+  .col-md-6 h3  {
+    margin-left: 250px;
+    color:rgb(8, 8, 8);
+   }
+   .col-md-6 p  {
+    margin-left: 250px;
+    color:rgb(6, 6, 6);
+   }
+   .col-md-4 h1{
+    text-align: center;
+    font-size: 70px;
+    color: rgb(7, 7, 7);
+    margin-top: 50px;
+    font-family:'Times New Roman', Times, serif;
+   }
+   .col-md-8 h4{
+    color: rgb(46, 162, 238);
+    font-size: larger;
+    margin-top: 70px;
+    font-family:Times, serif;
+   }
+   .me-5 {
+    font-size: 25px;
+    margin: 15px;
+   }
+    .faaa {
+      padding: 20px;
+      font-size: 30px;
+      width: 50px;
+      text-align: center;
+      text-decoration: none;
+      margin: 5px 2px;
+  }
+   .fa-facebook {
+    background: #3B5998;
+    color: white;
+  }
+  
+  .fa-twitter {
+    background: #55ACEE;
+    color: white;
+  }
+  
+  .fa-google {
+    background: #dd4b39;
+    color: white;
+  }
+  
+  .fa-youtube {
+    background: #bb0000;
+    color: white;
+  }
+  
+  .fa-instagram {
+    background: #125688;
+    color: white;
+  }
+  .social link{
+    height: 100px;
+  }
+  .faa {
+    height: 18px;
+    text-align: justify;
+  }
+    @media screen and (max-width:1200px){
+     .col-md-9{
+       flex-direction:column;
+     }
+    }
