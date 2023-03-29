@@ -1,6 +1,6 @@
 import React from 'react'
-
-const aboutUs = () => {
+import '../AboutUs/aboutUs.css'
+const AboutUs = () => {
   return (
 
     <div className="container-fluid">
