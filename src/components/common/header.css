@@ -1,0 +1,13 @@
+* {
+    /* overflow: hidden; */
+}
+.col-md-3 img {
+    width: 180px;
+    /* border: 2px solid red; */
+  }
+
+  .col-md-9{
+    color: #2a487f;
+    font-size: 23px;
+    /* border: 2px solid red; */
+  }

@@ -35,6 +35,6 @@ const AboutUs = () => {
   )
 }
 
-export default aboutUs;
+export default AboutUs;
 
 
