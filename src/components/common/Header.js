@@ -8,7 +8,7 @@ const Header = () => {
 
     <div className="row header">
       <div className="col-md-3">
-        <img src ="/image/logo.jpg" alt="about"/>
+        <img src ="/image/logo.jpg" href="/Home" alt="about"/>
       </div>
       <div class="col-md-9 navbar text-decoration-none " >
         <strong><Link to="/Home" className="text-decoration-none">Home</Link></strong>

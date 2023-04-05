@@ -8,7 +8,7 @@ const AboutUs = () => {
     <div className="container-fluid">
         <div className="row">
             <div className="bg col-7 col-md-12">
-                <img src="./photos/bg.webp" alt=""/>
+                <img src="./" alt=""/>
             </div>
             <div className="content col-5 col-md-12">
                 <br/><br/>

@@ -10,12 +10,19 @@ import "./Pages/Doctor/doctor.css";
 import Hospital from "./Pages/Hospital/Hosp";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/common/Header";
+import Footer from "./components/common/Footer";
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { BsHeartFill, BsHeart } from "react-icons/bs";
 
 
 function App() {
   return (
     <>
       <Header />
+      <FaHeart />
+      <FaRegHeart />
+      <BsHeartFill />
+      <BsHeart />
       <Routes>
           <Route path="/" element={<Home />} />
           <Route path="AboutUs" element={<AboutUs />} />
@@ -25,6 +32,7 @@ function App() {
           
           
       </Routes>
+      <Footer />
     
       {/* <Home/>
       <AboutUs />
