@@ -1,0 +1,1023 @@
+{
+  "hospitals": [
+    {
+      "name": "Gujarat Cancer and Research Institute (GCRI)",
+      "speciality": "Oncology",
+      "img": "gujarat-cancer.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/mkQgfKoB8G31f4sF6"
+    },
+    {
+      "name": "Apollo CBCC Cancer Care",
+      "speciality": "Oncology",
+      "img": "apollo-hospital.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/DmSPuvB4Sg1LnbJw5"
+    },
+    {
+      "name": "HCG Cancer Centre",
+      "speciality": "Oncology",
+      "img": "hcg-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/zCzkfvtrNWJnXf9R9"
+    },
+    {
+      "name": "CIMS Hospital",
+      "speciality": "Oncology",
+      "img": "cims_logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/SzGCYP92TS9j5PQJ8"
+    },
+    {
+      "name": "Sterling Cancer Hospital",
+      "speciality": "Oncology",
+      "img": "sterling.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/7KDEreNrtxf1Zjry5"
+    },
+    {
+      "name": "Zydus Hospitals and Healthcare Research Pvt. Ltd.",
+      "speciality": "Oncology",
+      "img": "zydus.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/SvR1S9anKt1ioxQ3A"
+    },
+    {
+      "name": "Shalby Hospitals",
+      "speciality": "Oncology",
+      "img": "Shalby-Hospitals-logo.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/TL7nVzw8xbJDEDoC8"
+    },
+    {
+      "name": "Wockhardt Hospitals",
+      "speciality": "Oncology",
+      "img": "wockhardt-hospitals-logo.png",
+      "location": "Surat",
+      "url": "https://goo.gl/maps/3At4hTYrM6dcfBj48"
+    },
+    {
+      "name": "Narayana Multispeciality Hospital",
+      "speciality": "Oncology",
+      "img": "narayana-hos-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/EQjC5HkHDFSvDhwaA"
+    },
+    {
+      "name": "Unicare Hospital",
+      "speciality": "Oncology",
+      "img": "unicare-logo.jpg",
+      "location": "Surat",
+      "url": "https://goo.gl/maps/xrRGHB9y4X6aMAFfA"
+    },
+    {
+      "name": "Wellspring IVF & Women's Hospital",
+      "speciality": "IVF",
+      "img": "well-spring.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/A5oDfK7AJioP3onSA"
+    },
+    {
+      "name": "Sumiran Women's Hospital",
+      "speciality": "IVF",
+      "img": "sumiran-women.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/ZfkBr7jhBLmNEhJDA"
+    },
+    {
+      "name": "Bavishi Fertility Institute",
+      "speciality": "IVF",
+      "img": "bavishi-fertility.png",
+      "location": "Surat",
+      "url": "https://goo.gl/maps/gjVeSShA62YPi7DYA"
+    },
+    {
+      "name": "Sneh Hospitals and IVF Center",
+      "speciality": "IVF",
+      "img": "Sneh-IVF-hos.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/QMRZnrSYHeE3m82t6"
+    },
+    {
+      "name": "Shree IVF Clinic",
+      "speciality": "IVF",
+      "img": "sree-ivf.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/rytiR7L5iCXdVwgJA"
+    },
+    {
+      "name": "Vijaya Maternity Home and Metro IVF Center",
+      "speciality": "IVF",
+      "img": "vijaya-mateernity.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/Q6mPswBzyApYaMNh6"
+    },
+    {
+      "name": "Sunflower Women's Hospital",
+      "speciality": "IVF",
+      "img": "sunflower-hos.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/bwMy8DDrDumzRBXLA"
+    },
+    {
+      "name": "Nova IVF Fertility",
+      "speciality": "IVF",
+      "img": "nova-ivf.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/atLQK6Y5F5EVzpG56"
+    },
+    {
+      "name": "Dr. Nisarg Dharaiya's IVF Clinic",
+      "speciality": "IVF",
+      "img": "Dr.-Nisarg-IVF.png",
+      "location": "Rajkot",
+      "url": "https://goo.gl/maps/uNHuFz8vfjMLpFhL9"
+    },
+    {
+      "name": "Wings IVF Women's Hospital",
+      "speciality": "IVF",
+      "img": "wings-ivf.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/KaH7myHXJBJXcjbX9"
+    },
+    {
+      "name": "CIMS Hospital",
+      "speciality": "Cardiology",
+      "img": "cims_logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/SzGCYP92TS9j5PQJ8"
+    },
+    {
+      "name": "Sterling Hospital",
+      "speciality": "Cardiology",
+      "img": "sterling.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/656HjTmw2ftP995W8"
+    },
+    {
+      "name": "Apex Heart Institute",
+      "speciality": "Cardiology",
+      "img": "apex-heart.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/G5hhJxndBHrYULS59"
+    },
+    {
+      "name": "SAL Hospital and Medical Institute",
+      "speciality": "Cardiology",
+      "img": "sal-hos.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/1UJq4mWx7j6GQR4MA"
+    },
+    {
+      "name": "Zydus Hospitals and Healthcare Research Pvt. Ltd.",
+      "speciality": "Cardiology",
+      "img": "zydus.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/SvR1S9anKt1ioxQ3A"
+    },
+    {
+      "name": "Shalby Hospitals",
+      "speciality": "Cardiology",
+      "img": "Shalby-Hospitals-logo.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/TL7nVzw8xbJDEDoC8"
+    },
+    {
+      "name": "Narayana Multispeciality Hospital",
+      "speciality": "Cardiology",
+      "img": "narayana-hos-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/EQjC5HkHDFSvDhwaA"
+    },
+    {
+      "name": "Krishna Heart Institute",
+      "speciality": "Cardiology",
+      "img": "krishna-heart.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/2CcPzvQT1CxpHz4b8"
+    },
+    {
+      "name": "Shreeji Hospital",
+      "speciality": "Cardiology",
+      "img": "shriji-heart.jpg",
+      "location": "Vadodara",
+      "url": "https://goo.gl/maps/sfyKYKSKw976YYsKA"
+    },
+    {
+      "name": "Bhailal Amin General Hospital",
+      "speciality": "Cardiology",
+      "img": "bhailal-amin.png",
+      "location": "Vadodara",
+      "url": "https://goo.gl/maps/szG3XhdBfzuh66if9"
+    },
+    {
+      "name": "Shalby Hospitals",
+      "speciality": "orthology",
+      "img": "Shalby-Hospitals-logo.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/TL7nVzw8xbJDEDoC8"
+    },
+    {
+      "name": "HCG Hospital",
+      "speciality": "orthology",
+      "img": "hcg-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/zCzkfvtrNWJnXf9R9"
+    },
+    {
+      "name": "CIMS Hospital",
+      "speciality": "orthology",
+      "img": "cims_logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/SzGCYP92TS9j5PQJ8"
+    },
+    {
+      "name": "Sterling Hospital",
+      "speciality": "orthology",
+      "img": "sterling.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/7KDEreNrtxf1Zjry5"
+    },
+    {
+      "name": "Narayana Multispeciality Hospital",
+      "speciality": "orthology",
+      "img": "narayana-hos-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/EQjC5HkHDFSvDhwaA"
+    },
+    {
+      "name": "Apollo Hospitals",
+      "speciality": "orthology",
+      "img": "apollo-hospital.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/TULNzizydGGDJ5Rw6"
+    },
+    {
+      "name": "Zydus Hospitals and Healthcare Research Pvt. Ltd.",
+      "speciality": "orthology",
+      "img": "zydus.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/SvR1S9anKt1ioxQ3A"
+    },
+    {
+      "name": "Sanjivani Super Speciality Hospital",
+      "speciality": "orthology",
+      "img": "sanjivani-ortho.png",
+      "location": "Rajkot",
+      "url": "https://goo.gl/maps/o3qLfjtzQh7sqVXp7"
+    },
+    {
+      "name": "Sterling Hospital",
+      "speciality": "orthology",
+      "img": "sterling.png",
+      "location": "Rajkot",
+      "url": "https://goo.gl/maps/M16Yuz2J9NHeZWkJA"
+    },
+    {
+      "name": "Sunshine Global Hospital",
+      "speciality": "orthology",
+      "img": "sunshine.png",
+      "location": "Vadodara",
+      "url": "https://goo.gl/maps/upumpzz3HEJz3eFt8"
+    },
+    {
+      "name": "Sterling Hospital",
+      "speciality": "Neurology",
+      "img": "sterling.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/qp1gNUgpNjNCRtgM6"
+    },
+    {
+      "name": "CIMS Hospital",
+      "speciality": "Neurology",
+      "img": "cims_logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/SzGCYP92TS9j5PQJ8"
+    },
+    {
+      "name": "HCG Hospital",
+      "speciality": "Neurology",
+      "img": "hcg-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/zCzkfvtrNWJnXf9R9"
+    },
+    {
+      "name": "Zydus Hospitals and Healthcare Research Pvt. Ltd.",
+      "speciality": "Neurology",
+      "img": "zydus.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/SvR1S9anKt1ioxQ3A"
+    },
+    {
+      "name": "Narayana Multispeciality Hospital",
+      "speciality": "Neurology",
+      "img": "narayana-hos-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/EQjC5HkHDFSvDhwaA"
+    },
+    {
+      "name": "Shalby Hospitals",
+      "speciality": "Neurology",
+      "img": "Shalby-Hospitals-logo.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/TL7nVzw8xbJDEDoC8"
+    },
+    {
+      "name": "Apollo Hospitals",
+      "speciality": "Neurology",
+      "img": "apollo-hospital.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/TULNzizydGGDJ5Rw6"
+    },
+    {
+      "name": "NeuroGen Brain and Spine Institute",
+      "speciality": "Neurology",
+      "img": "neurogen-neuro.jpg",
+      "location": "Surat",
+      "url": "https://goo.gl/maps/diR9ppcppjazCT7r9"
+    },
+    {
+      "name": "Advait Neuro-Care Pvt. Ltd.",
+      "speciality": "Neurology",
+      "img": "Advaith-Logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/HJJRDacLAbh4knfT6"
+    },
+    {
+      "name": "Arpan Neurology Center",
+      "speciality": "Neurology",
+      "img": "Arpan-neuro.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/1bH2mEdFznmmq4Y1A"
+    },
+    {
+      "name": "Shroff Eye Hospital",
+      "speciality": "Ophthalmology",
+      "img": "shroff-eye.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/usCuSw39DGcE76YP9"
+    },
+    {
+      "name": "C H Nagri Eye Hospital",
+      "speciality": "Ophthalmology",
+      "img": "nagri-eye.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/waMZQ8P6LjZxCUhp8"
+    },
+    {
+      "name": "Iladevi Cataract & IOL Research Centre",
+      "speciality": "Ophthalmology",
+      "img": "Ila-devi-eye-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/LcNLMbUjQsugwZ3k7"
+    },
+    {
+      "name": "Raghudeep Eye Hospital",
+      "speciality": "Ophthalmology",
+      "img": "raghudeep-eye.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/8yfkUPk4BsWus6mE9"
+    },
+    {
+      "name": "Centre for Sight",
+      "speciality": "Ophthalmology",
+      "img": "centre-for-sight.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/iChw7ojmpR3kLibVA"
+    },
+    {
+      "name": "Drashti Netralaya",
+      "speciality": "Ophthalmology",
+      "img": "drishti-eye.jpg",
+      "location": "Vadodara",
+      "url": "https://goo.gl/maps/oHUVW3oDBG6uxgnC6"
+    },
+    {
+      "name": "Vasan Eye Care Hospital",
+      "speciality": "Ophthalmology",
+      "img": "vasan-eye.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/eHGg9SLWyRJSPDke8"
+    },
+    {
+      "name": "Eye-Q Super Specialty Eye Hospital",
+      "speciality": "Ophthalmology",
+      "img": "eye-q.jpg",
+      "location": "Surat",
+      "url": "https://goo.gl/maps/zfkGyzFMZCgaPHVQ7"
+    },
+    {
+      "name": "Navkar Eye Care Hospital",
+      "speciality": "Ophthalmology",
+      "img": "navkar-eye.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/7WwhqJ4yU6DpgA8S8"
+    },
+    {
+      "name": "Netradham Eye Hospital",
+      "speciality": "Ophthalmology",
+      "img": "nethradham-eye.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/GR448xLPkTqfUsJKA"
+    },
+    {
+      "name": "CIMS Hospital",
+      "speciality": "nephrology",
+      "img": "cims_logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/mLNumLssgTh7MqjRA"
+    },
+    {
+      "name": "Sterling Hospital",
+      "speciality": "nephrology",
+      "img": "sterling.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/TruuGpbhLUYG91wv6"
+    },
+    {
+      "name": "HCG Hospital",
+      "speciality": "nephrology",
+      "img": "hcg-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/zCzkfvtrNWJnXf9R9"
+    },
+    {
+      "name": "Narayana Multispeciality Hospital",
+      "speciality": "nephrology",
+      "img": "narayana-hos-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/EQjC5HkHDFSvDhwaA"
+    },
+    {
+      "name": "Zydus Hospitals and Healthcare Research Pvt. Ltd.",
+      "speciality": "nephrology",
+      "img": "zydus.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/aQs4fyBBx6LhdfDH7"
+    },
+    {
+      "name": "Shalby Hospitals",
+      "speciality": "nephrology",
+      "img": "Shalby-Hospitals-logo.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/TL7nVzw8xbJDEDoC8"
+    },
+    {
+      "name": "Apollo Hospitals",
+      "speciality": "nephrology",
+      "img": "apollo-hospital.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/Ua74QSVhjTjXoagQ8"
+    },
+    {
+      "name": "Kidneyline Healthcare",
+      "speciality": "nephrology",
+      "img": "kidneyline.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/1Cou4Gd3SuUZrVjx7"
+    },
+    {
+      "name": "Gujarat Kidney Foundation",
+      "speciality": "nephrology",
+      "img": "gujarat-kidney.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/xyYTKWD6MntMS4b38"
+    },
+    {
+      "name": "Sanjivani Super Speciality Hospital",
+      "speciality": "nephrology",
+      "img": "sanjivani-ortho.png",
+      "location": "Rajkot",
+      "url": "https://goo.gl/maps/o3qLfjtzQh7sqVXp7"
+    },
+    {
+      "name": "CIMS Hospital",
+      "speciality": "urology",
+      "img": "cims_logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/mLNumLssgTh7MqjRA"
+    },
+    {
+      "name": "Shalby Hospitals",
+      "speciality": "urology",
+      "img": "Shalby-Hospitals-logo.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/TL7nVzw8xbJDEDoC8"
+    },
+    {
+      "name": "Sterling Hospitals",
+      "speciality": "urology",
+      "img": "sterling.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/TruuGpbhLUYG91wv6"
+    },
+    {
+      "name": "Apollo Hospitals",
+      "speciality": "urology",
+      "img": "apollo-hospital.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/Ua74QSVhjTjXoagQ8"
+    },
+    {
+      "name": "Narayana Multispeciality Hospital",
+      "speciality": "urology",
+      "img": "narayana-hos-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/EQjC5HkHDFSvDhwaA"
+    },
+    {
+      "name": "Zydus Hospitals",
+      "speciality": "urology",
+      "img": "zydus.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/aQs4fyBBx6LhdfDH7"
+    },
+    {
+      "name": "Uro Care Hospital",
+      "speciality": "urology",
+      "img": "uro-care.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/cLJ9cm3K1mccvnZbA"
+    },
+    {
+      "name": "Asian Bariatrics and Urology Center",
+      "speciality": "urology",
+      "img": "asian-bariatrics-uro.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/W3uwpv6ZKyAuv8Pu7"
+    },
+    {
+      "name": "Shalby Hospital",
+      "speciality": "urology",
+      "img": "Shalby-Hospitals-logo.jpg",
+      "location": "Surat",
+      "url": "https://goo.gl/maps/VUqFN5kH9W7cM5iPA"
+    },
+    {
+      "name": "Sanjivani Super Speciality Hospital",
+      "speciality": "urology",
+      "img": "sanjivani-ortho.png",
+      "location": "Surat",
+      "url": "https://goo.gl/maps/fVYQzAVKMXZSZLZQ7"
+    },
+    {
+      "name": "Sterling Hospitals",
+      "speciality": "surgeons",
+      "img": "sterling.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/EWu3fSR18ZxeYNQk6"
+    },
+    {
+      "name": "HCG Cancer Centre",
+      "speciality": "surgeons",
+      "img": "hcg-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/zCzkfvtrNWJnXf9R9"
+    },
+    {
+      "name": "Apollo Hospitals",
+      "speciality": "surgeons",
+      "img": "apollo-hospital.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/xgJ7fnHC4becqWmA7"
+    },
+    {
+      "name": "Narayana Multispeciality Hospital",
+      "speciality": "surgeons",
+      "img": "narayana-hos-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/EQjC5HkHDFSvDhwaA"
+    },
+    {
+      "name": "Shalby Hospitals",
+      "speciality": "surgeons",
+      "img": "Shalby-Hospitals-logo.jpg",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/3ABkbZ4DsDcpzqt57"
+    },
+    {
+      "name": "Zydus Hospitals",
+      "speciality": "surgeons",
+      "img": "zydus.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/aQs4fyBBx6LhdfDH7"
+    },
+    {
+      "name": "CIMS Hospital",
+      "speciality": "surgeons",
+      "img": "cims_logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/oyeLRq6DAhGtFajo7"
+    },
+    {
+      "name": "Wockhardt Hospitals",
+      "speciality": "surgeons",
+      "img": "wockhardt-hospitals-logo.png",
+      "location": "Ahmedabad",
+      "url": "https://goo.gl/maps/3At4hTYrM6dcfBj48"
+    },
+    {
+      "name": "Siddhi Vinayak Hospital",
+      "speciality": "surgeons",
+      "img": "siddhi-vinayak-surg.png",
+      "location": "Surat",
+      "url": "https://goo.gl/maps/XGuW3V3vLUgaUtis9"
+    },
+    {
+      "name": "Shalby Hospital",
+      "speciality": "surgeons",
+      "img": "Shalby-Hospitals-logo.jpg",
+      "location": "Surat",
+      "url": "https://goo.gl/maps/VUqFN5kH9W7cM5iPA"
+    }
+  ],
+  "doctors": [
+    {
+      "name": "Dr. Darshit Dalal",
+      "speciality": "Oncology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "26 years",
+      "description": "Dr. Darshit Dalal is a renowned doctor in Ahmedabad. He specialises in Oncology. He has been practicing medicine for over 26 years. Apart from His association with different hospitals, He has put His skills to the test in many other ways. He has been an active member of various organisations, including Indian Society of Oncology,, Gujarat State Surgeons Association. Dr. Darshit Dalal finished His MS - General Surgery from Gujarat University, India. He also has a Senior Residency in Surgical Oncology from Tata Memorial Hospital, Mumbai."
+    },
+    {
+      "name": "Dr. Akash Shah",
+      "speciality": "Oncology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "9 years",
+      "description": "Dr. Akash Shah is an esteemed doctor practising Oncology in Ahmedabad. He has more than 9 years of experience. Beyond His affiliation with many hospitals, He has been professionally active in many other ways. Dr. Akash Shah is an alum of Baroda University where He earned a MBBS. Thereafter, Dr. Akash Shah earned DM - Medical Oncology from Cancer Institute (WIA), Adyar."
+    },
+    {
+      "name": "Dr. Malhar Patel",
+      "speciality": "Oncology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "9 years",
+      "description": "Ahmedabad-based Dr. Malhar Patel is a well-known doctor specialising in Oncology. Dr. Malhar Patel has been practicing medicine for over 9 years. Dr. Malhar Patel practices medicine at CIMS Cancer Center, CIMS Hospital. Dr. Malhar Patel has worked with CBCC Apollo, Jaslok Hospital & Research Center in the past. Dr. Malhar Patel specialises in Cancer Screening (Preventive), Brachytherapy (Internal Radiation Therapy), Radiotherapy, Stereotactic Radio Surgery (SRS), Stereotactic Body Radio Therapy (SBRT), Image Guided Radio Therapy (IGRT). Besides being affiliated with many hospitals, Dr. Malhar Patel has been professionally active in other important ways. Dr. Malhar Patel is also a member of prestigious institutions such as Association of Radiation Oncologists of India (AROI). Dr. Malhar Patel is an alum of Jaslok Hospital and Research Centre, Mumbai where Dr. Malhar Patel earned a DNB - Radiation Oncology. After that, Dr. Malhar Patel went on to do MBBS from Dr. D Y Patil University, Pune."
+    },
+    {
+      "name": "Dr. Bhavesh B. Parekh",
+      "speciality": "Oncology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "18 years",
+      "description": "Dr. Bhavesh B. Parekh is a well-known doctor based in Ahmedabad who specialises in Oncology. With 18 years of experience, Dr. Bhavesh B. Parekh has been associated with various prestigious hospitals and clinics. Dr. Bhavesh B. Parekh currently works at HCG Cancer Centre. Some of the places where Dr. Bhavesh B. Parekh has worked in the past include B J M C, B J M C, B J M C, GCRI, Shubham Hospital. Dr. Bhavesh B. Parekh specialises in Hormone Therapy For Breast Cancer, Cancer Treatment, Medical Oncology, Hemato Oncology."
+    },
+    {
+      "name": "Dr. Amol Agarwal",
+      "speciality": "Cardiology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "Over 23 years",
+      "description": "Dr. Amol Agarwal is a well-known doctor based in Ahmedabad. He specializes in Heart Conditions, Complex Trauma, Cardiac Procedure, Carotid Angioplasty And Stenting, Chest Pain Treatment, Implantable Cardioverter-Defibrillators (Icds) and has been practicing medicine for over 23 years. Dr. Amol Agarwal is affiliated with many hospitals and has been an active member of various organizations including MNAMS, FACC. He completed MBBS from B J Medical College Ahemdabad and also has a DNB - Cardiology from G B Pant Hospital / Moulana Azad Medical College, New Delhi."
+    },
+    {
+      "name": "Dr. Sandeep Agrawal",
+      "speciality": "Cardiology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "Over 18 years",
+      "description": "Dr. Sandeep Agrawal is a renowned doctor in Ahmedabad who specializes in Cardiology and Pacemaker Implantation. He has been practicing medicine for over 18 years and is affiliated with multiple hospitals. Dr. Sandeep Agrawal earned a MBBS from King Edward Memorial Hospital and Seth Gordhandas Sunderdas Medical College and also has a FRCS - General Surgery from Yorkhire University - UK."
+    },
+    {
+      "name": "Dr. URMIL GIRISHBHAI SHAH",
+      "speciality": "Cardiology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "Over 23 years",
+      "description": "Dr. URMIL GIRISHBHAI SHAH is a well-known doctor based in Ahmedabad who has been practicing medicine for over 23 years. He is affiliated with multiple hospitals and has earned an MD - Cardiology from Gujarat University, India. Post that Dr. URMIL GIRISHBHAI SHAH went on to take DM - Cardiology from Gujarat University, India."
+    },
+    {
+      "name": "Dr. Tushar Sharma",
+      "speciality": "Cardiology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "More than 3 years",
+      "description": "Dr. Tushar Sharma is a renowned doctor in Ahmedabad who specializes in Cardiology, Vascular Surgery, Thoracic surgery, and Cardiac Surgery. He has more than 3 years of experience and practices medicine at VS Hospital. Dr. Tushar Sharma has worked with Shalby hospital in the past and completed MCh - Cardio Thoracic and Vascular Surgery from Smt. NHL Municipal Medical College, Ahmedabad."
+    },
+    {
+      "name": "Dr. MILAN CHINUBHAI CHAG",
+      "speciality": "Cardiology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "29 years",
+      "description": "Dr. MILAN CHINUBHAI CHAG is an esteemed doctor practicing Cardiology in Ahmedabad. He has 29 years of experience and has been associated with various prestigious hospitals and clinics. Dr. MILAN CHINUBHAI CHAG graduated with a MD - Cardiology from Gujarat University, India and also has a DM."
+    },
+    {
+      "name": "Dr. Bhumir Chauhan",
+      "speciality": "Neurology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "7 years",
+      "description": "Ahmedabad-based Dr. Bhumir Chauhan is a well-known doctor specialising in Neurology. With 7 years of experience, He has been associated with various prestigious hospitals and clinics. Dr. Bhumir Chauhan is now working with Zydus Hospital, Ahmedabad. Some of the places where Dr. Bhumir Chauhan has worked in the past include Narayana Health City, Bangalore, Narayana Health City, Bangalore, LG Hospital & AMCMET Medical College, Ahmedabad, VS Hospital, Ahmedabad. Dr. Bhumir Chauhan specialises in Dementia Treatment, Epilepsy Treatment, Vertigo Treatment, stroke rehab, Nerve and Muscle Disorders, Neuromuscular Disorders. Beyond His affiliation with many hospitals, He has been professionally active in many other ways. He is a member of Ahmedabad Medical Association, Indian Medical Association (IMA). He graduated with a DNB - Neurology from Narayana Hrudayalaya Institute , Bangalore. Post that Dr. Bhumir Chauhan went on to take His MBBS from Smt NHL Municipal Medical college & Vadilal Sarabhai Hospital, Ahmedabad."
+    },
+    {
+      "name": "Dr. Mahendra Singh Chouhan",
+      "speciality": "Neurology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "12 years",
+      "description": "Dr. Mahendra Singh Chouhan is a renowned doctor in Ahmedabad. Dr. Mahendra Singh Chouhan specialises in Neurology. Dr. Mahendra Singh Chouhan has over 12 years of experience practising medicine in various hospitals and clinics. Dr. Mahendra Singh Chouhan specialises in Electroconvulsive Therapy (ECT), Surgery Of The Facial Nerve, CSF Rhinorrhoea Repair Surgery. In addition to affiliation with multiple hospitals, Dr. Mahendra Singh Chouhan has been professionally active in many other ways. Dr. Mahendra Singh Chouhan graduated with a MBBS from All India Institute of Medical Sciences, New Delhi. After that, Dr. Mahendra Singh Chouhan went on to do MCh - Neuro Surgery from All India Institute of Medical Sciences, New Delhi."
+    },
+    {
+      "name": "Dr. Shuchit Pandey",
+      "speciality": "Neurology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "6 years",
+      "description": "Dr. Shuchit Pandey is an esteemed doctor practising Neurology in Ahmedabad. Dr. Shuchit Pandey has more than 6 years of experience. Currently, Dr. Shuchit Pandey is working with [organization_doctor experience - id5]. Dr. Shuchit Pandey specialises in EMG/NCV and EEG. Besides being affiliated with many hospitals, Dr. Shuchit Pandey has been professionally active in other important ways. Dr. Shuchit Pandey graduated with a DM - Neurology from King Georges Medical College, Lucknow University. After that, Dr. Shuchit Pandey went on to do MBBS from BJMC Pune."
+    },
+    {
+      "name": "Dr. Jigar Parekh",
+      "speciality": "Neurology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "4 years",
+      "description": "Having worked with several hospitals, He has 3 years of relevant experience. Beyond His affiliation with many hospitals, He has been professionally active in many other ways. He completed His MBBS from RUHS College of Medical Sciences, Jaipur. Post that Dr. Dinesh S Saini went on to take His MD - General Medicine from RUHS College of Medical Sciences, Jaipur"
+    },
+    {
+      "name": "Dr. Dipti Jain",
+      "speciality": "Gynecology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "10 years",
+      "description": "Sr. Consultant at Advance Hospitals, Ahmedabad. Affiliated with various hospitals in Ahmedabad. Completed MBBS from SMS Medical College, Jaipur and Masters in Surgery (Obst & Gynec) from S.N. Medical College, Jodhpur. Pursued fellowship in Gynec Oncology at Gujarat Cancer and Research Institute (GCRI)."
+    },
+    {
+      "name": "Dr. Dharti Thakkar",
+      "speciality": "Gynecology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "18 years",
+      "description": "BHMS. Associated with Anand Homeopathic Clinic And Store in Bodakdev, Ahmedabad. One of the best Homeopathy Doctors in Bodakdev, Ahmedabad. "
+    },
+    {
+      "name": "Dr. Farhin A Radhanpuri",
+      "speciality": "Gynecology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "8 years",
+      "description": "MS - Obstetrics and Gynaecology. Practising at Aayat Multispeciality Hospital in Dholka, Ahmedabad. Popular Gynaecologist in Dholka, Ahmedabad."
+    },
+    {
+      "name": "Dr. Hetal Patolia",
+      "speciality": "Gynecology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "25 years",
+      "description": "MD - Obstetrics & Gynaecology, MBBS. Popular Gynaecologist in Bodakdev, Ahmedabad."
+    },
+    {
+      "name": "Dr Pranay Shah",
+      "speciality": "Gynecology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "8 years",
+      "description": "MS - Obstetrics and Gynaecology. Popular IVF speciality in Satellite, Ahmedabad."
+    },
+    {
+      "name": "Dr. Tejas D. Shah",
+      "speciality": "Ophthalmology",
+      "location": "Ahmedabad",
+      "experience": "29 years",
+      "description": "Dr. Tejas D. Shah is a respected Eye Surgeon and Ophthalmologist who currently stays in Ambawadi in Ahmedabad, Gujarat. With 29 years of successful work experience he holds numerous successful eye surgeries in his records. He received the MBBS degree in the Smt. NHL Municipal Medical College, Ahmedabad in 1987 and his Diploma and MS in Ophthalmology from the Smt. NHL Municipal Medical College, Ahmedabad in 1991. In 1992 he joined the Amdavad Eye Laser Hospitals Pvt. Ltd as an Ophthalmologist and is presently its director. He has received the Fellowship in Cataract Management and completed the coursework under Dr. A. R. Vasavada and a Fellowship in Corneal Diseases from L.V. Prasad Eye Institute."
+    },
+    {
+      "name": "Dr. Shashi N Jha",
+      "speciality": "Ophthalmology",
+      "img": "doctor.png",
+      "location": "Delhi",
+      "experience": "42 years",
+      "description": "Dr. Shashi N Jha is one of the best Ophthalmologists in Ganga Ram Hospital, Delhi. He has had many happy patients in his 42 years of journey as a Ophthalmologist. He is a qualified MD - Ophthalmology, MBBS Bachelor of Medicine and Bachelor of Surgery. He is currently associated with Sir Ganga Ram Hospital in Ganga Ram Hospital, Delhi."
+    },
+    {
+      "name": "Dr. Anita Bisht",
+      "speciality": "Ophthalmology",
+      "img": "doctor.png",
+      "location": "Meerut",
+      "experience": "12 years",
+      "description": "Doctor Anita Bisht has had many happy patients in his/her 12 years of journey as a Ophthalmologist. Doctor has done MBBS, Diploma in Ophthalmology."
+    },
+    {
+      "name": "Dr. Ruchi Mehta",
+      "speciality": "Ophthalmology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "15 years",
+      "description": "Dr. Ruchi Mehta is one of the best Ophthalmologists in Gandhinagar Highway, Ahmedabad. She has over 15 years of experience as a Ophthalmologist. She has completed MBBS, MS - Ophthalmology. She is currently practising at Advance retina and eye care in Gandhinagar Highway, Ahmedabad."
+    },
+    {
+      "name": "Dr. Naveen Patel",
+      "speciality": "Ophthalmology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": null,
+      "description": "Dr. Naveen Patel is a trusted Ophthalmologist in Shahibaug, Ahmedabad. Doctor has completed MBBS. Doctor is currently practising at BAPS Yogiji Maharaj Hospital in Shahibaug, Ahmedabad."
+    },
+    {
+      "name": "Dr. Mahendra Mulani",
+      "speciality": "nephrology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "7 years",
+      "description": "Dr. Mahendra Mulani has had many happy patients in his 7 years of journey as a Nephrologist. He has done Mbbs, DM - Nephrology."
+    },
+    {
+      "name": "Dr. Hasit Patel",
+      "speciality": "nephrology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "18 years",
+      "description": "Dr. Hasit Patel is an experienced Nephrologist in Baroda, Ahmedabad. He has had many happy patients in his 18 years of journey as a Nephrologist. He is a MBBS,MD(medicine), MD- Medicine, DNB- Nephrology . You can consult Dr. Hasit Patel at Labh kidney clinic in Baroda, Ahmedabad."
+    },
+    {
+      "name": "Dr. Jay Harshad Shah",
+      "speciality": "nephrology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "",
+      "description": "dr. Jay harshad shah strive to provide quality care and best treatment to all kind of kidney patients by patiently listening to them, identifying disease and then working hand in hand with them to achieve better quality life. Compassion and dedication for patient care is assured at our clinic as the patients? satisfaction & health is our prime concern. Dr Jay H Shah has studied in premier institutes of country.He studied MBBS from BJ Medical College and was a meritorious student throughout.He completed MD in Internal Medicine from the prestigious Maulana Azad Medical College,Delhi.He trained under pioneers of nephrology in IKDRC, Civil Hospital which serves as a benchmark for kidney care in India."
+    },
+    {
+      "name": "Dr. Mayur Patil",
+      "speciality": "nephrology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "9 years",
+      "description": "Dr. Mayur Patil is one of the best Nephrologists in Science City, Ahmedabad. He has been a successful Nephrologist for the last 9 years. He has completed DM - Nephrology, MD - Internal Medicine . You can visit him at CIMS Hospital in Science City, Ahmedabad."
+    },
+    {
+      "name": "Dr. Bhavin Mehtalia",
+      "speciality": "nephrology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "",
+      "description": "Dr. Bhavin Mehtalia is a trusted Nephrologist in Naranpura, Ahmedabad. You can visit him/her at Shubham Superspeciality Hospital in Naranpura, Ahmedabad."
+    },
+    {
+      "name": "Dr. Viral Shah",
+      "speciality": "urology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "10 years",
+      "description": "Dr. Viral shah has over 10 years of experience as a Urologist. He has completed MS - General Surgery, DNB - Urology/Genito - Urinary Surgery."
+    },
+    {
+      "name": "Dr. Darshil Shah",
+      "speciality": "urology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "11 years",
+      "description": "Dr. Darshil Shah is one of the best Urologists in Sarkhej, Ahmedabad. He has over 11 years of experience as a Urologist. He is a M.B.B.S, MS - General Surgery, MCh - Urology. He is currently associated with KD Hospital in Sarkhej, Ahmedabad."
+    },
+    {
+      "name": "Dr. Himanshu Patel",
+      "speciality": "urology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "",
+      "description": "Dr. Himanshu Patel is an experienced Urologist in Vadaj, Ahmedabad. You can visit him at Satyam Urology and Kidney Hospital in Vadaj, Ahmedabad."
+    },
+    {
+      "name": "Dr. Manish Dhawan",
+      "speciality": "urology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "",
+      "description": "Dr. Manish Dhawan is an experienced Urologist in Ambawadi, Ahmedabad. You can consult Dr. Manish Dhawan at Fusion Kidney Institute in Ambawadi, Ahmedabad."
+    },
+    {
+      "name": "Dr. R B Patel",
+      "speciality": "urology",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "",
+      "description": "Dr. R B Patel is a trusted Urologist in Maninagar, Ahmedabad. Doctor has done MBBS. You can visit him/her at Parimal Hospital in Maninagar, Ahmedabad."
+    },
+    {
+      "name": "dt. Suraksha Shetty Shah",
+      "speciality": "Dietician",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "12 years",
+      "description": "Diploma in Nutrition and Health Education from IGNOU Ahmedabad. Currently associated as a dietician at Health Plus Center in Vastrapur, Ahmedabad."
+    },
+    {
+      "name": "Dr. Komal Patel",
+      "speciality": "Dietician",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "N/A",
+      "description": "Offers online diet consultations related to weight loss, cholesterol management, diabetes management, obesity, teenage obesity, and diet for hypertension. Aims to provide customized diets to her clients."
+    },
+    {
+      "name": "Dt. Payaal",
+      "speciality": "Dietician",
+      "img": "doctor.png",
+      "location": "N/A",
+      "experience": "N/A",
+      "description": "Specializes in weight loss, weight gain, diabetes care, heart health, child nutrition. Completed Master In Clinical Nutririon from SNDT Women's University."
+    },
+    {
+      "name": "Dr. Samir Anadkat",
+      "speciality": "Dietician",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "20+ years",
+      "description": "Fellowship in diabetes, Professional Training in Mind Body Medicine (USA), MS, MBBS (India). Currently practicing at www.lifestylemedicine.in in Navrangpura & Bopal, Ahmedabad."
+    },
+    {
+      "name": "dt. Akanksha Bhargava",
+      "speciality": "Dietician",
+      "img": "doctor.png",
+      "location": "Ahmedabad",
+      "experience": "N/A",
+      "description": "Freelance Diet Consultant providing diet and lifestyle counselling for obesity, diabetes and various other metabolic disorders. Also associated with Pharmaceutical companies for conducting various health camps in Ahmedabad as a diet consultant."
+    }
+  ],
+  "user": [
+    {
+      "name": "mayur",
+      "email": "mayurpati7456@gmail.com",
+      "password": "Mayur@123",
+      "id": 1
+    }
+  ],
+  "homeappointment": [
+    {
+      "name": "mayur",
+      "phone": "9106306225",
+      "date": "2023-05-04",
+      "email": "mayurpati7456@gmail.com",
+      "hospitalName": "SAL Hospital and Medical Institute",
+      "location": "Ahmedabad",
+      "id": 2
+    },
+    {
+      "name": "josi",
+      "phone": "6565656565",
+      "date": "2023-05-26",
+      "email": "s@gmail.com",
+      "textarea": "ad>DH.bcas",
+      "hospitalName": "HCG Hospital",
+      "location": "Ahmedabad",
+      "id": 3
+    },
+    {
+      "name": "patil khushal",
+      "phone": "9428286892",
+      "date": "2023-06-01",
+      "email": "mayurpati7456@gmail.com",
+      "textarea": "dwiqyihweudw9fq890",
+      "hospitalName": "HCG Hospital",
+      "location": "Ahmedabad",
+      "id": 4
+    },
+    {
+      "name": "kl rahul",
+      "phone": "9855665245",
+      "date": "2023-05-18",
+      "email": "mayurpatil7456@gmail.com",
+      "textarea": "addcxaw",
+      "hospitalName": "HCG Hospital",
+      "location": "Ahmedabad",
+      "id": 5
+    }
+  ],
+  "app": [
+    {
+      "doctor": "Kidney",
+      "name": "Ali baba",
+      "phone no": "09876543210",
+      "id": 1
+    },
+    {
+      "doctor": "Orthopedic",
+      "name": "jay shree ram",
+      "phone no": "0123456788",
+      "date": "2023-05-28T04:27",
+      "optradio": "Female",
+      "id": 2
+    },
+    {
+      "doctor": "Orthopedic",
+      "name": "jay shree ram",
+      "phone no": "123456788",
+      "date": "2023-05-05T04:33",
+      "id": 3
+    },
+    {
+      "doctor": "Orthopedic",
+      "name": "jay shree ram",
+      "phone no": "123456788",
+      "date": "2023-05-05T04:33",
+      "id": 4
+    }
+  ],
+  "app1" : [
+    {
+
+    }
+  ]
+}

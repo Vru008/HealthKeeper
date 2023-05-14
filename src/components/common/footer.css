@@ -1,0 +1,76 @@
+.fimage img{
+  width: 250px;
+  margin-top: 40px;
+}
+
+.me-5 {
+  font-size: 25px;
+  margin: 15px;
+  /* border: 1px solid red; */
+  color: #2a487f;
+  font-family: 'Times New Roman', Times, serif;
+ }
+.faaa {
+  padding: 20px;
+  font-size: 30px;
+  width: 50px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+  display: inline-flex; 
+  /* border: 1px solid red; */
+}
+.bx {
+  background-color: white !important;
+  color: #125688;
+  border: 1px solid #2a487f;
+  border-radius: 15px; 
+  padding: 5px;
+  transition: .5s ease;
+  /* border: 1px solid red; */
+}
+i:hover {
+  color: white;
+  background-color: #2a487f;
+  border: 1px solid#2a487f;
+  border-radius: 15px; 
+  padding: 5px;
+  box-shadow: 0 0 1rem #2a487f;
+  /* border: 1px solid red; */
+}
+.text-uppercase{
+  /* border: 1px solid red; */
+  font-size: 20px;
+  font-family: 'Times New Roman', Times, serif;
+  color: #2a487f;
+}
+.text-reset{
+  /* border: 1px solid red; */
+  font-size: 18px;
+  color: #2a487f !important;
+  text-decoration: none;
+}
+.faa {
+  font-size: 18px;
+text-align: justify;
+/* border: 1px solid red; */
+color:#2a487f !important; 
+}
+
+/* Styles for Small Devices */
+@media (min-width: 576px) and (max-width: 767px) {
+  
+}
+
+/* Styles for Medium Devices */
+@media (min-width: 768px) and (max-width: 991px) {
+  .fimage img{
+    width: 100%;
+    margin-top: 0px;
+    justify-content: space-around;
+  }
+  .mb-4 {
+    width: 100%;
+  }
+  
+}

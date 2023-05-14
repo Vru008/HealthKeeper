@@ -1,0 +1,235 @@
+.container.ct {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+}
+
+.cnt_card {
+  background-color: #ddd;
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid #bbb;
+  height: 500px !important;
+  display: -webkit-box;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
+  gap: 2rem;
+}
+.right input::placeholder {
+  color: black;
+}
+.right textarea::placeholder {
+  color: black;
+}
+.left {
+  width: 25vw;
+  overflow: hidden;
+  border-radius: 5px;
+}
+.left img {
+  width: 25vw;
+  height: 500px;
+  object-fit: cover;
+}
+.right {
+  margin-top: 40px;
+}
+.right .contact {
+  display: inline-flex;
+  gap: 1rem;
+  width: 20vw;
+  align-items: center;
+}
+.form,
+.address {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0 0;
+}
+.form input,
+textarea {
+  width: 100%;
+  outline: none;
+  background: none;
+  border: none;
+  border-bottom: 2px solid black;
+  padding: 10px 0;
+  margin: 5px 0;
+}
+.usersubmit input {
+  background-color: skyblue;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  width: min-content;
+  padding: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.usersubmit input:hover {
+  background-color: #ddd;
+}
+.row .info {
+  color: #2a487f;
+  margin: 100px;
+  border-bottom: 5px solid #2a487f;
+}
+.info h3{
+  margin-bottom: 5px;
+}
+
+/* @media screen and (max-width: 700px) {
+  .cnt_card {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .container {
+    overflow: hidden;
+  }
+} */
+
+
+/* Styles for Small Devices */
+@media (min-width: 576px) and (max-width: 767px) {
+  .container.ct {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+  }
+  .cnt_card {
+    background-color: #ddd;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #bbb;
+    height: 500px !important;
+    display: inline-table;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    gap: 2rem;
+  }
+  .left {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 5px;
+  }
+  
+  .left img {
+    width: 100%;
+    height: 500px;
+    object-fit: fill;
+  }
+  .right h2{
+    margin-top: 20px;
+    text-align: center;
+    font-size: xx-large;
+    font-family: serif;
+    font-weight: bolder;
+  }
+  .right .contact {
+    display: block;
+    width: 95%;
+    margin-left: 12px;
+  }
+  .usersubmit {
+    text-align: center;
+  }
+  #submit {
+    width: 150px;
+    font-size: larger;
+    font-family: serif;
+  }
+  .row .info {
+    color: #2a487f;
+    margin-left: 117px;
+    border-bottom: 3px solid #2a487f;
+  }
+  .info h3{
+    margin-bottom: 15px;
+    font-weight: bolder;
+  }
+}
+
+/* Styles for Medium Devices */
+@media (min-width: 768px) and (max-width: 991px) {
+  .container.ct {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-family: sans-serif;
+  }
+  .cnt_card {
+    background-color: #ddd;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #bbb;
+    height: 500px !important;
+    display: -webkit-box;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    gap: 2rem;
+  }
+  .left {
+    width: 30vw;
+    overflow: hidden;
+    border-radius: 5px;
+  }
+  
+  .left img {
+    width: 30vw;
+    height: 500px;
+    object-fit: cover;
+  }
+  .right h2{
+    margin-top: 70px;
+    font-size: xx-large;
+    font-family: serif;
+    font-weight: bolder;
+  }
+  .right .contact {
+    display: inline-flex;
+    gap: 1rem;
+    width: 95%;
+  }
+  .usersubmit {
+    text-align: center;
+  }
+  #submit {
+    width: 150px;
+    font-size: larger;
+    font-family: serif;
+  }
+  .row .info {
+    color: #2a487f;
+    margin-left: 195px;
+    border-bottom: 3px solid #2a487f;
+    margin-top: 50px; 
+  }
+  .info h3{
+    margin-bottom: 15px;
+    font-weight: bolder;
+  }
+}
+
+/* Styles for Large Devices */
+@media (min-width: 992px) and (max-width: 1199px) {
+  /* CSS rules for screens between 992px and 1199px wide */
+}
+
+/* Styles for Extra Large Devices */
+@media (min-width: 1200px) {
+  /* CSS rules for screens 1200px wide and above */
+}
+

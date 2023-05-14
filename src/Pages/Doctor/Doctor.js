@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import "./doctor.css";
 
 const Doctor = () => {
     return (
@@ -10,7 +11,7 @@ const Doctor = () => {
           </div>
           <div class="row g-4">
             <div class="col-6">
-              <div class="box p-3">
+              <div class="box3 p-3">
                 <div class="row">
                     <div class="column">
                         <img src="/dr img/dr-ashish-sabhrawal.jpg" alt=""/>
@@ -37,7 +38,7 @@ const Doctor = () => {
             </div>
 
             <div class="col-6">
-              <div class="box p-3">
+              <div class="box3 p-3">
                 <div class="row">
                     <div class="column">
                         <img src="/dr img/Dr Sanjay Sachdeva.jpeg" alt=""/>
@@ -65,7 +66,7 @@ const Doctor = () => {
             </div>
 
             <div class="col-6">
-              <div class="box p-3">
+              <div class="box3 p-3">
                 <div class="row">
                     <div class="column">
                         <img src="/dr img/Surbhi anand.webp" alt=""/>
@@ -89,33 +90,9 @@ const Doctor = () => {
               </div>
             </div>
 
-            <div class="col-6">
-              <div class="box p-3">
-                <div class="row">
-                    <div class="column">
-                        <img src="/dr img/Gagan gautam.jpg" alt=""/>
-                    </div>
-                    <div class="column">
-                      <div class="row">
-                        <div class="column text-green">Dr. Gagan Gautam</div>
-                        <div class="column text-grey">Uro - Oncologist | Head Of Department</div>
-                        <div class="column degree">M.Ch (Urology) ,M.S (Surgery),DNB (Surgery),MBBS<br/>New Delhi, India</div>
-                          <ul class="column list">
-                            <lh for="list"><strong>Clinical Focus</strong></lh>
-                            <li>Cavity filling</li>
-                            <li>Root canal</li>
-                            <li>Cosmetic Dentistry</li>
-                            <lh><strong> Awards</strong></lh>
-                            <li>First Prize in a session for a Paper presentation on u201cCalcium loss and Micro-hardness determination using different irrigantsu201d from 06/12/12 to 0 9/12/12 held at 27th FODI & 20th IES National Conference 2012, DUBAI.ss</li>
-                          </ul>
-                      </div>
-                    </div>
-                  </div>
-              </div>
-            </div>
 
             <div class="col-6">
-              <div class="box p-3">
+              <div class="box3 p-3">
                 <div class="row">
                     <div class="column">
                         <img src="/dr img/Dr-Sandeep-Batra.jpg" alt=""/>
@@ -140,7 +117,7 @@ const Doctor = () => {
             </div>
 
             <div class="col-6">
-              <div class="box p-3">
+              <div class="box3 p-3">
                 <div class="row">
                     <div class="column">
                         <img src="/dr img/Bipin Walia.webp" alt=""/>
@@ -166,7 +143,7 @@ const Doctor = () => {
             </div>
 
             <div class="col-6">
-              <div class="box p-3">
+              <div class="box3 p-3">
                 <div class="row">
                     <div class="column">
                         <img src="/dr img/Amardeepsingh.jpg" alt=""/>
@@ -193,7 +170,7 @@ const Doctor = () => {
             </div>
 
             <div class="col-6">
-              <div class="box p-3">
+              <div class="box3 p-3">
                 <div class="row">
                     <div class="column">
                         <img src="/dr img/Dr_S_K_S_Marya.jpg" alt=""/>
@@ -221,7 +198,7 @@ const Doctor = () => {
             </div>
 
             <div class="col-6">
-              <div class="box p-3">
+              <div class="box3 p-3">
                 <div class="row">
                     <div class="column">
                         <img src="/dr img/Gaurav Kharya.webp" alt=""/>
@@ -248,7 +225,7 @@ const Doctor = () => {
             </div>
 
             <div class="col-6">
-              <div class="box p-3">
+              <div class="box3 p-3">
                 <div class="row">
                     <div class="column">
                         <img src="/dr img/Aditya gupta.webp" alt=""/>
@@ -268,6 +245,31 @@ const Doctor = () => {
                             <li>Sir Dorabji Tata Award, 1996</li>
                             <li>Best Research Paper Award, IES, 1999</li>
                             <li>BOYSCAST Fellow, President of India, 2006</li>
+                          </ul>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            
+            <div class="col-6">
+              <div class="box3 p-3">
+                <div class="row">
+                    <div class="column">
+                        <img src="/dr img/Gagan gautam.jpg" alt=""/>
+                    </div>
+                    <div class="column">
+                      <div class="row">
+                        <div class="column text-green">Dr. Gagan Gautam</div>
+                        <div class="column text-grey">Uro - Oncologist | Head Of Department</div>
+                        <div class="column degree">M.Ch (Urology) ,M.S (Surgery),DNB (Surgery),MBBS<br/>New Delhi, India</div>
+                          <ul class="column list">
+                            <lh for="list"><strong>Clinical Focus</strong></lh>
+                            <li>Cavity filling</li>
+                            <li>Root canal</li>
+                            <li>Cosmetic Dentistry</li>
+                            <lh><strong> Awards</strong></lh>
+                            <li>First Prize in a session for a Paper presentation on u201cCalcium loss and Micro-hardness determination using different irrigantsu201d from 06/12/12 to 0 9/12/12 held at 27th FODI & 20th IES National Conference 2012, DUBAI.ss</li>
                           </ul>
                       </div>
                     </div>

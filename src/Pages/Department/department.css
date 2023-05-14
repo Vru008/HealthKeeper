@@ -1,56 +1,53 @@
-.headingg {
-    color: grey;
-    font-family: Georgia, serif;
-}
-.grid-container {
+.containerr{
+    /* background-color:#2a487f; */
+    /* border: 2px solid red; */
+    margin-top: 30px;
+    margin-bottom: 30px;
+    height: 950px;
+    /* width: 900px; */
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
-    height: 210px;
+    grid-template-columns: 1fr 1fr 1fr ;
+    grid-template-rows: 1fr 1fr 1fr;
+    row-gap: 1px;
+    column-gap: 1px;
 }
-img {
-    width: 100px;
-    height: 120px;
+.department{
+    border: 1px solid #2a487f;
+    /* background-color:white */
+    /* height: 122px;
+    width: 122px; */
+    /* border: 1px solid red; */
+    /* padding: 15px; */
+    margin: 15px;
+    background: linear-gradient(rgba(0,0,0,.1), #2a487f);
+    justify-content: end;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    /* padding: 0 4rem; */
 }
-img:hover {
-    width: 130px;
-    height: 130px;
-    border-radius: 5px;
+.department:hover{
+    transform: scale(1.1);
 }
-.text-green {
-    font-size: 10px;
-    color: rgb(46, 162, 238);
-    font-family: 'Times New Roman', serif;
-    /* border: 1px solid black; */
+.depa1{
+    grid-row-start: 1;
+    grid-row-end: 4 ;
 }
-.text-grey {
-    font-size: 7px;
-    color: grey;
-    font-family: 'Times New Roman', serif;
-    /* border: 2px solid green; */
+.depa1 img{
+    height: 100%;
+    width: 366px;
 }
-.degree {
-    font-size: 6px;
-    color: black; 
-    font-family: Georgia, 'Times New Roman', Times, serif;
-}
-.list {
-    font-size: 6px;
-}
-ul {
-    margin-left: -25px;
-    margin-top: 5px;
-    /* border: 1px solid black; */
-    width: 160px;
-}
-.col-6 {
-    height: 290px;
-    /* border: 2px solid black; */
-}
-.box {
-    height: 230px;
-    border-style: groove;
-    border-width: 7px;
-    border-color: rgb(187, 179, 179);
-    /* border: 2px solid purple; */
+.depa2 h5{
+    text-align: center;
+    /* border: 1px solid red; */
+    margin-top: 30px;
+    color: white;
+    font-size: 3rem;
+} 
+.depa2 img{
+    height: 110px;
+    width: 30%;
+    margin-top: 30px;    
+    /* margin-left: 170px; */
+    /* border:2px solid #2a487f; */
 }

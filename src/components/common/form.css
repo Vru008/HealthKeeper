@@ -1,0 +1,110 @@
+.bgg {
+  height: 100%;
+  width: 100%;
+  background-image: url('/public/Form_image/dbg9.jpg');
+  background-repeat: no-repeat;
+  background-size:1500px 100%; 
+  font-family: 'Times New Roman', Times, serif;
+  overflow: hidden;
+} 
+.cnt {
+  background-color:#2a487f;
+  color: white;
+  width: 500px;
+  height: 600px;
+  border-radius: 15px;
+  margin: 80px 75px 75px 50px;
+  box-shadow: 14px 14px 20px #cbced1, -14px -14px 20px white;
+  position: relative;
+}
+.clm {
+  background-color: #2a487f;
+  color: white; 
+  width: 100%;
+  text-align: center;
+  border-radius: 15px;
+  /* margin-bottom: 10px; */
+}
+select {
+  padding: 0px 0px 0px 15px;
+}
+.clm h2 {
+  width: 100%;
+  border-bottom: 5px solid white;
+  padding-bottom: 20px;
+  font-size: 55px;
+}
+.radio_group {
+  /* display: flex; */
+  /* flex-direction: row; */
+  margin: -4px 0px 2px px;
+  font-size: 20px;
+  width: 220px;
+  height: 52px;
+  box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
+  border-radius: 15px;
+}
+.form-check-label {
+  margin: 9px 0 0 0px;
+}
+input[type="radio"] {
+  margin: 3px;
+  /* vertical-align: middle; */
+  /* align-items: center; */
+  padding: 2px;
+}
+.Date {
+  display: flex;
+  flex-direction: row;
+  /* margin-left: 92px; */
+  font-size: 20px;
+  width: 220px;
+  height: 50px;
+  margin: -37px 0px 0px 250px;
+  
+}
+input[type="datetime-local"]:valid {
+  background-color: #2a487f;
+  padding: 25px;
+  box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
+  border-radius: 15px;
+  align-items: center;
+  width: 250px;
+  color: white;
+  border: none;
+  margin-top: -2px;
+
+}
+input {
+  caret-color: white;
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  /* margin: 1em; */
+  /* max-width: 350px; */
+  width: calc(100% - 2em);
+  vertical-align: top;
+  padding: 18px;
+  border: none;
+}
+*:focus {
+  outline: none;
+}
+._box {
+  width: 100%;
+  height: 50px;
+  box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
+  border-radius: 15px;
+  font-size: 20px;
+  background-color: #2a487f;
+  color: white;
+}
+::placeholder {
+  color: white;
+}
+#_btn {
+  /* box-shadow: 6px 6px 6px #cbced1, -6px -6px 6px white; */
+  color: white;
+  background: linear-gradient(360deg, transparent, #2a487f);
+  border: none;
+}
