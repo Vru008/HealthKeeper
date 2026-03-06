@@ -16,7 +16,6 @@ import _Header from "./components/common/_Header";
 import ConList from "./Pages/ConList/ConList";
 // import ScrollToTop from "./components/common/ScrollToTop";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-// import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import ScrollToTop from "./components/common/ScrollToTop";
 import Service from "./components/common/Service";
 import axios from "axios";

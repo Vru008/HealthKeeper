@@ -33,7 +33,7 @@ const _Header = () => {
               <NavLink class="link" to="/department">Department</NavLink>
             </li>
             <li>
-              <NavLink class="link" to="/contact">Contactus</NavLink>
+              <NavLink class="link" to="/contact">Contact-us</NavLink>
             </li>
           </ul>
         </div>

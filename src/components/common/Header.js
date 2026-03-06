@@ -32,7 +32,7 @@ const Header = () => {
         <strong><Link to="/doctor" className="text-decoration-none">Doctor</Link></strong>
         <strong><Link to="/department" className="text-decoration-none">Department</Link></strong>
         {/* <strong><Link to="/hospital" className="text-decoration-none">Hospital</Link></strong> */}
-        <strong><Link to="/contact" className="text-decoration-none">Contactus</Link></strong>
+        <strong><Link to="/contact" className="text-decoration-none">Contact-us</Link></strong>
         {
           isAuthenticated && <p> {user.name}</p>
         }
