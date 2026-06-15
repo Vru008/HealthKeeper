@@ -8,25 +8,6 @@ import {
 } from "../../data/catalog";
 import "./home.css";
 
-const SPEC_ICONS = {
-  Cardiology: "/Icon/heart.png",
-  Neurology: "/Icon/neurology.png",
-  Oncology: "/Icon/oncology.png",
-  Orthopedics: "/Icon/ortho.png",
-  Pediatrics: "/Icon/heart1.png",
-  Dermatology: "/Icon/pharma.png",
-  Gynecology: "/Icon/ivf.png",
-  Ophthalmology: "/Icon/general.png",
-  ENT: "/Icon/ENT.png",
-  Urology: "/Icon/joint.png",
-  Nephrology: "/Icon/kidney.png",
-  Gastroenterology: "/Icon/liver.png",
-  Pulmonology: "/Icon/lung.png",
-  Psychiatry: "/Icon/general.png",
-  Dentistry: "/Icon/teeth.png",
-  "General Medicine": "/Icon/general.png",
-};
-
 const STEPS = [
   {
     n: "1",
@@ -60,10 +41,11 @@ const Home = () => {
   const search = () =>
     navigate("/list", { state: { loc: city, speciality } });
 
-  const goSpeciality = (sp) =>
-    navigate("/list", { state: { loc: "", speciality: sp } });
-
   const topDoctors = [...doctors]
+    .sort((a, b) => b.rating - a.rating || b.reviews - a.reviews)
+    .slice(0, 4);
+
+  const topHospitals = [...hospitals]
     .sort((a, b) => b.rating - a.rating || b.reviews - a.reviews)
     .slice(0, 4);
 
@@ -136,25 +118,44 @@ const Home = () => {
         </div>
       </section>
 
-      {/* SPECIALITIES */}
+      {/* FEATURED HOSPITALS */}
       <section className="home-section">
         <div className="sec-head">
-          <h2>Browse by speciality</h2>
-          <p>Tap a department to see top doctors and hospitals.</p>
+          <h2>Featured hospitals</h2>
+          <p>Top-rated multi-speciality hospitals on HealthKeeper.</p>
         </div>
-        <div className="spec-grid">
-          {specialities.map((sp) => (
-            <button key={sp} className="spec-card" onClick={() => goSpeciality(sp)}>
-              <img
-                src={SPEC_ICONS[sp] || "/Icon/general.png"}
-                alt={sp}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "/Icon/general.png";
-                }}
-              />
-              <span>{sp}</span>
-            </button>
+        <div className="hosp-showcase">
+          {topHospitals.map((h) => (
+            <div
+              key={h.id}
+              className="hsc-card"
+              onClick={() =>
+                navigate("/list", {
+                  state: { loc: h.location, speciality: h.specialities[0] },
+                })
+              }
+            >
+              <div className="hsc-img">
+                <img
+                  src={h.img}
+                  alt={h.name}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/Logo/lg6.png";
+                  }}
+                />
+                <span className="hsc-rating">★ {h.rating}</span>
+              </div>
+              <div className="hsc-body">
+                <h4>{h.name}</h4>
+                <p className="hsc-city">📍 {h.location}</p>
+                <p className="hsc-meta">
+                  {h.specialities.length} specialities · {h.facilities.length}{" "}
+                  facilities
+                </p>
+              </div>
+            </div>
           ))}
         </div>
       </section>

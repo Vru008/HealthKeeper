@@ -190,39 +190,65 @@
   margin: 0;
 }
 
-/* speciality grid */
-.spec-grid {
+/* featured hospitals */
+.hosp-showcase {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
 }
-.spec-card {
+.hsc-card {
   background: #fff;
   border: 1px solid #eaeef5;
-  border-radius: 14px;
-  padding: 22px 14px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  border-radius: 16px;
+  overflow: hidden;
   cursor: pointer;
-  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+  box-shadow: 0 6px 18px rgba(42, 72, 127, 0.06);
+  transition: transform 0.18s, box-shadow 0.18s;
 }
-.spec-card:hover {
+.hsc-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 16px 32px rgba(42, 72, 127, 0.14);
-  border-color: #cdd9ee;
+  box-shadow: 0 18px 36px rgba(42, 72, 127, 0.16);
 }
-.spec-card img {
-  width: 42px;
-  height: 42px;
-  object-fit: contain;
+.hsc-img {
+  position: relative;
+  height: 150px;
 }
-.spec-card span {
+.hsc-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hsc-rating {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1f9d55;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.hsc-body {
+  padding: 16px;
+}
+.hsc-body h4 {
   color: #2c3a52;
   font-weight: 700;
-  font-size: 14.5px;
-  text-align: center;
+  font-size: 16px;
+  margin: 0 0 4px;
+}
+.hsc-city {
+  color: #2a487f;
+  font-weight: 600;
+  font-size: 13.5px;
+  margin: 0 0 4px;
+}
+.hsc-meta {
+  color: #6b7a90;
+  font-size: 13px;
+  margin: 0;
 }
 
 /* top doctors */

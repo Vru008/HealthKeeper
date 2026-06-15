@@ -30,13 +30,16 @@ const AboutUs = () => {
     <div className="about-page">
       {/* Hero */}
       <section className="about-hero">
-        <img src="/abt img/dbg2.jpg" alt="Doctors caring for patients" />
         <div className="about-hero__overlay">
           <h1>
             Happiness begins
             <br />
             with good health
           </h1>
+          <p>
+            HealthKeeper connects you with trusted doctors and hospitals across
+            India — and makes booking effortless.
+          </p>
         </div>
       </section>
 
