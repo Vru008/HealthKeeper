@@ -1,18 +1,27 @@
 import React from "react";
 import "./department.css";
 import { useNavigate } from "react-router-dom";
+import { specialities } from "../../data/catalog";
 
-const departments = [
-  { icon: "/Icon/cancer.png", label: "Oncology", speciality: "Oncology" },
-  { icon: "/Icon/heart.png", label: "Cardiology", speciality: "Cardiology" },
-  { icon: "/Icon/kidney.png", label: "Neurology", speciality: "Neurology" },
-  { icon: "/Icon/teeth.png", label: "Gynecology", speciality: "Gynecology" },
-  { icon: "/Icon/ivf.png", label: "Ophthalmology", speciality: "Ophthalmology" },
-  { icon: "/Icon/neurology.png", label: "Nephrology", speciality: "nephrology" },
-  { icon: "/Icon/ENT.png", label: "Urology", speciality: "urology" },
-  { icon: "/Icon/joint.png", label: "Dietician", speciality: "Dietician" },
-  { icon: "/Icon/liver.png", label: "Liver", speciality: "Liver" },
-];
+// Map each speciality to one of the bundled icons (falls back to a generic one).
+const ICONS = {
+  Cardiology: "/Icon/heart.png",
+  Neurology: "/Icon/neurology.png",
+  Oncology: "/Icon/oncology.png",
+  Orthopedics: "/Icon/ortho.png",
+  Pediatrics: "/Icon/heart1.png",
+  Dermatology: "/Icon/pharma.png",
+  Gynecology: "/Icon/ivf.png",
+  Ophthalmology: "/Icon/general.png",
+  ENT: "/Icon/ENT.png",
+  Urology: "/Icon/joint.png",
+  Nephrology: "/Icon/kidney.png",
+  Gastroenterology: "/Icon/liver.png",
+  Pulmonology: "/Icon/lung.png",
+  Psychiatry: "/Icon/general.png",
+  Dentistry: "/Icon/teeth.png",
+  "General Medicine": "/Icon/general.png",
+};
 
 const Department = () => {
   const navigate = useNavigate();
@@ -29,17 +38,24 @@ const Department = () => {
       </div>
 
       <div className="dept-grid">
-        {departments.map((d, i) => (
+        {specialities.map((sp, i) => (
           <button
-            key={d.label}
+            key={sp}
             className="dept-card"
-            style={{ animationDelay: `${i * 0.05}s` }}
-            onClick={() => handleClick(d.speciality)}
+            style={{ animationDelay: `${i * 0.04}s` }}
+            onClick={() => handleClick(sp)}
           >
             <div className="dept-icon">
-              <img src={d.icon} alt={d.label} />
+              <img
+                src={ICONS[sp] || "/Icon/general.png"}
+                alt={sp}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/Icon/general.png";
+                }}
+              />
             </div>
-            <h5>{d.label}</h5>
+            <h5>{sp}</h5>
             <span className="dept-arrow">Find specialists →</span>
           </button>
         ))}

@@ -1,58 +1,248 @@
-/* :root{
-    --primary-color: rgba(0,124,157,0.9);
-    --helper-color: rgba(0,160,156,0.9);
-    --background-color: rgb(236, 236, 236);
-} */
-
-
-.form1 h2,
-.callbackh3 {
-    color: var(--primary-color);
+.cl-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 36px 20px 80px;
 }
 
-.card {
-    height: 430px;
-    /* width: auto; */
+.cl-hero {
+  margin-bottom: 32px;
+}
+.cl-hero h1 {
+  color: #2a487f;
+  font-weight: 700;
+  font-size: 34px;
+  margin-bottom: 6px;
+}
+.cl-hero p {
+  color: #6b7a90;
+  font-size: 15px;
+  margin: 0;
 }
 
-
-
-
-.btn1 {
-    background-color: var(--background-color);
-    color: var(--primary-color);
-    border: 1px solid var(--primary-color);
+.cl-section {
+  margin-bottom: 44px;
+}
+.cl-section-title {
+  color: #2c3a52;
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eef1f6;
 }
 
-/* .card:hover {
-    padding: 3px;
-    transform: scale(1.05);
-    border-radius: 10px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 1);
-} */
-
-.btn1:hover {
-    width: 100%;
-    color: white;
-    background-color: var(--primary-color);
+.cl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+.cl-grid-wide {
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
 }
 
+/* ---- Doctor card ---- */
+.doc-card {
+  display: flex;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid #eaeef5;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(42, 72, 127, 0.06);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.doc-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(42, 72, 127, 0.13);
+}
+.doc-photo {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 3px solid #eef3fb;
+}
+.doc-body {
+  flex: 1;
+  min-width: 0;
+}
+.doc-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.doc-top h3 {
+  font-size: 16px;
+  color: #2c3a52;
+  margin: 0;
+}
+.cl-stars {
+  background: #e7f6ec;
+  color: #1f9d55;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.doc-spec {
+  color: #2a487f;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 4px 0 2px;
+}
+.doc-qual {
+  color: #8a96a8;
+  font-size: 12.5px;
+  margin: 0 0 6px;
+}
+.doc-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: #41506a;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.doc-tags,
+.hosp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.doc-tag,
+.hosp-tag {
+  background: #eef3fb;
+  color: #2a487f;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 6px;
+}
 
+/* ---- Hospital card ---- */
+.hosp-card {
+  background: #fff;
+  border: 1px solid #eaeef5;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(42, 72, 127, 0.06);
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+}
+.hosp-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(42, 72, 127, 0.13);
+}
+.hosp-imgwrap {
+  position: relative;
+  height: 160px;
+}
+.hosp-imgwrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hosp-rating {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1f9d55;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.hosp-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.hosp-body h3 {
+  font-size: 17px;
+  color: #2c3a52;
+  margin: 0 0 4px;
+}
+.hosp-addr {
+  color: #6b7a90;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+.hosp-fac {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  color: #5a6b82;
+  font-size: 12.5px;
+  margin-bottom: 14px;
+}
+.hosp-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
 
-@media only screen and (max-width: 768px) {
+/* ---- Buttons ---- */
+.cl-btn {
+  background: #2a487f;
+  color: #fff;
+  border: 1px solid #2a487f;
+  border-radius: 9px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.2s;
+}
+.cl-btn:hover {
+  background: #1d3360;
+  color: #fff;
+}
+.cl-btn-block {
+  width: 100%;
+}
+.cl-btn-ghost {
+  background: #fff;
+  color: #2a487f;
+}
+.cl-btn-ghost:hover {
+  background: #eef3fb;
+  color: #2a487f;
+}
 
-    [class*="col-"] {
-        width: 100%;
-        height: 80%;
-    }
+.cl-none {
+  color: #8a96a8;
+  grid-column: 1 / -1;
+  padding: 20px 0;
+}
 
-    .ab {
-        border-bottom: 1px solid var(--primary-color);
-    }
+.cl-empty-page {
+  text-align: center;
+  padding: 100px 20px;
+}
+.cl-empty-page h2 {
+  color: #2a487f;
+}
+.cl-empty-page p {
+  color: #6b7a90;
+  margin: 8px 0 22px;
+}
 
-    .btn1 {
-        width: 100%;
-    }
-
-
+@media (max-width: 520px) {
+  .cl-hero h1 {
+    font-size: 26px;
+  }
+  .hosp-actions {
+    flex-direction: column;
+  }
 }

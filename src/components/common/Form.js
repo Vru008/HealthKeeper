@@ -7,30 +7,8 @@ import {
   googleCalendarUrl,
   notifyBooking,
 } from "../../utils/calendar";
+import { locations as cities, specialities as departments } from "../../data/catalog";
 import "./form.css";
-
-const cities = [
-  "Ahmedabad",
-  "Gandhinagar",
-  "Surat",
-  "Rajkot",
-  "Vadodara",
-  "Mehsana",
-];
-const departments = [
-  "Oncology",
-  "Cardiology",
-  "Neurology",
-  "Gynecology",
-  "Ophthalmology",
-  "Nephrology",
-  "Urology",
-  "Dietician",
-  "Dental",
-  "ENT",
-  "Orthopedic",
-  "IVF",
-];
 
 const Form = () => {
   const { user } = useAuth();
