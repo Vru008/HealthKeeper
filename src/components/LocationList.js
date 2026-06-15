@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE } from "../config";
 
 const LocationList = (props) => {
   const [data, setData] = useState([]);
 
-  const getHospitalData = () => {
-    axios.get("http://localhost:3004/hospitals").then((result) => {
-      console.log("here's the data", result.data);
-      const specilalityArr = result.data.map((item, index) => {
-        return item.location;
-      });
-      console.log("console_data", [...new Set(specilalityArr)]);
-      setData([...new Set(specilalityArr)]);
+  const getLocations = () => {
+    axios.get(`${API_BASE}/hospitals`).then((result) => {
+      const locationArr = result.data.map((item) => item.location);
+      setData([...new Set(locationArr)]);
     });
   };
 
   useEffect(() => {
-    getHospitalData();
+    getLocations();
   }, []);
 
   return (
@@ -25,13 +22,11 @@ const LocationList = (props) => {
         className="form-control text-area"
         name="location"
         onChange={(e) => props.handleChange(e)}
-
-        // id="exampleFormControlSelect1"
       >
-        <option>Choose City </option>
+        <option>Choose City</option>
         {data &&
           data?.map((item, index) => {
-            return <option>{item}</option>;
+            return <option key={index}>{item}</option>;
           })}
       </select>
     </div>

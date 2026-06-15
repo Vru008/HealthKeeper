@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { API_BASE } from "../../config";
 
 const ConList = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [hospitalData, setHospitalData] = useState([]);
   const [docData, setDocData] = useState([]);
-  const [listData, setlistData] = useState([]);
-  console.log("console_check_dataaa_00", location);
 
   const IMG = (imageName) => {
     return require(`../../Assets/hospital_img/${imageName}`);
@@ -17,47 +16,34 @@ const ConList = () => {
     return require(`../../Assets/doctor_img/${imageName}`);
   };
   const getHospitalData = () => {
-    axios.get("http://localhost:3004/hospitals").then((result) => {
-      console.log("location", location.state)
-      let hospitalArr
-      if(location.state.loc) {
+    axios.get(`${API_BASE}/hospitals`).then((result) => {
+      let hospitalArr;
+      if (location.state?.loc) {
         hospitalArr = result.data.filter(
-          (item, index) => 
+          (item) =>
             item.location === location.state.loc &&
             item.speciality === location.state.speciality
         );
       } else {
         hospitalArr = result.data.filter(
-            (item, index) => 
-            item.speciality === location.state.speciality
-          );
+          (item) => item.speciality === location.state?.speciality
+        );
       }
-       
-      console.log("console_1",result.data, hospitalArr);
-      // const departmentArr = result.data.filter(
-      //   (item, index) => 
-      //   // console.log("console_22",item.speciality, location.state.name)
-      //   item.speciality === location.state.name
-      // );
-      // console.log("console_3",departmentArr);
-      console.log("console_4", hospitalArr);
       setHospitalData(hospitalArr);
-      // setHospitalData(departmentArr);
     });
   };
   const getDoctorData = () => {
-    axios.get("http://localhost:3004/doctors").then((result) => {
+    axios.get(`${API_BASE}/doctors`).then((result) => {
       const docArr = result.data.filter(
-        (item, index) =>
-          item.location === location.state.loc &&
-          item.speciality === location.state.speciality
+        (item) =>
+          item.location === location.state?.loc &&
+          item.speciality === location.state?.speciality
       );
       setDocData(docArr);
     });
   };
 
   const handleBook = (data) => {
-    console.log("console_check_dataaa", data);
     navigate("/form", {
       state: {
         loc: data?.location,
@@ -68,11 +54,15 @@ const ConList = () => {
   };
 
   useEffect(() => {
+    if (!location.state) {
+      navigate("/");
+      return;
+    }
     getHospitalData();
     getDoctorData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
-  console.log("console_data", location);
   return (
     <>
       <section className="border-bottom mt-1">
@@ -101,7 +91,7 @@ const ConList = () => {
             <form className="form1">
               <h3 className="mt-1 callbackh3">Assistence, Over Call</h3>
               <div className="form-group mt-1">
-                <label for="exampleInputPassword1" className="mt-1">
+                <label htmlFor="exampleInputPassword1" className="mt-1">
                   Full Name
                 </label>
                 <input
@@ -112,7 +102,7 @@ const ConList = () => {
                 />
               </div>
               <div className="form-group mt-1">
-                <label for="exampleInputEmail1" className="mt-1">
+                <label htmlFor="exampleInputEmail1" className="mt-1">
                   Email address
                 </label>
                 <input
@@ -123,7 +113,7 @@ const ConList = () => {
                 />
               </div>
               <div>
-                <label for="message" className="mt-1">
+                <label htmlFor="message" className="mt-1">
                   Mobile No.
                 </label>
                 <input
@@ -144,12 +134,11 @@ const ConList = () => {
         {/* <div className="row row-cols-1 row-cols-md-5 g-4 mt-3"> */}
         <div className="row">
           <h1 className="list_hadding mb-5 mt-5">
-          {location.state.loc !=="" ? `Hospital in ${hospitalData[0]?.location}` : `Hospital of ${hospitalData[0]?.speciality}`}
+          {location.state?.loc ? `Hospital in ${hospitalData[0]?.location}` : `Hospital of ${hospitalData[0]?.speciality}`}
           </h1>
-          {console.log("console_5",hospitalData )}
           {hospitalData?.map((item, index) => {
             return (
-              <>
+              <React.Fragment key={`hospital-${index}`}>
                 <div className="col-3 mb-3 ">
                   <div className="card-deck ">
                     <div className="card card_list ">
@@ -157,7 +146,7 @@ const ConList = () => {
                         <img
                           className="card-img-top  "
                           src={IMG(item.img)}
-                          alt="Card image cap"
+                          alt={item.name}
                           height={"250px"}
                           width={"350px"}
                         />
@@ -168,8 +157,8 @@ const ConList = () => {
 
                       <div className="card-body">
                         <h5 className="card-title">{item.name}</h5>
-                        <a href={item.url}>
-                          <i class="fa fa-map-marker" aria-hidden="true"></i>
+                        <a href={item.url} target="_blank" rel="noreferrer">
+                          <i className="fa fa-map-marker" aria-hidden="true"></i>
                           &nbsp; view in map
                         </a>
                       </div>
@@ -199,7 +188,7 @@ const ConList = () => {
                 <div
                   className="modal fade"
                   id={`hospital-${index}`}
-                  tabindex="-1"
+                  tabIndex="-1"
                 >
                   <div className="modal-dialog">
                     <div className="modal-content">
@@ -224,20 +213,18 @@ const ConList = () => {
                         </button> */}
                         <div className="list_btn text-center">
                           <button
-                            to="/Form"
                             type="button"
                             className="btn modal_btn "
                             data-bs-dismiss="modal"
                             onClick={() => handleBook(item)}
                           >Book an Appoinment
-                            {/* <Link to="/Form">Book an Appoinment</Link> */}
                           </button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </>
+              </React.Fragment>
             );
           })}
         </div>
@@ -248,13 +235,13 @@ const ConList = () => {
         <div className="row row-cols-1 row-cols-md-5 g-4 mt-3 ">
           {docData?.map((item, index) => {
             return (
-              <>
+              <React.Fragment key={`doctor-${index}`}>
                 <div className="col">
                   <div className="card doc_img_card">
                     <img
                       src={DIMG(item.img)}
                       className="card-img-top "
-                      alt="zydus"
+                      alt={item.name}
                     />
                     <div className="card-body">
                       <h5 className="card-title">{item.name}</h5>
@@ -277,7 +264,7 @@ const ConList = () => {
                 <div
                   className="modal fade"
                   id={`doctor-${index}`}
-                  tabindex="-1"
+                  tabIndex="-1"
                 >
                   <div className="modal-dialog">
                     <div className="modal-content">
@@ -296,14 +283,15 @@ const ConList = () => {
                           type="button"
                           className="btn btn-primary"
                           data-bs-dismiss="modal"
+                          onClick={() => handleBook(item)}
                         >
-                          <Link to={"/listform"}>Book Appointment</Link>
+                          Book Appointment
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </>
+              </React.Fragment>
             );
           })}
         </div>

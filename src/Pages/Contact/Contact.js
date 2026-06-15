@@ -6,7 +6,7 @@ const Contact = () => {
       <div className="container ct">
         <div className="cnt_card">
           <div className="left">
-            <img src="/Contact img/dbg3.jpg" />
+            <img src="/Contact img/dbg3.jpg" alt="Contact HealthKeeper" />
           </div>
           <div className="right">
             <h2>Get in touch</h2>

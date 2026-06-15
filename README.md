@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# HealthKeeper
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A healthcare discovery web app built with React. Users can search for hospitals
+and doctors by city and speciality, browse departments, read about the service,
+and book an appointment. Authentication is handled with Auth0.
 
-## Available Scripts
+## Tech stack
 
-In the project directory, you can run:
+- **React 18** (Create React App) + **React Router 6**
+- **Bootstrap 5** for layout and components
+- **Auth0** (`@auth0/auth0-react`) for login
+- **axios** for data fetching
+- **json-server** as a mock REST API (data in `db.json`)
 
-### `npm start`
+## Getting started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Install dependencies:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+npm install
+```
 
-### `npm test`
+Run the mock API and the React app together:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm run dev
+```
 
-### `npm run build`
+This starts:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- the API (json-server) at `http://localhost:3004`
+- the React dev server at `http://localhost:3000`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+You can also run them separately with `npm run server` and `npm start`.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Configuration
 
-### `npm run eject`
+The API base URL lives in `src/config.js` and defaults to
+`http://localhost:3004`. Override it for other environments with an env var:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+# .env
+REACT_APP_API_URL=https://your-api.example.com
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Available scripts
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+| Script           | Description                                   |
+| ---------------- | --------------------------------------------- |
+| `npm run dev`    | Run the mock API and React app concurrently   |
+| `npm start`      | Run the React dev server only                 |
+| `npm run server` | Run the json-server mock API only (port 3004) |
+| `npm run build`  | Production build into `build/`                |
+| `npm test`       | Run tests                                     |
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Project structure
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+src/
+  Pages/          Route-level pages (Home, AboutUs, Department, Contact, ConList)
+  components/
+    common/       Shared UI (Header, Footer, Form, ScrollToTop)
+    SpecialityList.js, LocationList.js   Data-driven dropdowns
+  Assets/         Hospital and doctor images used in the results list
+  config.js       API base URL
+db.json           Mock data (hospitals, doctors, appointments)
+```

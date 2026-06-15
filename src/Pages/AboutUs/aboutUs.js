@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import "./aboutUs.css";
 
 
@@ -51,7 +51,7 @@ const AboutUs = () => {
             <h1>Our Expertise</h1>
           </div>
           <div className="col-md-4 sr">
-            <img src="/Icon/lung.png" />
+            <img src="/Icon/lung.png" alt="Lung Diseases" />
             <h4>Lung Diseases</h4>
             <p>
               One of the key classifications is between traditio nal small
@@ -59,7 +59,7 @@ const AboutUs = () => {
             </p>
           </div>
           <div className="col-md-4 sr">
-            <img src="/Icon/heart1.png" />
+            <img src="/Icon/heart1.png" alt="Heart Diseases" />
             <h4>Heart Diseases</h4>
             <p>
               One of the key classifications is between traditio nal small
@@ -67,7 +67,7 @@ const AboutUs = () => {
             </p>
           </div>
           <div className="col-md-4 sr">
-            <img src="/Icon/ortho.png" />
+            <img src="/Icon/ortho.png" alt="Orthopaedic" />
             <h4>Orthopaedic</h4>
             <p>
               One of the key classifications is between traditio nal small
@@ -75,7 +75,7 @@ const AboutUs = () => {
             </p>
           </div>
           <div className="col-md-4 sr">
-            <img src="/Icon/general.png" />
+            <img src="/Icon/general.png" alt="General Surgery" />
             <h4>General Surgery</h4>
             <p>
               One of the key classifications is between traditio nal small
@@ -83,7 +83,7 @@ const AboutUs = () => {
             </p>
           </div>
           <div className="col-md-4 sr">
-            <img src="/Icon/pharma.png" />
+            <img src="/Icon/pharma.png" alt="Pharmacy" />
             <h4>Pharmacy</h4>
             <p>
               One of the key classifications is between traditio nal small
@@ -91,7 +91,7 @@ const AboutUs = () => {
             </p>
           </div>
           <div className="col-md-4 sr">
-            <img src="/Icon/sports.png" />
+            <img src="/Icon/sports.png" alt="Sports Injury" />
             <h4>Sports Injury</h4>
             <p>
               One of the key classifications is between traditio nal small
@@ -100,7 +100,7 @@ const AboutUs = () => {
           </div>
           </div>
       </div>
-     </div> 
+     </div>
   );
 };
 

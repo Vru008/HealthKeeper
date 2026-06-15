@@ -2,34 +2,27 @@ import React, { useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./form.css";
+import { API_BASE } from "../../config";
 
 const Form = () => {
-  const [data, setData] = useState();
   const [val, setVal] = useState();
 
-  const handleSubmit = () => {
-    console.log("console_post", val);
-    try {
-      axios.post("http://localhost:3004/app", val).then((result) => {
-        console.log(result);
-        // setData(result.data);
-      });
-    } catch (err) {
-      console.log("console_err", err);
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.post(`${API_BASE}/app`, val).catch(() => {
+      // network errors are ignored for this demo form
+    });
   };
 
   const handleChange = (e) => {
-    console.log("code snap", e.target.value);
     setVal({ ...val, [e.target.name]: e.target.value });
   };
   return (
     <div>
       <div className="bgg">
         <div className="container cnt">
-          {console.log("console_change", val)}
           <div className="row">
-            <form action="">
+            <form onSubmit={handleSubmit}>
               <fieldset>
                 <br />
                 <div className="column clm">
@@ -39,13 +32,12 @@ const Form = () => {
                 <div className="column clm inputbox">
                   <select
                     name="department"
-                    value={val?.department}
-                    onfocus="this.size=4;"
-                    onblur="this.size=0;"
-                    onchange="this.size=1; this.blur(); {(e)=>handleChange(e)}"
+                    value={val?.department || ""}
+                    onChange={(e) => handleChange(e)}
                     id="department"
                     className="_box"
                   >
+                    <option value="">Select City</option>
                     <option value="Ahmedabad">Ahmedabad</option>
                     <option value="Gandhinagar">Gandhinagar</option>
                     <option value="Surat"> Surat</option>
@@ -58,9 +50,10 @@ const Form = () => {
                 <div className="column clm inputbox">
                   <select
                     name="doctor"
-                    value={val?.doctor}
+                    value={val?.doctor || ""}
                     onChange={(e) => handleChange(e)}
                     className="_box">
+                    <option value="">Select Department</option>
                     <option value="Cancer">Cancer</option>
             <option value="Heart">Heart</option>
             <option value="Kidney"> Kidney</option>
@@ -71,33 +64,40 @@ const Form = () => {
                 </div>
                 <br />
                 <div className="column clm radio_group">
-                  <div class="form-check-inline">
-                    <label class="form-check-label" for="radio1">
+                  <div className="form-check-inline">
+                    <label className="form-check-label" htmlFor="radio1">
                       <input
                         type="radio"
-                        class="form-check-input"
+                        className="form-check-input"
                         id="radio1"
                         name="optradio"
                         value="Male"
-                        checked
+                        defaultChecked
+                        onChange={(e) => handleChange(e)}
                       />
                       Male
                     </label>
                   </div>
-                  <div class="form-check-inline">
-                    <label class="form-check-label" for="radio2">
+                  <div className="form-check-inline">
+                    <label className="form-check-label" htmlFor="radio2">
                       <input
                         type="radio"
-                        class="form-check-input"
+                        className="form-check-input"
                         id="radio2"
                         name="optradio"
                         value="Female"
+                        onChange={(e) => handleChange(e)}
                       />
                       Female
                     </label>
                   </div>
                   <div className="Date">
-                    <input type="datetime-local" id="date" name="date" />
+                    <input
+                      type="datetime-local"
+                      id="date"
+                      name="date"
+                      onChange={(e) => handleChange(e)}
+                    />
                   </div>
                 </div>
 
@@ -110,6 +110,7 @@ const Form = () => {
                     className="_box text-input"
                     name="name"
                     placeholder="Enter Your Name"
+                    onChange={(e) => handleChange(e)}
                     required
                   />
                 </div>
@@ -119,14 +120,17 @@ const Form = () => {
                     type="text"
                     id="phone_no"
                     className="_box text-input"
-                    name="phone no"
+                    name="phone_no"
                     placeholder="Enter Your Contact No."
+                    onChange={(e) => handleChange(e)}
                     required
                   />
                 </div>
                 <br />
                 <div className=" inputbox">
-                  <button className="_box">MAKE AN APPOINTMENT</button>
+                  <button type="submit" className="_box">
+                    MAKE AN APPOINTMENT
+                  </button>
                 </div>
                 <br />
               </fieldset>

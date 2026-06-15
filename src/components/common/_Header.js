@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import "./_header.css";
 import { NavLink } from "react-router-dom";
 
-const _Header = () => {
+const MainHeader = () => {
   const { loginWithRedirect, isAuthenticated, logout, user } = useAuth0();
   const [showMediaIcons, setShowMediaIcons] = useState(false);
 
@@ -13,27 +13,24 @@ const _Header = () => {
       <nav className="main-nav">
 
         <div className="logo">
-          <NavLink class="link" to="/">
-            <img src="/Logo/lg6.png"></img>
+          <NavLink className="link" to="/">
+            <img src="/Logo/lg6.png" alt="HealthKeeper logo" />
           </NavLink>
         </div>
 
         <div className="menu-link">
           <ul>
             <li>
-              <NavLink class="link" to="/">Home</NavLink>
+              <NavLink className="link" to="/">Home</NavLink>
             </li>
             <li>
-              <NavLink class="link" to="/aboutUs">AboutUs</NavLink>
-            </li>
-              {/* <li>
-                <NavLink class="link" to="/doctor">Doctor</NavLink>
-              </li> */}
-            <li>
-              <NavLink class="link" to="/department">Department</NavLink>
+              <NavLink className="link" to="/aboutUs">AboutUs</NavLink>
             </li>
             <li>
-              <NavLink class="link" to="/contact">Contact-us</NavLink>
+              <NavLink className="link" to="/department">Department</NavLink>
+            </li>
+            <li>
+              <NavLink className="link" to="/contact">Contact-us</NavLink>
             </li>
           </ul>
         </div>
@@ -52,29 +49,33 @@ const _Header = () => {
           ) : (
             <button onClick={() => loginWithRedirect()}>Log In</button>
           )}
-          {console.log("login", isAuthenticated)}
         </div>
 
         <div className="hamburger-menu">
-          <a href="#" onClick={() => setShowMediaIcons(!showMediaIcons)}>
-            <i class="bx bx-menu"></i>
-          </a>
-          <div className="menu-link mobile-menu-link">
+          <button
+            type="button"
+            className="hamburger-btn"
+            onClick={() => setShowMediaIcons(!showMediaIcons)}
+          >
+            <i className="bx bx-menu"></i>
+          </button>
+          <div
+            className={`menu-link mobile-menu-link${
+              showMediaIcons ? " active" : ""
+            }`}
+          >
             <ul>
               <li>
-                <NavLink class="link" to="/">Home</NavLink>
+                <NavLink className="link" to="/">Home</NavLink>
               </li>
               <li>
-                <NavLink class="link" to="/aboutUs">AboutUs</NavLink>
+                <NavLink className="link" to="/aboutUs">AboutUs</NavLink>
               </li>
               <li>
-                <NavLink class="link" to="/doctor">Doctor</NavLink>
+                <NavLink className="link" to="/department">Department</NavLink>
               </li>
               <li>
-                <NavLink class="link" to="/department">Department</NavLink>
-              </li>
-              <li>
-                <NavLink class="link" to="/contactus">Contactus</NavLink>
+                <NavLink className="link" to="/contact">Contact-us</NavLink>
               </li>
             </ul>
           </div>
@@ -85,4 +86,4 @@ const _Header = () => {
   );
 };
 
-export default _Header;
+export default MainHeader;

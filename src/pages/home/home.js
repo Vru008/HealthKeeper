@@ -1,7 +1,6 @@
 import React,{ useState} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./home.css";
-import Service from "../../components/common/Service";
 import SpecialityList from "../../components/SpecialityList";
 import LocationList from "../../components/LocationList";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +20,6 @@ const Home = (props) => {
     });
   };
   const handleSearch = () => {
-    console.log("console_check", searchData);
     navigate("/list", {
       state: {
         loc: searchData?.location,
@@ -36,7 +34,7 @@ const Home = (props) => {
       <div>
       <div className="row">
         <div className="pic" id="top">
-          <img src="./Home img/dbg6.jpg" alt="" />
+          <img src="/Home img/dbg6.jpg" alt="Healthcare banner" />
           <div className="column centered">
             We are here
             <br />
@@ -44,7 +42,7 @@ const Home = (props) => {
           </div>
           <div className="column click">
             <button type="button" className="btn btn-light btn-lg1">
-              <Link to="/Form">Book an Appoinment</Link>
+              <Link to="/form">Book an Appoinment</Link>
             </button>
           </div>
         </div>
@@ -61,10 +59,13 @@ const Home = (props) => {
         </div>
 
         <div className="col-4 select">
-        <a role="button" onClick={handleSearch}>
-           
-          <img src="./Home img/dbg5.png" alt=""></img>
-          </a>
+          <button
+            type="button"
+            className="search-btn"
+            onClick={handleSearch}
+          >
+            <img src="/Home img/dbg5.png" alt="Search doctors and hospitals" />
+          </button>
         </div>
         <div className=" col-4 select">
           <LocationList handleChange={handleChange} />
