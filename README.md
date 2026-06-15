@@ -1,67 +1,135 @@
-# HealthKeeper
+# HealthKeeper 🩺
 
-A healthcare discovery web app built with React. Users can search for hospitals
-and doctors by city and speciality, browse departments, read about the service,
-and book an appointment. Authentication is handled with Auth0.
+A full-stack healthcare platform where patients discover hospitals and doctors by
+city and speciality, book appointments, get calendar reminders, and chat with an
+AI health assistant. Built with the **MERN** stack and **Google Gemini**.
 
-## Tech stack
+![Tech](https://img.shields.io/badge/stack-MERN-2a487f) ![AI](https://img.shields.io/badge/AI-Gemini-4285F4)
 
-- **React 18** (Create React App) + **React Router 6**
-- **Bootstrap 5** for layout and components
-- **Auth0** (`@auth0/auth0-react`) for login
-- **axios** for data fetching
-- **json-server** as a mock REST API (data in `db.json`)
+---
 
-## Getting started
+## ✨ Features
 
-Install dependencies:
+- **Search by city & speciality** — find the right hospitals and doctors fast.
+- **Email + password accounts** — secure JWT auth (bcrypt-hashed passwords).
+- **Appointment booking** — saved to your account, with a confirmation screen.
+- **Device reminders** — every booking generates a downloadable **`.ics`
+  calendar event with a built-in alarm**, plus an "Add to Google Calendar" link
+  and a browser notification — the same way flight/booking apps remind you.
+- **My Appointments** — view, add-to-calendar, or cancel your bookings.
+- **AI Health Assistant** — a floating chatbot (Google Gemini) that helps users
+  understand symptoms and pick the right speciality.
+- **Optional email confirmations** — sent via Nodemailer when SMTP is configured.
+- Responsive, modern UI with subtle animations.
 
-```bash
-npm install
+---
+
+## 🧱 Tech stack
+
+| Layer    | Tech                                                        |
+| -------- | ----------------------------------------------------------- |
+| Frontend | React 18 (CRA), React Router 6, Axios, Bootstrap 5          |
+| Backend  | Node.js, Express, MongoDB (Mongoose)                        |
+| Auth     | JSON Web Tokens, bcryptjs                                   |
+| AI       | Google Gemini (`@google/generative-ai`, `gemini-2.5-flash`) |
+| Email    | Nodemailer (optional)                                       |
+
+---
+
+## 📁 Project structure
+
+```
+healthkeeper/
+├── public/                 # static assets (logos, icons, images)
+├── src/                    # React app
+│   ├── Pages/              # Home, AboutUs, Department, Contact, ConList,
+│   │                       #   Appointments, Auth (Login/Register)
+│   ├── components/         # Header, Footer, AIChat, dropdowns, Form
+│   ├── context/            # AuthContext (login state)
+│   ├── utils/              # calendar.js (.ics + reminders)
+│   ├── api.js              # axios instance (auto-attaches JWT)
+│   └── config.js           # API base URL
+├── server/                 # Express + MongoDB API
+│   ├── Models/             # User, Appointment
+│   ├── Routes/             # auth, data, appointments, ai
+│   ├── middleware/         # JWT auth guard
+│   ├── utils/              # mailer
+│   ├── seed-data.json      # hospital & doctor catalog
+│   └── server.js
+└── package.json            # client + orchestration scripts
 ```
 
-Run the mock API and the React app together:
+---
+
+## 🚀 Getting started
+
+### 1. Install dependencies (client + server)
+
+```bash
+npm run setup
+```
+
+### 2. Configure the backend
+
+```bash
+cp server/.env.example server/.env
+```
+
+Then fill in `server/.env`:
+
+```env
+PORT=5000
+MONGO_URI=your-mongodb-atlas-connection-string
+GEMINI_API_KEY=your-free-gemini-key      # https://aistudio.google.com/
+JWT_SECRET=any-long-random-string
+CLIENT_URL=http://localhost:3000
+# Optional — appointment confirmation emails:
+EMAIL_USER=
+EMAIL_PASS=
+```
+
+- **MongoDB** (free): https://www.mongodb.com/atlas
+- **Gemini key** (free, no card): https://aistudio.google.com/ → "Get API key"
+
+### 3. Run the app (frontend + backend together)
 
 ```bash
 npm run dev
 ```
 
-This starts:
+- Web app → http://localhost:3000
+- API → http://localhost:5000
 
-- the API (json-server) at `http://localhost:3004`
-- the React dev server at `http://localhost:3000`
+> Run them separately with `npm start` (client) and `npm run server` (backend).
 
-You can also run them separately with `npm run server` and `npm start`.
+---
 
-## Configuration
+## 🔌 API overview
 
-The API base URL lives in `src/config.js` and defaults to
-`http://localhost:3004`. Override it for other environments with an env var:
+| Method | Endpoint                  | Auth | Description                       |
+| ------ | ------------------------- | ---- | -------------------------------- |
+| POST   | `/api/auth/register`      | —    | Create an account                |
+| POST   | `/api/auth/login`         | —    | Log in, returns a JWT            |
+| GET    | `/api/auth/me`            | ✓    | Current user                     |
+| GET    | `/api/data/hospitals`     | —    | Hospital catalog                 |
+| GET    | `/api/data/doctors`       | —    | Doctor catalog                   |
+| GET    | `/api/data/specialities`  | —    | Distinct specialities            |
+| GET    | `/api/data/locations`     | —    | Distinct cities                  |
+| POST   | `/api/appointments`       | ✓    | Book an appointment              |
+| GET    | `/api/appointments`       | ✓    | List my appointments             |
+| DELETE | `/api/appointments/:id`   | ✓    | Cancel an appointment            |
+| POST   | `/api/ai/chat`            | —    | Health assistant chat (Gemini)   |
 
-```bash
-# .env
-REACT_APP_API_URL=https://your-api.example.com
-```
+---
 
-## Available scripts
+## 📦 Deployment notes
 
-| Script           | Description                                   |
-| ---------------- | --------------------------------------------- |
-| `npm run dev`    | Run the mock API and React app concurrently   |
-| `npm start`      | Run the React dev server only                 |
-| `npm run server` | Run the json-server mock API only (port 3004) |
-| `npm run build`  | Production build into `build/`                |
-| `npm test`       | Run tests                                     |
+- Build the frontend with `npm run build`; host the `build/` folder on any
+  static host (Netlify, Vercel, etc.) and set `REACT_APP_API_URL` to your
+  deployed API URL.
+- Deploy `server/` to any Node host (Render, Railway, etc.) with the same env
+  vars. Secrets live only in `.env` and are never committed.
 
-## Project structure
+---
 
-```
-src/
-  Pages/          Route-level pages (Home, AboutUs, Department, Contact, ConList)
-  components/
-    common/       Shared UI (Header, Footer, Form, ScrollToTop)
-    SpecialityList.js, LocationList.js   Data-driven dropdowns
-  Assets/         Hospital and doctor images used in the results list
-  config.js       API base URL
-db.json           Mock data (hospitals, doctors, appointments)
-```
+Built by **Vruttant Patel**.

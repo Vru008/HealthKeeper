@@ -1,22 +1,32 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { API_BASE } from "../../config";
+import api from "../../api";
 
 const ConList = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [hospitalData, setHospitalData] = useState([]);
   const [docData, setDocData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // Hospital/doctor photos are bundled in the app; fall back gracefully
+  // if an image filename from the catalog isn't present.
   const IMG = (imageName) => {
-    return require(`../../Assets/hospital_img/${imageName}`);
+    try {
+      return require(`../../Assets/hospital_img/${imageName}`);
+    } catch {
+      return "/Logo/lg6.png";
+    }
   };
   const DIMG = (imageName) => {
-    return require(`../../Assets/doctor_img/${imageName}`);
+    try {
+      return require(`../../Assets/doctor_img/${imageName}`);
+    } catch {
+      return "/Logo/lg6.png";
+    }
   };
   const getHospitalData = () => {
-    axios.get(`${API_BASE}/hospitals`).then((result) => {
+    return api.get(`/data/hospitals`).then((result) => {
       let hospitalArr;
       if (location.state?.loc) {
         hospitalArr = result.data.filter(
@@ -33,7 +43,7 @@ const ConList = () => {
     });
   };
   const getDoctorData = () => {
-    axios.get(`${API_BASE}/doctors`).then((result) => {
+    return api.get(`/data/doctors`).then((result) => {
       const docArr = result.data.filter(
         (item) =>
           item.location === location.state?.loc &&
@@ -58,8 +68,10 @@ const ConList = () => {
       navigate("/");
       return;
     }
-    getHospitalData();
-    getDoctorData();
+    setLoading(true);
+    Promise.all([getHospitalData(), getDoctorData()]).finally(() =>
+      setLoading(false)
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
@@ -136,6 +148,16 @@ const ConList = () => {
           <h1 className="list_hadding mb-5 mt-5">
           {location.state?.loc ? `Hospital in ${hospitalData[0]?.location}` : `Hospital of ${hospitalData[0]?.speciality}`}
           </h1>
+          {loading && (
+            <p className="text-center w-100 py-4 text-muted">
+              Finding the best options for you…
+            </p>
+          )}
+          {!loading && hospitalData.length === 0 && (
+            <p className="text-center w-100 py-4 text-muted">
+              No hospitals found for this selection.
+            </p>
+          )}
           {hospitalData?.map((item, index) => {
             return (
               <React.Fragment key={`hospital-${index}`}>

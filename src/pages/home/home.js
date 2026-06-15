@@ -41,9 +41,9 @@ const Home = (props) => {
             for your health
           </div>
           <div className="column click">
-            <button type="button" className="btn btn-light btn-lg1">
-              <Link to="/form">Book an Appoinment</Link>
-            </button>
+            <Link to="/form" className="hero-cta">
+              Book an Appointment
+            </Link>
           </div>
         </div>
       </div>
@@ -63,8 +63,23 @@ const Home = (props) => {
             type="button"
             className="search-btn"
             onClick={handleSearch}
+            aria-label="Search doctors and hospitals"
           >
-            <img src="/Home img/dbg5.png" alt="Search doctors and hospitals" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <span>Search</span>
           </button>
         </div>
         <div className=" col-4 select">
@@ -84,7 +99,7 @@ const Home = (props) => {
             </p>
           </div>
           <div className="boxes p-2 m-2  flex-fill" id="primary_care">
-            <strong>Emergrncy cases</strong>
+            <strong>Emergency cases</strong>
             <p>
               Emergency care in healthcare refers to the treatment of patients
               with acute illnesses or injuries that require immediate medical
@@ -93,7 +108,7 @@ const Home = (props) => {
             </p>
           </div>
           <div className="boxes p-2 m-2  flex-fill" id="primary_care">
-            <strong>Online Appoinment</strong>
+            <strong>Online Appointment</strong>
             <p>
               The individual or the patient can book an appointment any time
               from anywhere through an Online healthcare service provider.

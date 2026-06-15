@@ -1,143 +1,273 @@
 import React, { useState } from "react";
-import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import api from "../../api";
+import { useAuth } from "../../context/AuthContext";
+import {
+  downloadICS,
+  googleCalendarUrl,
+  notifyBooking,
+} from "../../utils/calendar";
 import "./form.css";
-import { API_BASE } from "../../config";
+
+const cities = [
+  "Ahmedabad",
+  "Gandhinagar",
+  "Surat",
+  "Rajkot",
+  "Vadodara",
+  "Mehsana",
+];
+const departments = [
+  "Oncology",
+  "Cardiology",
+  "Neurology",
+  "Gynecology",
+  "Ophthalmology",
+  "Nephrology",
+  "Urology",
+  "Dietician",
+  "Dental",
+  "ENT",
+  "Orthopedic",
+  "IVF",
+];
 
 const Form = () => {
-  const [val, setVal] = useState();
+  const { user } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const prefill = location.state || {};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post(`${API_BASE}/app`, val).catch(() => {
-      // network errors are ignored for this demo form
-    });
-  };
+  const [form, setForm] = useState({
+    patientName: user?.name || "",
+    phone: user?.phone || "",
+    gender: "Male",
+    city: prefill.loc || "",
+    speciality: prefill.speciality || "",
+    provider: prefill.name || "",
+    datetime: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [booked, setBooked] = useState(null);
 
-  const handleChange = (e) => {
-    setVal({ ...val, [e.target.name]: e.target.value });
-  };
-  return (
-    <div>
-      <div className="bgg">
-        <div className="container cnt">
-          <div className="row">
-            <form onSubmit={handleSubmit}>
-              <fieldset>
-                <br />
-                <div className="column clm">
-                  <h2>HealthKeeper</h2>
-                </div>
-                <br />
-                <div className="column clm inputbox">
-                  <select
-                    name="department"
-                    value={val?.department || ""}
-                    onChange={(e) => handleChange(e)}
-                    id="department"
-                    className="_box"
-                  >
-                    <option value="">Select City</option>
-                    <option value="Ahmedabad">Ahmedabad</option>
-                    <option value="Gandhinagar">Gandhinagar</option>
-                    <option value="Surat"> Surat</option>
-                    <option value="Rajkot">Rajkot</option>
-                    <option value="Vadodra">Vadodra</option>
-                    <option value="Mehsana">Mehsana</option>
-                  </select>
-                </div>
-                <br />
-                <div className="column clm inputbox">
-                  <select
-                    name="doctor"
-                    value={val?.doctor || ""}
-                    onChange={(e) => handleChange(e)}
-                    className="_box">
-                    <option value="">Select Department</option>
-                    <option value="Cancer">Cancer</option>
-            <option value="Heart">Heart</option>
-            <option value="Kidney"> Kidney</option>
-            <option value="ENT">ENT</option>
-            <option value="Orthopedic">Orthopedic</option>
-            <option value="IVF">IVF</option>
-                  </select>
-                </div>
-                <br />
-                <div className="column clm radio_group">
-                  <div className="form-check-inline">
-                    <label className="form-check-label" htmlFor="radio1">
-                      <input
-                        type="radio"
-                        className="form-check-input"
-                        id="radio1"
-                        name="optradio"
-                        value="Male"
-                        defaultChecked
-                        onChange={(e) => handleChange(e)}
-                      />
-                      Male
-                    </label>
-                  </div>
-                  <div className="form-check-inline">
-                    <label className="form-check-label" htmlFor="radio2">
-                      <input
-                        type="radio"
-                        className="form-check-input"
-                        id="radio2"
-                        name="optradio"
-                        value="Female"
-                        onChange={(e) => handleChange(e)}
-                      />
-                      Female
-                    </label>
-                  </div>
-                  <div className="Date">
-                    <input
-                      type="datetime-local"
-                      id="date"
-                      name="date"
-                      onChange={(e) => handleChange(e)}
-                    />
-                  </div>
-                </div>
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
-                <br />
-                <div className="column clm inputbox">
-                  <input
-                    type="text"
-                    id="name"
-                    autoComplete="off"
-                    className="_box text-input"
-                    name="name"
-                    placeholder="Enter Your Name"
-                    onChange={(e) => handleChange(e)}
-                    required
-                  />
-                </div>
-                <br />
-                <div className="column clm inputbox">
-                  <input
-                    type="text"
-                    id="phone_no"
-                    className="_box text-input"
-                    name="phone_no"
-                    placeholder="Enter Your Contact No."
-                    onChange={(e) => handleChange(e)}
-                    required
-                  />
-                </div>
-                <br />
-                <div className=" inputbox">
-                  <button type="submit" className="_box">
-                    MAKE AN APPOINTMENT
-                  </button>
-                </div>
-                <br />
-              </fieldset>
-            </form>
+  // Booking requires an account.
+  if (!user) {
+    return (
+      <div className="form-page">
+        <div className="form-gate">
+          <h2>Log in to book an appointment</h2>
+          <p>Create a free account so we can save your booking and reminders.</p>
+          <div className="form-gate-actions">
+            <Link
+              className="fbtn fbtn-primary"
+              to="/login"
+              state={{ from: "/form" }}
+            >
+              Log In
+            </Link>
+            <Link className="fbtn fbtn-ghost" to="/register">
+              Sign Up
+            </Link>
           </div>
         </div>
       </div>
+    );
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (!form.patientName || !form.datetime) {
+      setError("Please enter your name and choose a date & time.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await api.post("/appointments", form);
+      setBooked(res.data);
+      notifyBooking(res.data);
+    } catch (err) {
+      setError(
+        err.response?.data?.error || "Could not book. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Confirmation + reminder actions
+  if (booked) {
+    return (
+      <div className="form-page">
+        <div className="confirm-card">
+          <div className="confirm-check">✓</div>
+          <h2>Appointment booked!</h2>
+          <p className="confirm-when">
+            {new Date(booked.datetime).toLocaleString(undefined, {
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </p>
+          <ul className="confirm-details">
+            {booked.provider && (
+              <li>
+                <span>With</span>
+                {booked.provider}
+              </li>
+            )}
+            {booked.speciality && (
+              <li>
+                <span>Speciality</span>
+                {booked.speciality}
+              </li>
+            )}
+            {booked.city && (
+              <li>
+                <span>City</span>
+                {booked.city}
+              </li>
+            )}
+          </ul>
+
+          <p className="confirm-remind">Set a reminder on your device:</p>
+          <div className="confirm-actions">
+            <button
+              className="fbtn fbtn-primary"
+              onClick={() => downloadICS(booked)}
+            >
+              📅 Add to Calendar (.ics)
+            </button>
+            <a
+              className="fbtn fbtn-ghost"
+              href={googleCalendarUrl(booked)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Google Calendar
+            </a>
+          </div>
+          <button
+            className="confirm-link"
+            onClick={() => navigate("/appointments")}
+          >
+            View my appointments →
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="form-page">
+      <form className="appt-form" onSubmit={handleSubmit}>
+        <h2 className="appt-title">Book an Appointment</h2>
+        <p className="appt-sub">Fill in the details and we'll set a reminder.</p>
+
+        {error && <div className="appt-error">{error}</div>}
+
+        {form.provider && (
+          <div className="appt-provider">
+            Booking with <strong>{form.provider}</strong>
+          </div>
+        )}
+
+        <div className="appt-grid">
+          <div className="appt-field">
+            <label htmlFor="patientName">Full name</label>
+            <input
+              id="patientName"
+              name="patientName"
+              value={form.patientName}
+              onChange={handleChange}
+              placeholder="Patient name"
+              required
+            />
+          </div>
+
+          <div className="appt-field">
+            <label htmlFor="phone">Phone</label>
+            <input
+              id="phone"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="Contact number"
+            />
+          </div>
+
+          <div className="appt-field">
+            <label htmlFor="city">City</label>
+            <select
+              id="city"
+              name="city"
+              value={form.city}
+              onChange={handleChange}
+            >
+              <option value="">Select city</option>
+              {cities.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="appt-field">
+            <label htmlFor="speciality">Department</label>
+            <select
+              id="speciality"
+              name="speciality"
+              value={form.speciality}
+              onChange={handleChange}
+            >
+              <option value="">Select department</option>
+              {departments.map((d) => (
+                <option key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="appt-field">
+            <label htmlFor="gender">Gender</label>
+            <select
+              id="gender"
+              name="gender"
+              value={form.gender}
+              onChange={handleChange}
+            >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div className="appt-field">
+            <label htmlFor="datetime">Date &amp; time</label>
+            <input
+              id="datetime"
+              type="datetime-local"
+              name="datetime"
+              value={form.datetime}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+
+        <button type="submit" className="fbtn fbtn-primary appt-submit" disabled={loading}>
+          {loading ? "Booking…" : "Confirm Appointment"}
+        </button>
+      </form>
     </div>
   );
 };

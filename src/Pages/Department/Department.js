@@ -2,58 +2,47 @@ import React from "react";
 import "./department.css";
 import { useNavigate } from "react-router-dom";
 
+const departments = [
+  { icon: "/Icon/cancer.png", label: "Oncology", speciality: "Oncology" },
+  { icon: "/Icon/heart.png", label: "Cardiology", speciality: "Cardiology" },
+  { icon: "/Icon/kidney.png", label: "Neurology", speciality: "Neurology" },
+  { icon: "/Icon/teeth.png", label: "Gynecology", speciality: "Gynecology" },
+  { icon: "/Icon/ivf.png", label: "Ophthalmology", speciality: "Ophthalmology" },
+  { icon: "/Icon/neurology.png", label: "Nephrology", speciality: "nephrology" },
+  { icon: "/Icon/ENT.png", label: "Urology", speciality: "urology" },
+  { icon: "/Icon/joint.png", label: "Dietician", speciality: "Dietician" },
+  { icon: "/Icon/liver.png", label: "Liver", speciality: "Liver" },
+];
+
 const Department = () => {
   const navigate = useNavigate();
 
-  const handleClick = (item) => {
-    navigate("/list", {
-      state: {
-        loc: "",
-        speciality: item,
-      },
-    });
+  const handleClick = (speciality) => {
+    navigate("/list", { state: { loc: "", speciality } });
   };
 
   return (
-    <div className="containerr">
-      {/* <div className='department depa1'>
-          <img src='/image/bghd.jpg'/>
-          </div> */}
-      <div className="department depa2">
-        <img src="/Icon/cancer.png" alt="Oncology" />
-        <h5 onClick={(e) => handleClick("Oncology")}>Oncology</h5>
+    <div className="dept-page">
+      <div className="dept-head">
+        <h1>Our Departments</h1>
+        <p>Pick a speciality to find top doctors and hospitals near you.</p>
       </div>
-      <div className="department depa2">
-        <img src="/Icon/heart.png" alt="Cardiology" />
-        <h5 onClick={(e) => handleClick("Cardiology")}>Cardiology</h5>
-      </div>
-      <div className="department depa2">
-        <img src="/Icon/kidney.png" alt="Neurology" />
-        <h5 onClick={(e) => handleClick("Neurology")}>Neurology</h5>
-      </div>
-      <div className="department depa2">
-        <img src="/Icon/teeth.png" alt="Gynecology" />
-        <h5 onClick={(e) => handleClick("Gynecology")}>Gynecology</h5>
-      </div>
-      <div className="department depa2">
-        <img src="/Icon/ivf.png" alt="Ophthalmology" />
-        <h5 onClick={(e) => handleClick("Ophthalmology")}>Ophthalmology</h5>
-      </div>
-      <div className="department depa2">
-        <img src="/Icon/neurology.png" alt="Nephrology" />
-        <h5 onClick={(e) => handleClick("nephrology")}>nephrology</h5>
-      </div>
-      <div className="department depa2">
-        <img src="/Icon/ENT.png" alt="Urology" />
-        <h5 onClick={(e) => handleClick("urology")}>urology </h5>
-      </div>
-      <div className="department depa2">
-        <img src="/Icon/joint.png" alt="Dietician" />
-        <h5 onClick={(e) => handleClick("Dietician")}>Dietician</h5>
-      </div>
-      <div className="department depa2">
-        <img src="/Icon/liver.png" alt="Liver" />
-        <h5 onClick={(e) => handleClick("Liver")}>Liver</h5>
+
+      <div className="dept-grid">
+        {departments.map((d, i) => (
+          <button
+            key={d.label}
+            className="dept-card"
+            style={{ animationDelay: `${i * 0.05}s` }}
+            onClick={() => handleClick(d.speciality)}
+          >
+            <div className="dept-icon">
+              <img src={d.icon} alt={d.label} />
+            </div>
+            <h5>{d.label}</h5>
+            <span className="dept-arrow">Find specialists →</span>
+          </button>
+        ))}
       </div>
     </div>
   );

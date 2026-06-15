@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { API_BASE } from "../config";
+import api from "../api";
 
 const LocationList = (props) => {
   const [data, setData] = useState([]);
 
-  const getLocations = () => {
-    axios.get(`${API_BASE}/hospitals`).then((result) => {
-      const locationArr = result.data.map((item) => item.location);
-      setData([...new Set(locationArr)]);
-    });
-  };
-
   useEffect(() => {
-    getLocations();
+    api
+      .get("/data/locations")
+      .then((res) => setData(res.data))
+      .catch(() => setData([]));
   }, []);
 
   return (
@@ -24,10 +19,9 @@ const LocationList = (props) => {
         onChange={(e) => props.handleChange(e)}
       >
         <option>Choose City</option>
-        {data &&
-          data?.map((item, index) => {
-            return <option key={index}>{item}</option>;
-          })}
+        {data.map((item, index) => (
+          <option key={index}>{item}</option>
+        ))}
       </select>
     </div>
   );

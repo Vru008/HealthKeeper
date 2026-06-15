@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { API_BASE } from "../config";
+import api from "../api";
 
 const SpecialityList = (props) => {
   const [data, setData] = useState([]);
 
-  const getSpecialities = () => {
-    axios.get(`${API_BASE}/doctors`).then((result) => {
-      const specialityArr = result.data.map((item) => item.speciality);
-      setData([...new Set(specialityArr)]);
-    });
-  };
-
   useEffect(() => {
-    getSpecialities();
+    api
+      .get("/data/specialities")
+      .then((res) => setData(res.data))
+      .catch(() => setData([]));
   }, []);
 
   return (
@@ -24,10 +19,9 @@ const SpecialityList = (props) => {
       required
     >
       <option>Choose Disease</option>
-      {data &&
-        data?.map((item, index) => {
-          return <option key={index}>{item}</option>;
-        })}
+      {data.map((item, index) => (
+        <option key={index}>{item}</option>
+      ))}
     </select>
   );
 };

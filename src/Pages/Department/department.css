@@ -1,53 +1,116 @@
-.containerr{
-    /* background-color:#2a487f; */
-    /* border: 2px solid red; */
-    margin-top: 30px;
-    margin-bottom: 30px;
-    height: 950px;
-    /* width: 900px; */
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr ;
-    grid-template-rows: 1fr 1fr 1fr;
-    row-gap: 1px;
-    column-gap: 1px;
+.dept-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 50px 20px 80px;
+  min-height: calc(100vh - 70px);
 }
-.department{
-    border: 1px solid #2a487f;
-    /* background-color:white */
-    /* height: 122px;
-    width: 122px; */
-    /* border: 1px solid red; */
-    /* padding: 15px; */
-    margin: 15px;
-    background: linear-gradient(rgba(0,0,0,.1), #2a487f);
-    justify-content: end;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-    /* padding: 0 4rem; */
+
+.dept-head {
+  text-align: center;
+  margin-bottom: 44px;
 }
-.department:hover{
-    transform: scale(1.1);
+.dept-head h1 {
+  color: #2a487f;
+  font-weight: 700;
+  font-size: 42px;
+  margin-bottom: 8px;
 }
-.depa1{
-    grid-row-start: 1;
-    grid-row-end: 4 ;
+.dept-head p {
+  color: #6b7a90;
+  font-size: 16px;
+  margin: 0;
 }
-.depa1 img{
-    height: 100%;
-    width: 366px;
+
+.dept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 22px;
 }
-.depa2 h5{
-    text-align: center;
-    /* border: 1px solid red; */
-    margin-top: 30px;
-    color: white;
-    font-size: 3rem;
-} 
-.depa2 img{
-    height: 110px;
-    width: 30%;
-    margin-top: 30px;    
-    /* margin-left: 170px; */
-    /* border:2px solid #2a487f; */
+
+.dept-card {
+  background: #fff;
+  border: 1px solid #eaeef5;
+  border-radius: 16px;
+  padding: 30px 22px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 6px 18px rgba(42, 72, 127, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+  animation: deptIn 0.45s ease both;
+}
+@keyframes deptIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.dept-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 36px rgba(42, 72, 127, 0.16);
+  border-color: #cdd9ee;
+}
+
+.dept-icon {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: #eef3fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  transition: background 0.2s, transform 0.3s;
+}
+.dept-card:hover .dept-icon {
+  background: #2a487f;
+  transform: rotate(-6deg) scale(1.05);
+}
+.dept-icon img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  transition: filter 0.2s;
+}
+.dept-card:hover .dept-icon img {
+  filter: brightness(0) invert(1);
+}
+
+.dept-card h5 {
+  color: #2c3a52;
+  font-weight: 700;
+  font-size: 19px;
+  margin-bottom: 6px;
+}
+
+.dept-arrow {
+  color: #2a487f;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.dept-card:hover .dept-arrow {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 520px) {
+  .dept-head h1 {
+    font-size: 32px;
+  }
+  .dept-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+  }
+  .dept-card {
+    padding: 22px 14px;
+  }
 }

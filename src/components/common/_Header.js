@@ -1,88 +1,84 @@
 import React, { useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { NavLink, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "./_header.css";
-import { NavLink } from "react-router-dom";
 
 const MainHeader = () => {
-  const { loginWithRedirect, isAuthenticated, logout, user } = useAuth0();
-  const [showMediaIcons, setShowMediaIcons] = useState(false);
+  const { user, logout } = useAuth();
+  const [open, setOpen] = useState(false);
+
+  const close = () => setOpen(false);
+
+  const links = (
+    <ul className="nav-links" onClick={close}>
+      <li>
+        <NavLink className="link" to="/" end>
+          Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink className="link" to="/aboutUs">
+          About
+        </NavLink>
+      </li>
+      <li>
+        <NavLink className="link" to="/department">
+          Departments
+        </NavLink>
+      </li>
+      <li>
+        <NavLink className="link" to="/contact">
+          Contact
+        </NavLink>
+      </li>
+      {user && (
+        <li>
+          <NavLink className="link" to="/appointments">
+            My Appointments
+          </NavLink>
+        </li>
+      )}
+    </ul>
+  );
 
   return (
-    <>
-    {/* <div className="container"> */}
-      <nav className="main-nav">
+    <nav className="main-nav">
+      <div className="logo">
+        <Link to="/" onClick={close}>
+          <img src="/Logo/lg6.png" alt="HealthKeeper" />
+        </Link>
+      </div>
 
-        <div className="logo">
-          <NavLink className="link" to="/">
-            <img src="/Logo/lg6.png" alt="HealthKeeper logo" />
-          </NavLink>
-        </div>
+      <div className={`nav-center ${open ? "open" : ""}`}>{links}</div>
 
-        <div className="menu-link">
-          <ul>
-            <li>
-              <NavLink className="link" to="/">Home</NavLink>
-            </li>
-            <li>
-              <NavLink className="link" to="/aboutUs">AboutUs</NavLink>
-            </li>
-            <li>
-              <NavLink className="link" to="/department">Department</NavLink>
-            </li>
-            <li>
-              <NavLink className="link" to="/contact">Contact-us</NavLink>
-            </li>
-          </ul>
-        </div>
-
-        <div className="log_in">
-          {isAuthenticated && <p> {user.name}</p>}
-          {isAuthenticated ? (
-            <button
-              onClick={() =>
-                logout({ logoutParams: { returnTo: window.location.origin } })
-              }
-            >
-              {" "}
+      <div className="nav-auth">
+        {user ? (
+          <>
+            <span className="nav-hi">Hi, {user.name.split(" ")[0]}</span>
+            <button className="btn-ghost" onClick={logout}>
               Log Out
             </button>
-          ) : (
-            <button onClick={() => loginWithRedirect()}>Log In</button>
-          )}
-        </div>
+          </>
+        ) : (
+          <>
+            <Link className="btn-ghost" to="/login">
+              Log In
+            </Link>
+            <Link className="btn-primary" to="/register">
+              Sign Up
+            </Link>
+          </>
+        )}
+      </div>
 
-        <div className="hamburger-menu">
-          <button
-            type="button"
-            className="hamburger-btn"
-            onClick={() => setShowMediaIcons(!showMediaIcons)}
-          >
-            <i className="bx bx-menu"></i>
-          </button>
-          <div
-            className={`menu-link mobile-menu-link${
-              showMediaIcons ? " active" : ""
-            }`}
-          >
-            <ul>
-              <li>
-                <NavLink className="link" to="/">Home</NavLink>
-              </li>
-              <li>
-                <NavLink className="link" to="/aboutUs">AboutUs</NavLink>
-              </li>
-              <li>
-                <NavLink className="link" to="/department">Department</NavLink>
-              </li>
-              <li>
-                <NavLink className="link" to="/contact">Contact-us</NavLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      {/* </div> */}
-    </>
+      <button
+        className="hamburger"
+        aria-label="Toggle menu"
+        onClick={() => setOpen((o) => !o)}
+      >
+        <i className="bx bx-menu"></i>
+      </button>
+    </nav>
   );
 };
 
