@@ -1,9 +1,23 @@
 const express = require("express");
 const Appointment = require("../Models/Appointment");
-const { protect } = require("../middleware/auth");
+const { protect, allow } = require("../middleware/auth");
 const { sendAppointmentEmail } = require("../utils/mailer");
 
 const router = express.Router();
+
+/* INCOMING  GET /api/appointments/incoming  (doctor / hospital)
+   Appointments booked under this provider's name. */
+router.get("/incoming", protect, allow("doctor", "hospital"), async (req, res) => {
+  try {
+    const name = req.user.providerName || req.user.name;
+    const appts = await Appointment.find({ provider: name })
+      .populate("user", "name email phone")
+      .sort({ datetime: 1 });
+    return res.json(appts);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
 
 /* CREATE  POST /api/appointments  (requires login)
    { patientName, phone?, gender?, city?, speciality?, provider?, datetime } */

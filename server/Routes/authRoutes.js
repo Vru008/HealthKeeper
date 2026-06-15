@@ -4,17 +4,34 @@ const { protect, signToken } = require("../middleware/auth");
 
 const router = express.Router();
 
+const ADMIN_CODE = process.env.ADMIN_CODE || "healthkeeper-admin";
+
 // Shape the user object we send back (never include the password).
 const publicUser = (u) => ({
   id: u._id,
   name: u.name,
   email: u.email,
   phone: u.phone || "",
+  role: u.role || "patient",
+  providerName: u.providerName || "",
+  speciality: u.speciality || "",
+  city: u.city || "",
 });
 
-/* REGISTER  POST /api/auth/register  { name, email, password, phone? } */
+/* REGISTER  POST /api/auth/register
+   { name, email, password, phone?, role?, providerName?, speciality?, city?, adminCode? } */
 router.post("/register", async (req, res) => {
-  const { name, email, password, phone } = req.body;
+  const {
+    name,
+    email,
+    password,
+    phone,
+    role,
+    providerName,
+    speciality,
+    city,
+    adminCode,
+  } = req.body;
 
   if (!name || !email || !password) {
     return res
@@ -27,6 +44,16 @@ router.post("/register", async (req, res) => {
       .json({ error: "Password must be at least 6 characters" });
   }
 
+  // Resolve the requested role safely.
+  let finalRole = "patient";
+  if (["doctor", "hospital"].includes(role)) finalRole = role;
+  if (role === "admin") {
+    if (adminCode !== ADMIN_CODE) {
+      return res.status(403).json({ error: "Invalid admin code" });
+    }
+    finalRole = "admin";
+  }
+
   try {
     const exists = await User.findOne({ email: email.toLowerCase() });
     if (exists) {
@@ -35,7 +62,20 @@ router.post("/register", async (req, res) => {
         .json({ error: "An account with this email already exists" });
     }
 
-    const user = await User.create({ name, email, password, phone });
+    const user = await User.create({
+      name,
+      email,
+      password,
+      phone,
+      role: finalRole,
+      providerName:
+        finalRole === "doctor" || finalRole === "hospital"
+          ? providerName || name
+          : undefined,
+      speciality: finalRole === "doctor" ? speciality : undefined,
+      city: ["doctor", "hospital"].includes(finalRole) ? city : undefined,
+    });
+
     return res
       .status(201)
       .json({ token: signToken(user._id), user: publicUser(user) });

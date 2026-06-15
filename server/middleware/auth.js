@@ -23,8 +23,18 @@ async function protect(req, res, next) {
   }
 }
 
+// Restricts a route to specific roles, e.g. allow("admin") or allow("doctor","hospital").
+function allow(...roles) {
+  return (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({ error: "Not allowed for your role" });
+    }
+    next();
+  };
+}
+
 function signToken(userId) {
   return jwt.sign({ id: userId }, SECRET, { expiresIn: "7d" });
 }
 
-module.exports = { protect, signToken };
+module.exports = { protect, allow, signToken };

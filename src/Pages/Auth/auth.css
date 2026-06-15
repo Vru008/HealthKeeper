@@ -16,6 +16,35 @@
   box-shadow: 0 20px 50px rgba(42, 72, 127, 0.15);
   animation: authIn 0.4s ease;
 }
+.auth-card-wide {
+  max-width: 480px;
+}
+
+.role-tabs {
+  display: flex;
+  gap: 6px;
+  background: #eef3fb;
+  border-radius: 12px;
+  padding: 5px;
+  margin-bottom: 22px;
+}
+.role-tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #5a6b82;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 9px 4px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.role-tab.active {
+  background: #2a487f;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(42, 72, 127, 0.25);
+}
 
 @keyframes authIn {
   from {

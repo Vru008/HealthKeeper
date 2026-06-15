@@ -19,6 +19,52 @@
   margin: 0;
 }
 
+/* ---- Filter bar ---- */
+.cl-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #eaeef5;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 32px;
+  box-shadow: 0 6px 18px rgba(42, 72, 127, 0.06);
+  position: sticky;
+  top: 78px;
+  z-index: 20;
+}
+.cl-filters input,
+.cl-filters select {
+  border: 1px solid #d4ddec;
+  border-radius: 9px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #41506a;
+  background: #fff;
+}
+.cl-filters input:focus,
+.cl-filters select:focus {
+  outline: none;
+  border-color: #2a487f;
+}
+.cl-search {
+  flex: 1;
+  min-width: 180px;
+}
+.cl-reset {
+  border: 1px solid #cdd9ee;
+  background: #eef3fb;
+  color: #2a487f;
+  font-weight: 600;
+  border-radius: 9px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+.cl-reset:hover {
+  background: #e0e9f7;
+}
+
 .cl-section {
   margin-bottom: 44px;
 }

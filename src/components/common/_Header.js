@@ -31,10 +31,31 @@ const MainHeader = () => {
           Contact
         </NavLink>
       </li>
-      {user && (
+      {user?.role === "patient" && (
         <li>
           <NavLink className="link" to="/appointments">
             My Appointments
+          </NavLink>
+        </li>
+      )}
+      {user?.role === "doctor" && (
+        <li>
+          <NavLink className="link" to="/doctor">
+            Dashboard
+          </NavLink>
+        </li>
+      )}
+      {user?.role === "hospital" && (
+        <li>
+          <NavLink className="link" to="/hospital">
+            Dashboard
+          </NavLink>
+        </li>
+      )}
+      {user?.role === "admin" && (
+        <li>
+          <NavLink className="link" to="/admin">
+            Admin
           </NavLink>
         </li>
       )}

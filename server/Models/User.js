@@ -7,6 +7,16 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true, lowercase: true },
     password: { type: String, required: true },
     phone: String,
+    role: {
+      type: String,
+      enum: ["patient", "doctor", "hospital", "admin"],
+      default: "patient",
+    },
+    // For doctor/hospital accounts: the name appointments are booked under,
+    // plus a bit of profile context shown on their dashboard.
+    providerName: String,
+    speciality: String,
+    city: String,
   },
   { timestamps: true }
 );

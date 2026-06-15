@@ -1,6 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { hospitals as ALL_HOSPITALS, doctors as ALL_DOCTORS } from "../../data/catalog";
+import {
+  hospitals as ALL_HOSPITALS,
+  doctors as ALL_DOCTORS,
+  locations as ALL_CITIES,
+} from "../../data/catalog";
 import "./conlist.css";
 
 const imgFallback = (e) => {
@@ -8,36 +12,54 @@ const imgFallback = (e) => {
   e.target.src = "/Logo/lg6.png";
 };
 
-const Stars = ({ rating }) => (
-  <span className="cl-stars">
-    ★ {rating}
-  </span>
-);
-
 const ConList = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { loc, speciality } = location.state || {};
 
-  const hospitalList = useMemo(
-    () =>
-      ALL_HOSPITALS.filter(
-        (h) =>
-          h.specialities.includes(speciality) && (!loc || h.location === loc)
-      ),
-    [loc, speciality]
+  // Filter state
+  const [query, setQuery] = useState("");
+  const [city, setCity] = useState(loc || "");
+  const [minRating, setMinRating] = useState(0);
+  const [sort, setSort] = useState("rating");
+
+  const baseDoctors = useMemo(
+    () => ALL_DOCTORS.filter((d) => d.speciality === speciality),
+    [speciality]
+  );
+  const baseHospitals = useMemo(
+    () => ALL_HOSPITALS.filter((h) => h.specialities.includes(speciality)),
+    [speciality]
   );
 
-  const doctorList = useMemo(
-    () =>
-      ALL_DOCTORS.filter(
-        (d) => d.speciality === speciality && (!loc || d.location === loc)
-      ),
-    [loc, speciality]
-  );
+  const common = (x) =>
+    (!query || x.name.toLowerCase().includes(query.toLowerCase())) &&
+    (!city || x.location === city) &&
+    x.rating >= minRating;
+
+  const doctorList = useMemo(() => {
+    const list = baseDoctors.filter(common);
+    const sorters = {
+      rating: (a, b) => b.rating - a.rating,
+      experience: (a, b) => b.experience - a.experience,
+      feeLow: (a, b) => a.fee - b.fee,
+      feeHigh: (a, b) => b.fee - a.fee,
+    };
+    return [...list].sort(sorters[sort] || sorters.rating);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseDoctors, query, city, minRating, sort]);
+
+  const hospitalList = useMemo(() => {
+    const list = baseHospitals.filter(common);
+    return [...list].sort((a, b) =>
+      sort === "feeLow" || sort === "feeHigh"
+        ? b.reviews - a.reviews
+        : b.rating - a.rating
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseHospitals, query, city, minRating, sort]);
 
   if (!speciality) {
-    // No selection — guide the user back.
     return (
       <div className="cl-empty-page">
         <h2>Start a search</h2>
@@ -58,22 +80,66 @@ const ConList = () => {
       },
     });
 
+  const resetFilters = () => {
+    setQuery("");
+    setCity(loc || "");
+    setMinRating(0);
+    setSort("rating");
+  };
+
   return (
     <div className="cl-page">
       <header className="cl-hero">
         <h1>
           {speciality} specialists &amp; hospitals
-          {loc ? ` in ${loc}` : ""}
+          {city ? ` in ${city}` : ""}
         </h1>
         <p>
           {doctorList.length} doctors · {hospitalList.length} hospitals
-          {loc ? ` in ${loc}` : " across India"}. Compare, then book in seconds.
+          {city ? ` in ${city}` : " across India"}. Filter and sort to find your fit.
         </p>
       </header>
 
+      {/* Filter bar */}
+      <div className="cl-filters">
+        <input
+          className="cl-search"
+          type="text"
+          placeholder="🔍 Search by name…"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <select value={city} onChange={(e) => setCity(e.target.value)}>
+          <option value="">All cities</option>
+          {ALL_CITIES.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+        <select
+          value={minRating}
+          onChange={(e) => setMinRating(Number(e.target.value))}
+        >
+          <option value={0}>Any rating</option>
+          <option value={4}>4.0+ ★</option>
+          <option value={4.5}>4.5+ ★</option>
+          <option value={4.7}>4.7+ ★</option>
+        </select>
+        <select value={sort} onChange={(e) => setSort(e.target.value)}>
+          <option value="rating">Top rated</option>
+          <option value="experience">Most experienced</option>
+          <option value="feeLow">Fee: low to high</option>
+          <option value="feeHigh">Fee: high to low</option>
+        </select>
+        <button className="cl-reset" onClick={resetFilters}>
+          Reset
+        </button>
+      </div>
+
       {/* Doctors */}
       <section className="cl-section">
-        <h2 className="cl-section-title">Top Doctors</h2>
+        <h2 className="cl-section-title">Top Doctors ({doctorList.length})</h2>
         <div className="cl-grid">
           {doctorList.map((d) => (
             <article className="doc-card" key={d.id}>
@@ -87,7 +153,7 @@ const ConList = () => {
               <div className="doc-body">
                 <div className="doc-top">
                   <h3>{d.name}</h3>
-                  <Stars rating={d.rating} />
+                  <span className="cl-stars">★ {d.rating}</span>
                 </div>
                 <p className="doc-spec">{d.speciality}</p>
                 <p className="doc-qual">{d.qualifications}</p>
@@ -112,14 +178,14 @@ const ConList = () => {
             </article>
           ))}
           {doctorList.length === 0 && (
-            <p className="cl-none">No doctors found for this selection.</p>
+            <p className="cl-none">No doctors match your filters.</p>
           )}
         </div>
       </section>
 
       {/* Hospitals */}
       <section className="cl-section">
-        <h2 className="cl-section-title">Hospitals</h2>
+        <h2 className="cl-section-title">Hospitals ({hospitalList.length})</h2>
         <div className="cl-grid cl-grid-wide">
           {hospitalList.map((h) => (
             <article className="hosp-card" key={h.id}>
@@ -167,7 +233,7 @@ const ConList = () => {
             </article>
           ))}
           {hospitalList.length === 0 && (
-            <p className="cl-none">No hospitals found for this selection.</p>
+            <p className="cl-none">No hospitals match your filters.</p>
           )}
         </div>
       </section>

@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const authRoutes = require("./Routes/authRoutes");
 const dataRoutes = require("./Routes/dataRoutes");
 const appointmentRoutes = require("./Routes/appointmentRoutes");
+const adminRoutes = require("./Routes/adminRoutes");
 const aiRoutes = require("./Routes/aiRoutes");
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use("/api/auth", authRoutes);
 app.use("/api/data", dataRoutes);
 app.use("/api/appointments", appointmentRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/ai", aiRoutes);
 
 // Health check

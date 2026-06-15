@@ -1,193 +1,246 @@
-import React,{ useState} from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import {
+  specialities,
+  locations,
+  doctors,
+  hospitals,
+} from "../../data/catalog";
 import "./home.css";
-import SpecialityList from "../../components/SpecialityList";
-import LocationList from "../../components/LocationList";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
-const Home = (props) => {
+const SPEC_ICONS = {
+  Cardiology: "/Icon/heart.png",
+  Neurology: "/Icon/neurology.png",
+  Oncology: "/Icon/oncology.png",
+  Orthopedics: "/Icon/ortho.png",
+  Pediatrics: "/Icon/heart1.png",
+  Dermatology: "/Icon/pharma.png",
+  Gynecology: "/Icon/ivf.png",
+  Ophthalmology: "/Icon/general.png",
+  ENT: "/Icon/ENT.png",
+  Urology: "/Icon/joint.png",
+  Nephrology: "/Icon/kidney.png",
+  Gastroenterology: "/Icon/liver.png",
+  Pulmonology: "/Icon/lung.png",
+  Psychiatry: "/Icon/general.png",
+  Dentistry: "/Icon/teeth.png",
+  "General Medicine": "/Icon/general.png",
+};
 
+const STEPS = [
+  {
+    n: "1",
+    t: "Search",
+    d: "Pick a speciality and city, or describe symptoms to our AI assistant.",
+  },
+  {
+    n: "2",
+    t: "Compare",
+    d: "Browse verified doctors and hospitals by rating, experience, and fee.",
+  },
+  {
+    n: "3",
+    t: "Book & relax",
+    d: "Confirm in seconds and get a calendar reminder straight to your device.",
+  },
+];
+
+const FEATURES = [
+  { icon: "🔍", t: "Smart search & filters", d: "Find the right specialist by rating, experience, fee, and city." },
+  { icon: "📅", t: "Instant reminders", d: "Every booking adds a calendar event with an alarm — never miss a visit." },
+  { icon: "🤖", t: "AI health assistant", d: "Not sure which doctor to see? Ask our assistant any time." },
+  { icon: "🔒", t: "Secure accounts", d: "Your bookings and details are protected with encrypted logins." },
+];
+
+const Home = () => {
   const navigate = useNavigate();
-  const [searchData, setSearchData] = useState({
-    location: "Ahmedabad",
-    speciality: "Oncology",
-  });
+  const [speciality, setSpeciality] = useState(specialities[0]);
+  const [city, setCity] = useState("");
 
-  const handleChange = (e) => {
-    setSearchData((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-  };
-  const handleSearch = () => {
-    navigate("/list", {
-      state: {
-        loc: searchData?.location,
-        speciality: searchData?.speciality,
-      },
-    });
-  };
- 
+  const search = () =>
+    navigate("/list", { state: { loc: city, speciality } });
+
+  const goSpeciality = (sp) =>
+    navigate("/list", { state: { loc: "", speciality: sp } });
+
+  const topDoctors = [...doctors]
+    .sort((a, b) => b.rating - a.rating || b.reviews - a.reviews)
+    .slice(0, 4);
 
   return (
-    <div className="container-fluid">
-      <div>
-      <div className="row">
-        <div className="pic" id="top">
-          <img src="/Home img/dbg6.jpg" alt="Healthcare banner" />
-          <div className="column centered">
-            We are here
+    <div className="home">
+      {/* HERO */}
+      <section className="hero">
+        <div className="hero-inner">
+          <span className="hero-badge">🩺 Trusted healthcare, simplified</span>
+          <h1 className="hero-title">
+            Find the right doctor,
             <br />
-            for your health
-          </div>
-          <div className="column click">
-            <Link to="/form" className="hero-cta">
-              Book an Appointment
-            </Link>
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="column find">
-          <strong>Find suitable doctors and hospital</strong>
-        </div>
-      </div>
-      <br />
-      <div className="row city_disease">
-        <div className=" col-4  select">
-          <SpecialityList handleChange={handleChange} />
-        </div>
-
-        <div className="col-4 select">
-          <button
-            type="button"
-            className="search-btn"
-            onClick={handleSearch}
-            aria-label="Search doctors and hospitals"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              width="22"
-              height="22"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="7" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <span>Search</span>
-          </button>
-        </div>
-        <div className=" col-4 select">
-          <LocationList handleChange={handleChange} />
-        </div>
-      </div>
-      <br />
-      <div className="row" id="service">
-        <div className="column box d-flex mb-3">
-          <div className="boxes p-2 m-2 flex-fill" id="primary_care">
-            <strong>Primary Care</strong>
-            <p>
-              Primary care is a model of care that supports first-contact,
-              accessible, continuous, comprehensive and coordinated
-              person-focused care. It aims to optimize population health and
-              reduce disparities across the population{" "}
-            </p>
-          </div>
-          <div className="boxes p-2 m-2  flex-fill" id="primary_care">
-            <strong>Emergency cases</strong>
-            <p>
-              Emergency care in healthcare refers to the treatment of patients
-              with acute illnesses or injuries that require immediate medical
-              attention. This type of care is typically provided in an emergency
-              room or urgent care setting
-            </p>
-          </div>
-          <div className="boxes p-2 m-2  flex-fill" id="primary_care">
-            <strong>Online Appointment</strong>
-            <p>
-              The individual or the patient can book an appointment any time
-              from anywhere through an Online healthcare service provider.
-              Online Appointment Booking systems are also known as Online
-              booking application, online scheduler etc
-            </p>
-          </div>
-        </div>
-
-        {/* <Service /> */}
-      </div>
-      <div className="row gb">
-        <div className="col-md-12">
-          <div className="special">
-            <h1>Meet Our Specialist</h1>
-          </div>
-        </div>
-        <div className="col-md-4 dr">
-          <img src="/dr img/dr-ashish-sabhrawal.jpg" alt=""/>
-          <strong>
-            {" "}
-            <h3>Dr.Aashish Sabharwal</h3>
-          </strong>
-          <p>
-            Urologist | Robotic surgeon
-            <br />
-            MBBS,M.S,General surgery,DNB
-            <br />
-            New Delhi
-          </p>
-        </div>
-        <div className="col-md-4 dr">
-          <img src="/dr img/Dr_S_K_S_Marya.jpg" alt="" />
-          <strong>
-            {" "}
-            <h3>Dr.SKS Marya</h3>
-          </strong>
-          <p>
-            Orthopaedic Surgeon | Chairman - Bone & Joint Institut
-            <br />
-            M.B.B.S., M.S., DNB, M.Ch, FICS
-            <br />
-            Gurgaon, India
-          </p>
-        </div>
-        <div className="col-md-4 dr">
-          <img src="/dr img/Dr Sanjay Sachdeva.jpeg"alt="" />
-          <strong>
-            {" "}
-            <h3>Dr.Sanjay Sachdeva</h3>
-          </strong>
-          <p>
-            Otolaryngologist | Director-ENT
-            <br />
-            MBBS,DCH,MS
-            <br />
-            New Delhi,India
-          </p>
-        </div>
-      </div>
-      <div className="row WHY">
-        <div className="col-md-4">
-          <h1>
-            Why<br />we?
+            <span>book in seconds.</span>
           </h1>
+          <p className="hero-sub">
+            Search {doctors.length}+ verified doctors and {hospitals.length}+
+            hospitals across {locations.length} cities — compare, book, and get
+            instant reminders.
+          </p>
+
+          <div className="hero-search">
+            <div className="hs-field">
+              <label>Speciality</label>
+              <select
+                value={speciality}
+                onChange={(e) => setSpeciality(e.target.value)}
+              >
+                {specialities.map((s) => (
+                  <option key={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+            <div className="hs-field">
+              <label>City</label>
+              <select value={city} onChange={(e) => setCity(e.target.value)}>
+                <option value="">All cities</option>
+                {locations.map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+            <button className="hs-btn" onClick={search}>
+              Search
+            </button>
+          </div>
+
+          <div className="hero-trust">
+            ⭐ Top-rated specialists · ⏰ Calendar reminders · 🤖 AI assistant
+          </div>
         </div>
-        <div className="col-md-8">
-          <h4>
-            Healthkeeper ensures that the patient's experience right from the
-            discovery of the right doctor, to booking an appointment at the
-            clinic, getting a detailed diagnosis done, booking tests at a
-            diagnostic center, getting insurance paperwork done, commuting from
-            home to the hospital & back on the day of the surgery,
-            admission-discharge processes at the hospital, and follow-up
-            consultation after the surgery is hassle-free and care-filled
-          </h4>
+      </section>
+
+      {/* STATS */}
+      <section className="stats">
+        <div className="stat">
+          <strong>{doctors.length}+</strong>
+          <span>Verified Doctors</span>
         </div>
-      </div>
-      </div>
+        <div className="stat">
+          <strong>{hospitals.length}+</strong>
+          <span>Hospitals</span>
+        </div>
+        <div className="stat">
+          <strong>{locations.length}</strong>
+          <span>Cities</span>
+        </div>
+        <div className="stat">
+          <strong>{specialities.length}</strong>
+          <span>Specialities</span>
+        </div>
+      </section>
+
+      {/* SPECIALITIES */}
+      <section className="home-section">
+        <div className="sec-head">
+          <h2>Browse by speciality</h2>
+          <p>Tap a department to see top doctors and hospitals.</p>
+        </div>
+        <div className="spec-grid">
+          {specialities.map((sp) => (
+            <button key={sp} className="spec-card" onClick={() => goSpeciality(sp)}>
+              <img
+                src={SPEC_ICONS[sp] || "/Icon/general.png"}
+                alt={sp}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/Icon/general.png";
+                }}
+              />
+              <span>{sp}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* TOP DOCTORS */}
+      <section className="home-section alt">
+        <div className="sec-head">
+          <h2>Top-rated doctors</h2>
+          <p>Some of the highest-rated specialists on HealthKeeper.</p>
+        </div>
+        <div className="top-doctors">
+          {topDoctors.map((d) => (
+            <div
+              key={d.id}
+              className="td-card"
+              onClick={() =>
+                navigate("/list", {
+                  state: { loc: d.location, speciality: d.speciality },
+                })
+              }
+            >
+              <img
+                src={d.img}
+                alt={d.name}
+                loading="lazy"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/Logo/lg6.png";
+                }}
+              />
+              <h4>{d.name}</h4>
+              <p className="td-spec">{d.speciality}</p>
+              <p className="td-meta">
+                ⭐ {d.rating} · {d.experience} yrs · {d.location}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="home-section">
+        <div className="sec-head">
+          <h2>How it works</h2>
+          <p>From symptom to appointment in three simple steps.</p>
+        </div>
+        <div className="steps">
+          {STEPS.map((s) => (
+            <div key={s.n} className="step">
+              <div className="step-num">{s.n}</div>
+              <h4>{s.t}</h4>
+              <p>{s.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FEATURES */}
+      <section className="home-section alt">
+        <div className="sec-head">
+          <h2>Why HealthKeeper</h2>
+        </div>
+        <div className="feat-grid">
+          {FEATURES.map((f) => (
+            <div key={f.t} className="feat-card">
+              <div className="feat-icon">{f.icon}</div>
+              <h4>{f.t}</h4>
+              <p>{f.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="cta">
+        <h2>Ready to feel better?</h2>
+        <p>Book your next appointment with a top specialist today.</p>
+        <div className="cta-actions">
+          <Link to="/department" className="cta-btn">
+            Find a Doctor
+          </Link>
+          <Link to="/register" className="cta-btn cta-ghost">
+            Create Account
+          </Link>
+        </div>
+      </section>
     </div>
   );
 };

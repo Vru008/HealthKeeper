@@ -10,7 +10,16 @@ AI health assistant. Built with the **MERN** stack and **Google Gemini**.
 
 ## ✨ Features
 
-- **Search by city & speciality** — find the right hospitals and doctors fast.
+- **Rich catalog** — 380+ doctors and 80+ hospitals across 12 cities and 16
+  specialities (photos, ratings, fees, experience, facilities), bundled into the
+  app so search works instantly.
+- **Smart search & filters** — search by name, filter by city and minimum
+  rating, and sort by rating, experience, or fee.
+- **Role-based portals** — sign up as **Patient**, **Doctor**, **Hospital**, or
+  **Admin**, each with its own dashboard:
+  - _Patient_ — books and manages appointments.
+  - _Doctor / Hospital_ — sees appointments booked under their name.
+  - _Admin_ — platform stats, all users, and all appointments.
 - **Email + password accounts** — secure JWT auth (bcrypt-hashed passwords).
 - **Appointment booking** — saved to your account, with a confirmation screen.
 - **Device reminders** — every booking generates a downloadable **`.ics`
@@ -117,8 +126,19 @@ npm run dev
 | GET    | `/api/data/locations`     | —    | Distinct cities                  |
 | POST   | `/api/appointments`       | ✓    | Book an appointment              |
 | GET    | `/api/appointments`       | ✓    | List my appointments             |
+| GET    | `/api/appointments/incoming` | doctor/hospital | Appointments booked with me |
 | DELETE | `/api/appointments/:id`   | ✓    | Cancel an appointment            |
+| GET    | `/api/admin/stats`        | admin | Platform stats                  |
+| GET    | `/api/admin/users`        | admin | All users                       |
+| GET    | `/api/admin/appointments` | admin | All appointments                |
 | POST   | `/api/ai/chat`            | —    | Health assistant chat (Gemini)   |
+
+### Creating an admin account
+
+On the Sign Up page choose **Admin** and enter the admin code (set by
+`ADMIN_CODE` in `server/.env`, default `healthkeeper-admin`). Doctor and Hospital
+accounts are open self-signup; their dashboards show appointments booked under
+the name they register with.
 
 ---
 
