@@ -29,7 +29,7 @@ const Contact = () => {
               <span className="ci-icon">📍</span>
               <div>
                 <strong>Address</strong>
-                <p>Ahmedabad, Gujarat 382418, India</p>
+                <p>India</p>
               </div>
             </li>
             <li>

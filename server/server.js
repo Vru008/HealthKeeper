@@ -15,27 +15,51 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 
+// ---- MongoDB connection ----
+// The catalog (/api/data) and AI assistant work without a database; login and
+// appointments need one. We fail fast and loud so misconfig is obvious.
+mongoose.set("strictQuery", true);
+if (process.env.MONGO_URI) {
+  mongoose
+    .connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 8000 })
+    .then(() => console.log("✅ MongoDB connected"))
+    .catch((err) => {
+      console.error("❌ MongoDB connection failed:", err.message);
+      console.error(
+        "   Fix: in MongoDB Atlas, allow your IP (Network Access → Add IP → 0.0.0.0/0),\n" +
+          "   make sure the cluster is running, and check the password / db name in MONGO_URI."
+      );
+    });
+  mongoose.connection.on("disconnected", () =>
+    console.warn("⚠  MongoDB disconnected")
+  );
+} else {
+  console.warn("⚠  MONGO_URI not set — login & appointments need a database.");
+}
+
+// Returns a clear error immediately if the DB isn't connected, instead of
+// letting Mongoose buffer the query for 10s and throw a cryptic timeout.
+const requireDB = (req, res, next) => {
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({
+      error:
+        "Database not connected. Set MONGO_URI in server/.env and whitelist your IP in MongoDB Atlas.",
+    });
+  }
+  next();
+};
+
 // Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/data", dataRoutes);
-app.use("/api/appointments", appointmentRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/ai", aiRoutes);
+app.use("/api/auth", requireDB, authRoutes);
+app.use("/api/data", dataRoutes); // static catalog — no DB needed
+app.use("/api/appointments", requireDB, appointmentRoutes);
+app.use("/api/admin", requireDB, adminRoutes);
+app.use("/api/ai", aiRoutes); // Gemini — no DB needed
 
 // Health check
 app.get("/", (req, res) => {
   res.send("HealthKeeper API running 🩺");
 });
-
-// MongoDB connection (only if a URI is configured; the catalog/AI still work without it)
-if (process.env.MONGO_URI) {
-  mongoose
-    .connect(process.env.MONGO_URI)
-    .then(() => console.log("MongoDB connected 🚀"))
-    .catch((err) => console.log("DB error:", err.message));
-} else {
-  console.log("⚠  MONGO_URI not set — login & appointments need a database.");
-}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
