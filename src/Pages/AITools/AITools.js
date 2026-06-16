@@ -33,6 +33,12 @@ const CITY_ALIASES = {
   calcutta: "Kolkata",
   madras: "Chennai",
   "new delhi": "Delhi",
+  gurugram: "Gurgaon",
+  vizag: "Visakhapatnam",
+  vishakhapatnam: "Visakhapatnam",
+  mangaluru: "Mangalore",
+  mysuru: "Mysore",
+  trivandrum: "Thiruvananthapuram",
 };
 
 // Resolve a city from free text against our covered cities (+ aliases).

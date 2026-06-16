@@ -27,9 +27,11 @@ const STEPS = [
 ];
 
 const FEATURES = [
-  { icon: "🔍", t: "Smart search & filters", d: "Find the right specialist by rating, experience, fee, and city." },
-  { icon: "📅", t: "Instant reminders", d: "Every booking adds a calendar event with an alarm — never miss a visit." },
-  { icon: "🤖", t: "AI health assistant", d: "Not sure which doctor to see? Ask our assistant any time." },
+  { icon: "🩺", t: "AI Symptom Checker", d: "Describe how you feel — get likely causes, urgency, and the right department, with emergency alerts." },
+  { icon: "🔎", t: "Smart AI Search", d: "Find doctors in plain English — \"female skin doctor in Baroda under ₹1000\" just works." },
+  { icon: "📄", t: "AI Report Reader", d: "Upload a blood test, X-ray, or prescription and get it explained in simple language." },
+  { icon: "🏥", t: "AI Hospital Finder", d: "Best hospitals by condition, city, budget tier, and insurance — instantly recommended." },
+  { icon: "📅", t: "Instant reminders", d: "Every booking adds a calendar alarm and sends a confirmation email — never miss a visit." },
   { icon: "🔒", t: "Secure accounts", d: "Your bookings and details are protected with encrypted logins." },
 ];
 
@@ -217,6 +219,7 @@ const Home = () => {
       <section className="home-section alt">
         <div className="sec-head">
           <h2>Why HealthKeeper</h2>
+          <p>A full AI health toolkit, powered by Google Gemini.</p>
         </div>
         <div className="feat-grid">
           {FEATURES.map((f) => (

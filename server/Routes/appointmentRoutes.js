@@ -43,10 +43,17 @@ router.post("/", protect, async (req, res) => {
       datetime,
     });
 
-    // Fire-and-forget confirmation email (only if SMTP is configured).
-    sendAppointmentEmail(req.user.email, appt).catch(() => {});
+    // Send a confirmation email (only if SMTP is configured) and report back.
+    let emailSent = false;
+    try {
+      emailSent = await sendAppointmentEmail(req.user.email, appt);
+    } catch {
+      emailSent = false;
+    }
 
-    return res.status(201).json(appt);
+    return res
+      .status(201)
+      .json({ ...appt.toObject(), emailSent, email: req.user.email });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

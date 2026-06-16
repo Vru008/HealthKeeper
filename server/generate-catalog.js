@@ -24,20 +24,47 @@ const pick = (a) => a[Math.floor(r() * a.length)];
 const int = (min, max) => Math.floor(r() * (max - min + 1)) + min;
 const round1 = (n) => Math.round(n * 10) / 10;
 
-const cities = [
-  "Ahmedabad",
-  "Mumbai",
-  "Delhi",
-  "Bangalore",
-  "Chennai",
-  "Hyderabad",
-  "Pune",
-  "Kolkata",
-  "Jaipur",
-  "Surat",
-  "Lucknow",
-  "Chandigarh",
-];
+// Real Indian cities with real localities and pincode prefixes, so generated
+// addresses read as authentic (e.g. "Bopal, Ahmedabad - 380058").
+const CITY_DATA = {
+  Ahmedabad: { pin: "380", areas: ["Bopal", "Satellite", "Navrangpura", "Maninagar", "Vastrapur"] },
+  Mumbai: { pin: "400", areas: ["Andheri", "Bandra", "Powai", "Dadar", "Mulund"] },
+  Delhi: { pin: "110", areas: ["Saket", "Dwarka", "Rohini", "Vasant Kunj", "Pitampura"] },
+  Bangalore: { pin: "560", areas: ["Whitefield", "Indiranagar", "Jayanagar", "Koramangala", "Marathahalli"] },
+  Chennai: { pin: "600", areas: ["Adyar", "T. Nagar", "Velachery", "Anna Nagar", "Mylapore"] },
+  Hyderabad: { pin: "500", areas: ["Banjara Hills", "Gachibowli", "Madhapur", "Jubilee Hills", "Kukatpally"] },
+  Pune: { pin: "411", areas: ["Kothrud", "Hinjewadi", "Baner", "Viman Nagar", "Kharadi"] },
+  Kolkata: { pin: "700", areas: ["Salt Lake", "Ballygunge", "New Town", "Behala", "Howrah"] },
+  Jaipur: { pin: "302", areas: ["Malviya Nagar", "Vaishali Nagar", "C-Scheme", "Mansarovar", "Tonk Road"] },
+  Surat: { pin: "395", areas: ["Vesu", "Adajan", "Athwa", "Piplod", "Citylight"] },
+  Lucknow: { pin: "226", areas: ["Gomti Nagar", "Hazratganj", "Aliganj", "Indira Nagar", "Aminabad"] },
+  Chandigarh: { pin: "160", areas: ["Sector 17", "Sector 22", "Sector 35", "Sector 44", "Manimajra"] },
+  Vadodara: { pin: "390", areas: ["Alkapuri", "Gotri", "Akota", "Sayajigunj", "Fatehgunj"] },
+  Indore: { pin: "452", areas: ["Vijay Nagar", "Palasia", "Rau", "Bhawarkua", "Sudama Nagar"] },
+  Bhopal: { pin: "462", areas: ["MP Nagar", "Arera Colony", "Kolar Road", "Shahpura", "New Market"] },
+  Nagpur: { pin: "440", areas: ["Dharampeth", "Sadar", "Ramdaspeth", "Wardha Road", "Civil Lines"] },
+  Patna: { pin: "800", areas: ["Kankarbagh", "Boring Road", "Patliputra", "Rajendra Nagar", "Bailey Road"] },
+  Kanpur: { pin: "208", areas: ["Swaroop Nagar", "Kakadeo", "Civil Lines", "Kidwai Nagar", "Govind Nagar"] },
+  Coimbatore: { pin: "641", areas: ["RS Puram", "Gandhipuram", "Saibaba Colony", "Peelamedu", "Race Course"] },
+  Kochi: { pin: "682", areas: ["Kakkanad", "Edappally", "Vyttila", "Kaloor", "Palarivattom"] },
+  Visakhapatnam: { pin: "530", areas: ["MVP Colony", "Dwaraka Nagar", "Gajuwaka", "Madhurawada", "Seethammadhara"] },
+  Bhubaneswar: { pin: "751", areas: ["Saheed Nagar", "Patia", "Chandrasekharpur", "Jaydev Vihar", "Khandagiri"] },
+  Guwahati: { pin: "781", areas: ["Zoo Road", "Beltola", "Dispur", "Paltan Bazaar", "Six Mile"] },
+  Ranchi: { pin: "834", areas: ["Lalpur", "Kanke Road", "Harmu", "Doranda", "Ashok Nagar"] },
+  Raipur: { pin: "492", areas: ["Shankar Nagar", "Pandri", "Telibandha", "Devendra Nagar", "Samta Colony"] },
+  Dehradun: { pin: "248", areas: ["Rajpur Road", "Clement Town", "Ballupur", "Sahastradhara Road", "Race Course"] },
+  Amritsar: { pin: "143", areas: ["Ranjit Avenue", "Lawrence Road", "Mall Road", "Majitha Road", "Green Avenue"] },
+  Ludhiana: { pin: "141", areas: ["Sarabha Nagar", "Model Town", "Civil Lines", "Dugri", "BRS Nagar"] },
+  Vijayawada: { pin: "520", areas: ["Benz Circle", "Governorpet", "Patamata", "Auto Nagar", "Gunadala"] },
+  Mysore: { pin: "570", areas: ["Vijayanagar", "Saraswathipuram", "Kuvempunagar", "Gokulam", "Hebbal"] },
+  Nashik: { pin: "422", areas: ["College Road", "Gangapur Road", "Indira Nagar", "Panchavati", "Nashik Road"] },
+  Rajkot: { pin: "360", areas: ["Kalavad Road", "University Road", "Race Course", "Kotecha Nagar", "Gondal Road"] },
+  Gurgaon: { pin: "122", areas: ["DLF Phase 1", "Sushant Lok", "Sohna Road", "Golf Course Road", "Sector 56"] },
+  Noida: { pin: "201", areas: ["Sector 18", "Sector 62", "Sector 137", "Sector 50", "Sector 76"] },
+  Thiruvananthapuram: { pin: "695", areas: ["Kowdiar", "Pattom", "Vazhuthacaud", "Sasthamangalam", "Technopark"] },
+  Mangalore: { pin: "575", areas: ["Hampankatta", "Kadri", "Bejai", "Kankanady", "Surathkal"] },
+};
+const cities = Object.keys(CITY_DATA);
 
 const specialities = [
   { key: "Cardiology", deg: "DM (Cardiology)", focus: ["Angioplasty", "Heart Failure", "Pacemaker Implant", "Valve Repair"] },
@@ -64,7 +91,11 @@ const last = ["Sharma", "Patel", "Mehta", "Verma", "Reddy", "Iyer", "Nair", "Gup
 
 const hospitalChains = ["Apollo", "Fortis", "Manipal", "Max", "Medanta", "Narayana", "CARE", "Aster", "Columbia Asia", "Global", "Sterling", "Zydus", "Wockhardt", "KIMS"];
 const hospitalTypes = ["Hospital", "Super Speciality Hospital", "Medical Centre", "Multispeciality Hospital", "Institute of Medical Sciences"];
-const areas = ["Bopal", "Andheri", "Saket", "Whitefield", "Adyar", "Banjara Hills", "Kothrud", "Salt Lake", "Malviya Nagar", "Vesu", "Gomti Nagar", "Sector 22"];
+const cityAddress = (city) => {
+  const info = CITY_DATA[city];
+  const pincode = info.pin + String(int(0, 999)).padStart(3, "0");
+  return `${pick(info.areas)}, ${city} - ${pincode}`;
+};
 const facilitiesPool = ["24x7 Emergency", "Pharmacy", "ICU", "Ambulance", "Cafeteria", "Free WiFi", "Insurance Desk", "Diagnostic Lab", "Blood Bank", "Parking"];
 
 // Hospital photos (reliable Unsplash CDN, building/medical imagery)
@@ -134,7 +165,7 @@ for (const city of cities) {
       id: `h${hIdx + 1}`,
       name,
       location: city,
-      address: `${pick(areas)}, ${city}`,
+      address: cityAddress(city),
       rating: round1(4.0 + r() * 0.9),
       reviews: int(120, 4200),
       priceTier,

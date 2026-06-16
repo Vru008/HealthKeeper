@@ -115,6 +115,12 @@ const Form = () => {
             )}
           </ul>
 
+          {booked.emailSent && (
+            <p className="confirm-email">
+              📧 Confirmation email sent to {booked.email}
+            </p>
+          )}
+
           <p className="confirm-remind">Set a reminder on your device:</p>
           <div className="confirm-actions">
             <button
