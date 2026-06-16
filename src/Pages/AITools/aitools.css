@@ -265,6 +265,18 @@
   border-radius: 20px;
 }
 
+/* Highlight the matched speciality on a hospital card */
+.hosp-tag-hl {
+  background: #2a487f !important;
+  color: #fff !important;
+}
+
+.ait-note {
+  color: #8a96a8;
+  font-size: 13.5px;
+  margin: 4px 0 14px;
+}
+
 .ait-disclaimer {
   margin-top: 20px;
   background: #fff8e6;

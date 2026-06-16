@@ -5,6 +5,7 @@ import {
   doctors as ALL_DOCTORS,
   hospitals as ALL_HOSPITALS,
   specialities,
+  locations,
 } from "../../data/catalog";
 import { downloadICS, googleCalendarUrl } from "../../utils/calendar";
 import "../ConList/conlist.css";
@@ -21,6 +22,26 @@ const TABS = [
 const imgFallback = (e) => {
   e.target.onerror = null;
   e.target.src = "/Logo/lg6.png";
+};
+
+// Map common aliases / old city names to the cities we actually cover.
+const CITY_ALIASES = {
+  baroda: "Vadodara",
+  bombay: "Mumbai",
+  bengaluru: "Bangalore",
+  bangaluru: "Bangalore",
+  calcutta: "Kolkata",
+  madras: "Chennai",
+  "new delhi": "Delhi",
+};
+
+// Resolve a city from free text against our covered cities (+ aliases).
+const resolveCity = (text) => {
+  const t = (text || "").toLowerCase();
+  for (const c of locations) if (t.includes(c.toLowerCase())) return c;
+  for (const [alias, canonical] of Object.entries(CITY_ALIASES))
+    if (t.includes(alias)) return canonical;
+  return "";
 };
 
 /* ---------- shared cards ---------- */
@@ -50,35 +71,48 @@ const DoctorCard = ({ d, onBook }) => (
   </article>
 );
 
-const HospitalCard = ({ h, onBook }) => (
-  <article className="hosp-card">
-    <div className="hosp-imgwrap">
-      <img src={h.img} alt={h.name} loading="lazy" onError={imgFallback} />
-      <span className="hosp-rating">★ {h.rating}</span>
-    </div>
-    <div className="hosp-body">
-      <h3>{h.name}</h3>
-      <p className="hosp-addr">📍 {h.address}</p>
-      <div className="hosp-tags">
-        <span className="hosp-tag">{h.priceTier}</span>
-        {h.insurance && <span className="hosp-tag">Insurance</span>}
-        {h.specialities.slice(0, 3).map((s) => (
-          <span key={s} className="hosp-tag">
-            {s}
-          </span>
-        ))}
+const HospitalCard = ({ h, onBook, highlight }) => {
+  const specs = highlight
+    ? [highlight, ...h.specialities.filter((s) => s !== highlight)]
+    : h.specialities;
+  return (
+    <article className="hosp-card">
+      <div className="hosp-imgwrap">
+        <img src={h.img} alt={h.name} loading="lazy" onError={imgFallback} />
+        <span className="hosp-rating">★ {h.rating}</span>
       </div>
-      <div className="hosp-actions">
-        <button className="cl-btn" onClick={() => onBook(h)}>
-          Book Appointment
-        </button>
-        <a className="cl-btn cl-btn-ghost" href={h.url} target="_blank" rel="noreferrer">
-          View on map
-        </a>
+      <div className="hosp-body">
+        <h3>{h.name}</h3>
+        <p className="hosp-addr">📍 {h.address}</p>
+        <div className="hosp-tags">
+          <span className="hosp-tag">{h.priceTier}</span>
+          {h.insurance && <span className="hosp-tag">Insurance</span>}
+          {specs.slice(0, 3).map((s) => (
+            <span
+              key={s}
+              className={`hosp-tag${s === highlight ? " hosp-tag-hl" : ""}`}
+            >
+              {s}
+            </span>
+          ))}
+        </div>
+        <div className="hosp-actions">
+          <button className="cl-btn" onClick={() => onBook(h)}>
+            Book Appointment
+          </button>
+          <a
+            className="cl-btn cl-btn-ghost"
+            href={h.url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            View on map
+          </a>
+        </div>
       </div>
-    </div>
-  </article>
-);
+    </article>
+  );
+};
 
 const Disclaimer = ({ text }) => (
   <p className="ait-disclaimer">
@@ -185,6 +219,8 @@ const DoctorMatch = () => {
     try {
       const r = await api.post("/ai/match-doctor", { query });
       const f = r.data;
+      // Trust the query for the city (handles aliases like Baroda→Vadodara).
+      f.city = resolveCity(query) || (locations.includes(f.city) ? f.city : "");
       setFilters(f);
       let list = ALL_DOCTORS.filter(
         (d) =>
@@ -228,6 +264,11 @@ const DoctorMatch = () => {
           {filters.city && <span>{filters.city}</span>}
           {filters.maxFee > 0 && <span>≤ ₹{filters.maxFee}</span>}
         </div>
+      )}
+      {filters && !filters.city && (
+        <p className="ait-note">
+          No specific city detected — showing top-rated across India.
+        </p>
       )}
       {filters && (
         <div className="cl-grid">
@@ -351,6 +392,8 @@ const HospitalRecommender = () => {
     try {
       const r = await api.post("/ai/recommend-hospital", { query });
       const f = r.data;
+      // Trust the query for the city (handles aliases like Baroda→Vadodara).
+      f.city = resolveCity(query) || (locations.includes(f.city) ? f.city : "");
       setFilters(f);
       let list = ALL_HOSPITALS.filter(
         (h) =>
@@ -397,10 +440,20 @@ const HospitalRecommender = () => {
           {filters.needsInsurance && <span>Insurance</span>}
         </div>
       )}
+      {filters && !filters.city && (
+        <p className="ait-note">
+          No specific city detected — showing top-rated across India.
+        </p>
+      )}
       {filters && (
         <div className="cl-grid cl-grid-wide">
           {results.map((h) => (
-            <HospitalCard key={h.id} h={h} onBook={onBook} />
+            <HospitalCard
+              key={h.id}
+              h={h}
+              onBook={onBook}
+              highlight={filters.speciality}
+            />
           ))}
           {results.length === 0 && (
             <p className="cl-none">No hospitals matched — try a different city or tier.</p>
