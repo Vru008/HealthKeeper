@@ -81,16 +81,35 @@
   margin-bottom: 6px;
 }
 
-.auth-form input {
+.auth-form input,
+.auth-form select {
+  width: 100%;
+  box-sizing: border-box;
   border: 1px solid #d4ddec;
   border-radius: 10px;
   padding: 12px 14px;
   margin-bottom: 16px;
   font-size: 15px;
+  font-family: inherit;
+  color: #2c3a52;
+  background-color: #fff;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.auth-form input:focus {
+/* Custom dropdown arrow so selects match the inputs */
+.auth-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 40px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%232a487f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
   outline: none;
   border-color: #2a487f;
   box-shadow: 0 0 0 3px rgba(42, 72, 127, 0.12);
