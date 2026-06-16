@@ -272,6 +272,12 @@
   padding: 20px 0;
 }
 
+.cl-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
 .cl-empty-page {
   text-align: center;
   padding: 100px 20px;

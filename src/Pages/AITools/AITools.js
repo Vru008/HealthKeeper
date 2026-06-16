@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
-import {
-  doctors as ALL_DOCTORS,
-  hospitals as ALL_HOSPITALS,
-  specialities,
-  locations,
-} from "../../data/catalog";
+import { specialities, locations } from "../../data/lists";
+import { useCatalog } from "../../context/CatalogContext";
 import { downloadICS, googleCalendarUrl } from "../../utils/calendar";
 import "../ConList/conlist.css";
 import "./aitools.css";
@@ -207,6 +203,7 @@ const SymptomChecker = () => {
 /* ---------- 2. Doctor Match ---------- */
 const DoctorMatch = () => {
   const navigate = useNavigate();
+  const { doctors: ALL_DOCTORS } = useCatalog();
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState(null);
   const [results, setResults] = useState([]);
@@ -380,6 +377,7 @@ const ReportReader = () => {
 /* ---------- 4. Hospital Recommender ---------- */
 const HospitalRecommender = () => {
   const navigate = useNavigate();
+  const { hospitals: ALL_HOSPITALS } = useCatalog();
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState(null);
   const [results, setResults] = useState([]);

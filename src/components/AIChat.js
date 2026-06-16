@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import { useAuth } from "../context/AuthContext";
-import { specialities, locations, doctors } from "../data/catalog";
+import { useCatalog } from "../context/CatalogContext";
+import { specialities, locations } from "../data/lists";
 import "./aichat.css";
 
 const WELCOME = {
@@ -48,6 +49,7 @@ const detectCity = (text) => {
 const AIChat = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { doctors } = useCatalog();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([WELCOME]);
   const [input, setInput] = useState("");

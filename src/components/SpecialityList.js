@@ -1,5 +1,5 @@
 import React from "react";
-import { specialities } from "../data/catalog";
+import { specialities } from "../data/lists";
 
 const SpecialityList = (props) => {
   return (

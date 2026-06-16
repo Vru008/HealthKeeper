@@ -69,6 +69,30 @@ const MainHeader = () => {
     </ul>
   );
 
+  const authButtons = user ? (
+    <>
+      <span className="nav-hi">Hi, {user.name.split(" ")[0]}</span>
+      <button
+        className="btn-ghost"
+        onClick={() => {
+          logout();
+          close();
+        }}
+      >
+        Log Out
+      </button>
+    </>
+  ) : (
+    <>
+      <Link className="btn-ghost" to="/login" onClick={close}>
+        Log In
+      </Link>
+      <Link className="btn-primary" to="/register" onClick={close}>
+        Sign Up
+      </Link>
+    </>
+  );
+
   return (
     <nav className="main-nav">
       <div className="logo">
@@ -77,34 +101,41 @@ const MainHeader = () => {
         </Link>
       </div>
 
-      <div className={`nav-center ${open ? "open" : ""}`}>{links}</div>
-
-      <div className="nav-auth">
-        {user ? (
-          <>
-            <span className="nav-hi">Hi, {user.name.split(" ")[0]}</span>
-            <button className="btn-ghost" onClick={logout}>
-              Log Out
-            </button>
-          </>
-        ) : (
-          <>
-            <Link className="btn-ghost" to="/login">
-              Log In
-            </Link>
-            <Link className="btn-primary" to="/register">
-              Sign Up
-            </Link>
-          </>
-        )}
+      <div className={`nav-center ${open ? "open" : ""}`}>
+        {links}
+        <div className="nav-auth-mobile">{authButtons}</div>
       </div>
+
+      <div className="nav-auth">{authButtons}</div>
 
       <button
         className="hamburger"
         aria-label="Toggle menu"
+        aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
       >
-        <i className="bx bx-menu"></i>
+        <svg
+          width="26"
+          height="26"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+        >
+          {open ? (
+            <>
+              <line x1="6" y1="6" x2="18" y2="18" />
+              <line x1="6" y1="18" x2="18" y2="6" />
+            </>
+          ) : (
+            <>
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </>
+          )}
+        </svg>
       </button>
     </nav>
   );

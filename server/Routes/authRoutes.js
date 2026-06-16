@@ -4,7 +4,8 @@ const { protect, signToken } = require("../middleware/auth");
 
 const router = express.Router();
 
-const ADMIN_CODE = process.env.ADMIN_CODE || "healthkeeper-admin";
+// No hardcoded fallback — admin signup is disabled unless ADMIN_CODE is set in env.
+const ADMIN_CODE = process.env.ADMIN_CODE;
 
 // Shape the user object we send back (never include the password).
 const publicUser = (u) => ({
@@ -48,8 +49,10 @@ router.post("/register", async (req, res) => {
   let finalRole = "patient";
   if (["doctor", "hospital"].includes(role)) finalRole = role;
   if (role === "admin") {
-    if (adminCode !== ADMIN_CODE) {
-      return res.status(403).json({ error: "Invalid admin code" });
+    if (!ADMIN_CODE || adminCode !== ADMIN_CODE) {
+      return res
+        .status(403)
+        .json({ error: "Admin registration is not available" });
     }
     finalRole = "admin";
   }

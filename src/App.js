@@ -7,6 +7,7 @@ import Department from "./Pages/Department/Department";
 import Contact from "./Pages/Contact/Contact";
 import ConList from "./Pages/ConList/ConList";
 import AITools from "./Pages/AITools/AITools";
+import NotFound from "./Pages/NotFound/NotFound";
 import Appointments from "./Pages/Appointments/Appointments";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
@@ -66,6 +67,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <AIChat />
       <Footer />

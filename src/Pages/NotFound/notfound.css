@@ -1,0 +1,53 @@
+.nf-page {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+.nf-code {
+  font-size: clamp(80px, 18vw, 150px);
+  font-weight: 800;
+  line-height: 1;
+  color: #2a487f;
+  opacity: 0.15;
+}
+.nf-page h1 {
+  color: #2a487f;
+  font-weight: 700;
+  margin: -10px 0 10px;
+}
+.nf-page p {
+  color: #6b7a90;
+  margin-bottom: 26px;
+}
+.nf-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.nf-btn {
+  background: #2a487f;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+.nf-btn:hover {
+  background: #1d3360;
+  color: #fff;
+}
+.nf-ghost {
+  background: #fff;
+  color: #2a487f;
+  border: 1px solid #cdd9ee;
+}
+.nf-ghost:hover {
+  background: #eef3fb;
+  color: #2a487f;
+}

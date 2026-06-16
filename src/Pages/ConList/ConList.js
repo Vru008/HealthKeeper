@@ -1,10 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  hospitals as ALL_HOSPITALS,
-  doctors as ALL_DOCTORS,
-  locations as ALL_CITIES,
-} from "../../data/catalog";
+import { locations as ALL_CITIES } from "../../data/lists";
+import { useCatalog } from "../../context/CatalogContext";
 import "./conlist.css";
 
 const imgFallback = (e) => {
@@ -12,9 +9,13 @@ const imgFallback = (e) => {
   e.target.src = "/Logo/lg6.png";
 };
 
+const PAGE = 9;
+
 const ConList = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { doctors: ALL_DOCTORS, hospitals: ALL_HOSPITALS, loading } =
+    useCatalog();
   const { loc, speciality } = location.state || {};
 
   // Filter state
@@ -22,14 +23,16 @@ const ConList = () => {
   const [city, setCity] = useState(loc || "");
   const [minRating, setMinRating] = useState(0);
   const [sort, setSort] = useState("rating");
+  const [docLimit, setDocLimit] = useState(PAGE);
+  const [hospLimit, setHospLimit] = useState(PAGE);
 
   const baseDoctors = useMemo(
     () => ALL_DOCTORS.filter((d) => d.speciality === speciality),
-    [speciality]
+    [ALL_DOCTORS, speciality]
   );
   const baseHospitals = useMemo(
     () => ALL_HOSPITALS.filter((h) => h.specialities.includes(speciality)),
-    [speciality]
+    [ALL_HOSPITALS, speciality]
   );
 
   const common = (x) =>
@@ -58,6 +61,12 @@ const ConList = () => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [baseHospitals, query, city, minRating, sort]);
+
+  // Reset how many are shown whenever the result set changes.
+  useEffect(() => {
+    setDocLimit(PAGE);
+    setHospLimit(PAGE);
+  }, [speciality, query, city, minRating, sort]);
 
   if (!speciality) {
     return (
@@ -141,7 +150,7 @@ const ConList = () => {
       <section className="cl-section">
         <h2 className="cl-section-title">Top Doctors ({doctorList.length})</h2>
         <div className="cl-grid">
-          {doctorList.map((d) => (
+          {doctorList.slice(0, docLimit).map((d) => (
             <article className="doc-card" key={d.id}>
               <img
                 className="doc-photo"
@@ -177,17 +186,28 @@ const ConList = () => {
               </div>
             </article>
           ))}
-          {doctorList.length === 0 && (
+          {loading && <p className="cl-none">Loading doctors…</p>}
+          {!loading && doctorList.length === 0 && (
             <p className="cl-none">No doctors match your filters.</p>
           )}
         </div>
+        {doctorList.length > docLimit && (
+          <div className="cl-more">
+            <button
+              className="cl-btn cl-btn-ghost"
+              onClick={() => setDocLimit((n) => n + PAGE)}
+            >
+              Show more doctors ({doctorList.length - docLimit} more)
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Hospitals */}
       <section className="cl-section">
         <h2 className="cl-section-title">Hospitals ({hospitalList.length})</h2>
         <div className="cl-grid cl-grid-wide">
-          {hospitalList.map((h) => (
+          {hospitalList.slice(0, hospLimit).map((h) => (
             <article className="hosp-card" key={h.id}>
               <div className="hosp-imgwrap">
                 <img
@@ -232,10 +252,21 @@ const ConList = () => {
               </div>
             </article>
           ))}
-          {hospitalList.length === 0 && (
+          {loading && <p className="cl-none">Loading hospitals…</p>}
+          {!loading && hospitalList.length === 0 && (
             <p className="cl-none">No hospitals match your filters.</p>
           )}
         </div>
+        {hospitalList.length > hospLimit && (
+          <div className="cl-more">
+            <button
+              className="cl-btn cl-btn-ghost"
+              onClick={() => setHospLimit((n) => n + PAGE)}
+            >
+              Show more hospitals ({hospitalList.length - hospLimit} more)
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );

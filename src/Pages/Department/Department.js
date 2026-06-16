@@ -1,7 +1,7 @@
 import React from "react";
 import "./department.css";
 import { useNavigate } from "react-router-dom";
-import { specialities } from "../../data/catalog";
+import { specialities } from "../../data/lists";
 
 // Map each speciality to one of the bundled icons (falls back to a generic one).
 const ICONS = {

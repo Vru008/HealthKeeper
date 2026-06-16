@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { specialities, locations } from "../../data/catalog";
+import { specialities, locations } from "../../data/lists";
 import "./auth.css";
 
 const ROLES = [

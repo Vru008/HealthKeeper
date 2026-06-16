@@ -1,5 +1,5 @@
 import React from "react";
-import { locations } from "../data/catalog";
+import { locations } from "../data/lists";
 
 const LocationList = (props) => {
   return (

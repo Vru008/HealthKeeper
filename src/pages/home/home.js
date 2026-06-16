@@ -3,9 +3,10 @@ import { useNavigate, Link } from "react-router-dom";
 import {
   specialities,
   locations,
-  doctors,
-  hospitals,
-} from "../../data/catalog";
+  doctorCount,
+  hospitalCount,
+} from "../../data/lists";
+import { useCatalog } from "../../context/CatalogContext";
 import "./home.css";
 
 const STEPS = [
@@ -37,6 +38,7 @@ const FEATURES = [
 
 const Home = () => {
   const navigate = useNavigate();
+  const { doctors, hospitals } = useCatalog();
   const [speciality, setSpeciality] = useState(specialities[0]);
   const [city, setCity] = useState("");
 
@@ -63,7 +65,7 @@ const Home = () => {
             <span>book in seconds.</span>
           </h1>
           <p className="hero-sub">
-            Search {doctors.length}+ verified doctors and {hospitals.length}+
+            Search {doctorCount}+ verified doctors and {hospitalCount}+
             hospitals across {locations.length} cities — compare, book, and get
             instant reminders.
           </p>
@@ -103,11 +105,11 @@ const Home = () => {
       {/* STATS */}
       <section className="stats">
         <div className="stat">
-          <strong>{doctors.length}+</strong>
+          <strong>{doctorCount}+</strong>
           <span>Verified Doctors</span>
         </div>
         <div className="stat">
-          <strong>{hospitals.length}+</strong>
+          <strong>{hospitalCount}+</strong>
           <span>Hospitals</span>
         </div>
         <div className="stat">

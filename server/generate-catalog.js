@@ -187,16 +187,35 @@ for (const city of cities) {
   hospitals.push(...cityHospitals);
 }
 
-const catalog = { hospitals, doctors };
+// Drop the unused 'about' blurb to keep the payload small.
+const catalog = {
+  hospitals,
+  doctors: doctors.map(({ about, ...rest }) => rest),
+};
 
-const clientPath = path.join(__dirname, "..", "src", "data", "catalog.json");
+const uniq = (a) => [...new Set(a.filter(Boolean))];
+const lists = {
+  specialities: uniq(catalog.doctors.map((d) => d.speciality)).sort(),
+  locations: uniq(hospitals.map((h) => h.location)).sort(),
+  doctorCount: catalog.doctors.length,
+  hospitalCount: hospitals.length,
+};
+
+// Full catalog is fetched at runtime from public/ (kept out of the JS bundle).
+const publicPath = path.join(__dirname, "..", "public", "catalog.json");
 const serverPath = path.join(__dirname, "seed-data.json");
-fs.mkdirSync(path.dirname(clientPath), { recursive: true });
-fs.writeFileSync(clientPath, JSON.stringify(catalog));
-fs.writeFileSync(serverPath, JSON.stringify(catalog, null, 0));
+// Tiny lists are bundled (specialities, cities, counts) for instant dropdowns.
+const listsPath = path.join(__dirname, "..", "src", "data", "lists.json");
+
+fs.mkdirSync(path.dirname(publicPath), { recursive: true });
+fs.mkdirSync(path.dirname(listsPath), { recursive: true });
+fs.writeFileSync(publicPath, JSON.stringify(catalog));
+fs.writeFileSync(serverPath, JSON.stringify(catalog));
+fs.writeFileSync(listsPath, JSON.stringify(lists, null, 2));
 
 console.log(
-  `Generated ${doctors.length} doctors and ${hospitals.length} hospitals across ${cities.length} cities and ${specialities.length} specialities.`
+  `Generated ${catalog.doctors.length} doctors and ${hospitals.length} hospitals across ${cities.length} cities and ${specialities.length} specialities.`
 );
-console.log("Wrote:", clientPath);
+console.log("Wrote:", publicPath);
 console.log("Wrote:", serverPath);
+console.log("Wrote:", listsPath);

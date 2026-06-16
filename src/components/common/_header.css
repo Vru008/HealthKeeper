@@ -87,6 +87,9 @@
   gap: 12px;
   flex-shrink: 0;
 }
+.nav-auth-mobile {
+  display: none;
+}
 .nav-hi {
   color: #2a487f;
   font-weight: 600;
@@ -135,6 +138,11 @@
 @media (max-width: 860px) {
   .hamburger {
     display: block;
+    margin-left: auto; /* push to the right since nav-center is absolute */
+  }
+  /* Auth lives inside the menu on mobile, not in the top bar */
+  .nav-auth {
+    display: none;
   }
   .nav-center {
     position: absolute;
@@ -146,11 +154,11 @@
     justify-content: flex-start;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
+    transition: max-height 0.35s ease;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
   }
   .nav-center.open {
-    max-height: 340px;
+    max-height: 560px;
   }
   .nav-links {
     flex-direction: column;
@@ -163,11 +171,28 @@
   }
   .nav-links .link {
     display: block;
-    padding: 14px 28px;
+    padding: 14px 24px;
     width: 100%;
   }
   .nav-links .link::after {
     display: none;
+  }
+  .nav-auth-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 24px 20px;
+    border-top: 1px solid #eef1f6;
+  }
+  .nav-auth-mobile .nav-hi {
+    margin-bottom: 2px;
+  }
+  .nav-auth-mobile .btn-ghost,
+  .nav-auth-mobile .btn-primary {
+    width: 100%;
+    text-align: center;
+    padding: 11px;
+    font-size: 15px;
   }
 }
 
@@ -175,13 +200,5 @@
   .main-nav {
     padding: 0 16px;
     gap: 12px;
-  }
-  .nav-hi {
-    display: none;
-  }
-  .btn-ghost,
-  .btn-primary {
-    padding: 7px 12px;
-    font-size: 13px;
   }
 }

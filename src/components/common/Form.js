@@ -7,7 +7,7 @@ import {
   googleCalendarUrl,
   notifyBooking,
 } from "../../utils/calendar";
-import { locations as cities, specialities as departments } from "../../data/catalog";
+import { locations as cities, specialities as departments } from "../../data/lists";
 import "./form.css";
 
 const Form = () => {
