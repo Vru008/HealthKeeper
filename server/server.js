@@ -8,6 +8,7 @@ const dataRoutes = require("./Routes/dataRoutes");
 const appointmentRoutes = require("./Routes/appointmentRoutes");
 const adminRoutes = require("./Routes/adminRoutes");
 const aiRoutes = require("./Routes/aiRoutes");
+const { protect } = require("./middleware/auth");
 
 const app = express();
 
@@ -54,7 +55,7 @@ app.use("/api/auth", requireDB, authRoutes);
 app.use("/api/data", dataRoutes); // static catalog — no DB needed
 app.use("/api/appointments", requireDB, appointmentRoutes);
 app.use("/api/admin", requireDB, adminRoutes);
-app.use("/api/ai", aiRoutes); // Gemini — no DB needed
+app.use("/api/ai", requireDB, protect, aiRoutes); // logged-in users only
 
 // Health check
 app.get("/", (req, res) => {

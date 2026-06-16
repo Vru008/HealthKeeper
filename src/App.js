@@ -31,7 +31,14 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/form" element={<Form />} />
         <Route path="/list" element={<ConList />} />
-        <Route path="/ai-tools" element={<AITools />} />
+        <Route
+          path="/ai-tools"
+          element={
+            <ProtectedRoute>
+              <AITools />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

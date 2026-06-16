@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
+import { useAuth } from "../context/AuthContext";
 import { specialities, locations, doctors } from "../data/catalog";
 import "./aichat.css";
 
@@ -46,6 +47,7 @@ const detectCity = (text) => {
 
 const AIChat = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([WELCOME]);
   const [input, setInput] = useState("");
@@ -55,6 +57,9 @@ const AIChat = () => {
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, open, loading]);
+
+  // AI assistant is a logged-in perk — hide it from guests.
+  if (!user) return null;
 
   const send = async (e) => {
     e.preventDefault();
