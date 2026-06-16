@@ -27,6 +27,11 @@ const MainHeader = () => {
         </NavLink>
       </li>
       <li>
+        <NavLink className="link ai-link" to="/ai-tools">
+          ✨ AI Tools
+        </NavLink>
+      </li>
+      <li>
         <NavLink className="link" to="/contact">
           Contact
         </NavLink>

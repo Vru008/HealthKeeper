@@ -28,6 +28,15 @@ AI health assistant. Built with the **MERN** stack and **Google Gemini**.
 - **My Appointments** — view, add-to-calendar, or cancel your bookings.
 - **AI Health Assistant** — a floating chatbot (Google Gemini) that helps users
   understand symptoms and pick the right speciality.
+- **AI Tools hub** (`/ai-tools`) — seven Gemini-powered tools:
+  - **Symptom Checker** with **emergency detection** (red-flag safety net + alert)
+  - **Smart Doctor Match** — natural-language search ("female skin doctor in
+    Ahmedabad under ₹1000") → real matching doctors
+  - **Medical Report Reader** — upload a PDF/image or paste values → plain-language
+    explanation
+  - **Hospital Recommender** — by condition, city, budget tier, insurance
+  - **Follow-up & Care reminders** — suggested timeline + calendar (.ics) reminders
+  - **24/7 Health Assistant chat**
 - **Optional email confirmations** — sent via Nodemailer when SMTP is configured.
 - Responsive, modern UI with subtle animations.
 
@@ -132,6 +141,11 @@ npm run dev
 | GET    | `/api/admin/users`        | admin | All users                       |
 | GET    | `/api/admin/appointments` | admin | All appointments                |
 | POST   | `/api/ai/chat`            | —    | Health assistant chat (Gemini)   |
+| POST   | `/api/ai/symptom-check`   | —    | Symptom triage + emergency flag  |
+| POST   | `/api/ai/match-doctor`    | —    | NL query → doctor filters        |
+| POST   | `/api/ai/recommend-hospital` | — | NL query → hospital filters      |
+| POST   | `/api/ai/report`          | —    | Explain a medical report         |
+| POST   | `/api/ai/follow-up`       | —    | Follow-up timeline + reminders   |
 
 ### Creating an admin account
 

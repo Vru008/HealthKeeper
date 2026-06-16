@@ -69,6 +69,16 @@
 .nav-links .link.active {
   color: #2a487f;
 }
+.nav-links .ai-link {
+  color: #6b3fd4;
+}
+.nav-links .ai-link:hover,
+.nav-links .ai-link.active {
+  color: #5a2fc0;
+}
+.nav-links .ai-link::after {
+  background: #6b3fd4;
+}
 
 /* Right-hand auth area */
 .nav-auth {

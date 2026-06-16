@@ -99,6 +99,7 @@ for (const city of cities) {
         id: `d${dIdx + 1}`,
         name,
         speciality: sp.key,
+        gender: gender === "F" ? "Female" : "Male",
         qualifications: `MBBS, ${sp.deg}`,
         experience: exp,
         rating: round1(4.1 + r() * 0.8),
@@ -128,6 +129,7 @@ for (const city of cities) {
     const facilities = [...facilitiesPool]
       .sort(() => r() - 0.5)
       .slice(0, int(4, 7));
+    const priceTier = pick(["Budget", "Mid-range", "Premium"]);
     cityHospitals.push({
       id: `h${hIdx + 1}`,
       name,
@@ -135,6 +137,8 @@ for (const city of cities) {
       address: `${pick(areas)}, ${city}`,
       rating: round1(4.0 + r() * 0.9),
       reviews: int(120, 4200),
+      priceTier,
+      insurance: facilities.includes("Insurance Desk") || r() > 0.4,
       facilities,
       specialities: [],
       img: hospitalImgs[hIdx % hospitalImgs.length],

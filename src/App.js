@@ -6,6 +6,7 @@ import AboutUs from "./Pages/AboutUs/AboutUs";
 import Department from "./Pages/Department/Department";
 import Contact from "./Pages/Contact/Contact";
 import ConList from "./Pages/ConList/ConList";
+import AITools from "./Pages/AITools/AITools";
 import Appointments from "./Pages/Appointments/Appointments";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
@@ -30,6 +31,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/form" element={<Form />} />
         <Route path="/list" element={<ConList />} />
+        <Route path="/ai-tools" element={<AITools />} />
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
