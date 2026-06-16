@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
 import { useAuth } from "../../context/AuthContext";
+import { useToast } from "../../context/ToastContext";
 import { specialities, locations } from "../../data/lists";
 import "./dashboard.css";
 
@@ -25,6 +26,7 @@ const blankForm = { name: "", email: "", password: "", role: "patient", phone: "
 
 const AdminDashboard = () => {
   const { user: me } = useAuth();
+  const { show } = useToast();
   const [tab, setTab] = useState("overview");
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
@@ -38,6 +40,8 @@ const AdminDashboard = () => {
   const [form, setForm] = useState(blankForm);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState("");
+  const [confirmUser, setConfirmUser] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   const loadAll = () => {
     setLoading(true);
@@ -83,16 +87,18 @@ const AdminDashboard = () => {
     e.preventDefault();
     setFormError("");
     setSaving(true);
+    const isCreate = modal === "create";
     try {
       const payload = { ...form };
-      if (modal !== "create" && !payload.password) delete payload.password; // keep existing
-      if (modal === "create") {
+      if (!isCreate && !payload.password) delete payload.password; // keep existing
+      if (isCreate) {
         await api.post("/admin/users", payload);
       } else {
         await api.patch(`/admin/users/${modal._id}`, payload);
       }
       closeModal();
       loadAll();
+      show(isCreate ? "User created" : "Changes saved");
     } catch (err) {
       setFormError(err.response?.data?.error || "Could not save user.");
     } finally {
@@ -100,14 +106,18 @@ const AdminDashboard = () => {
     }
   };
 
-  const deleteUser = async (u) => {
-    if (!window.confirm(`Delete ${u.name} (${u.email})? This cannot be undone.`))
-      return;
+  const confirmDelete = async () => {
+    if (!confirmUser) return;
+    setDeleting(true);
     try {
-      await api.delete(`/admin/users/${u._id}`);
-      setUsers((prev) => prev.filter((x) => x._id !== u._id));
+      await api.delete(`/admin/users/${confirmUser._id}`);
+      setUsers((prev) => prev.filter((x) => x._id !== confirmUser._id));
+      show(`${confirmUser.name} deleted`);
+      setConfirmUser(null);
     } catch (err) {
-      alert(err.response?.data?.error || "Could not delete user.");
+      show(err.response?.data?.error || "Could not delete user.", "error");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -267,7 +277,7 @@ const AdminDashboard = () => {
                           </button>
                           <button
                             className="rbtn rbtn-danger"
-                            onClick={() => deleteUser(u)}
+                            onClick={() => setConfirmUser(u)}
                             disabled={u._id === me?.id}
                             title={u._id === me?.id ? "You can't delete yourself" : ""}
                           >
@@ -420,6 +430,38 @@ const AdminDashboard = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ---------- Delete confirm ---------- */}
+      {confirmUser && (
+        <div className="modal-backdrop" onClick={() => setConfirmUser(null)}>
+          <div
+            className="modal-card modal-confirm"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="confirm-ic">🗑️</div>
+            <h2>Delete user?</h2>
+            <p>
+              This will permanently remove <strong>{confirmUser.name}</strong> (
+              {confirmUser.email}). This can't be undone.
+            </p>
+            <div className="modal-actions">
+              <button
+                className="cbtn cbtn-ghost"
+                onClick={() => setConfirmUser(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="cbtn cbtn-danger"
+                onClick={confirmDelete}
+                disabled={deleting}
+              >
+                {deleting ? "Deleting…" : "Delete"}
+              </button>
+            </div>
           </div>
         </div>
       )}
