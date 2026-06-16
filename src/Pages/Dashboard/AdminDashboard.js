@@ -1,16 +1,46 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api";
+import { useAuth } from "../../context/AuthContext";
+import { specialities, locations } from "../../data/lists";
 import "./dashboard.css";
 
+const initials = (name = "") =>
+  name
+    .split(" ")
+    .filter(Boolean)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase() || "?";
+
+const fmtDate = (d) =>
+  new Date(d).toLocaleDateString(undefined, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
+const ROLES = ["patient", "doctor", "hospital", "admin"];
+const blankForm = { name: "", email: "", password: "", role: "patient", phone: "", providerName: "", speciality: specialities[0], city: locations[0] };
+
 const AdminDashboard = () => {
+  const { user: me } = useAuth();
+  const [tab, setTab] = useState("overview");
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
   const [appts, setAppts] = useState([]);
-  const [tab, setTab] = useState("users");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
 
-  useEffect(() => {
+  // Modal state
+  const [modal, setModal] = useState(null); // null | "create" | user object
+  const [form, setForm] = useState(blankForm);
+  const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState("");
+
+  const loadAll = () => {
+    setLoading(true);
     Promise.all([
       api.get("/admin/stats"),
       api.get("/admin/users"),
@@ -21,122 +51,376 @@ const AdminDashboard = () => {
         setUsers(u.data);
         setAppts(a.data);
       })
-      .catch((e) =>
-        setError(e.response?.data?.error || "Could not load admin data.")
-      )
+      .catch((e) => setError(e.response?.data?.error || "Could not load admin data."))
       .finally(() => setLoading(false));
-  }, []);
+  };
+
+  useEffect(loadAll, []);
+
+  const openCreate = () => {
+    setForm(blankForm);
+    setFormError("");
+    setModal("create");
+  };
+  const openEdit = (u) => {
+    setForm({
+      name: u.name || "",
+      email: u.email || "",
+      password: "",
+      role: u.role || "patient",
+      phone: u.phone || "",
+      providerName: u.providerName || "",
+      speciality: u.speciality || specialities[0],
+      city: u.city || locations[0],
+    });
+    setFormError("");
+    setModal(u);
+  };
+  const closeModal = () => setModal(null);
+  const onForm = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const saveUser = async (e) => {
+    e.preventDefault();
+    setFormError("");
+    setSaving(true);
+    try {
+      const payload = { ...form };
+      if (modal !== "create" && !payload.password) delete payload.password; // keep existing
+      if (modal === "create") {
+        await api.post("/admin/users", payload);
+      } else {
+        await api.patch(`/admin/users/${modal._id}`, payload);
+      }
+      closeModal();
+      loadAll();
+    } catch (err) {
+      setFormError(err.response?.data?.error || "Could not save user.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const deleteUser = async (u) => {
+    if (!window.confirm(`Delete ${u.name} (${u.email})? This cannot be undone.`))
+      return;
+    try {
+      await api.delete(`/admin/users/${u._id}`);
+      setUsers((prev) => prev.filter((x) => x._id !== u._id));
+    } catch (err) {
+      alert(err.response?.data?.error || "Could not delete user.");
+    }
+  };
+
+  const filtered = users.filter((u) => {
+    const q = search.toLowerCase();
+    return (
+      !q ||
+      u.name?.toLowerCase().includes(q) ||
+      u.email?.toLowerCase().includes(q) ||
+      u.role?.toLowerCase().includes(q)
+    );
+  });
+
+  const NAV = [
+    { key: "overview", label: "Overview", icon: "▦" },
+    { key: "users", label: "Users", icon: "👤" },
+    { key: "appointments", label: "Appointments", icon: "📅" },
+  ];
 
   return (
-    <div className="dash">
-      <div className="dash-head">
-        <div>
-          <span className="dash-role">Admin portal</span>
-          <h1>Platform Overview</h1>
-          <p className="dash-sub">Manage users and appointments across HealthKeeper.</p>
+    <div className="console">
+      <aside className="console-side">
+        <div className="console-brand">
+          <span className="console-logo">🩺</span> Admin Console
         </div>
-      </div>
-
-      {error && <div className="dash-error">{error}</div>}
-      {loading && <div className="dash-skeleton" />}
-
-      {stats && (
-        <div className="dash-stats dash-stats-4">
-          <div className="stat-card">
-            <span className="stat-num">{stats.patients}</span>
-            <span className="stat-label">Patients</span>
-          </div>
-          <div className="stat-card">
-            <span className="stat-num">{stats.doctors}</span>
-            <span className="stat-label">Doctors</span>
-          </div>
-          <div className="stat-card">
-            <span className="stat-num">{stats.hospitals}</span>
-            <span className="stat-label">Hospitals</span>
-          </div>
-          <div className="stat-card">
-            <span className="stat-num">{stats.appointments}</span>
-            <span className="stat-label">Appointments</span>
-          </div>
+        <nav>
+          {NAV.map((n) => (
+            <button
+              key={n.key}
+              className={tab === n.key ? "active" : ""}
+              onClick={() => setTab(n.key)}
+            >
+              <span className="cs-ic">{n.icon}</span> {n.label}
+              {n.key === "users" && <span className="cs-count">{users.length}</span>}
+              {n.key === "appointments" && (
+                <span className="cs-count">{appts.length}</span>
+              )}
+            </button>
+          ))}
+        </nav>
+        <div className="console-me">
+          Signed in as<br />
+          <strong>{me?.name}</strong>
         </div>
-      )}
+      </aside>
 
-      {stats && (
-        <div className="dash-tabs">
-          <button
-            className={tab === "users" ? "active" : ""}
-            onClick={() => setTab("users")}
-          >
-            Users ({users.length})
-          </button>
-          <button
-            className={tab === "appts" ? "active" : ""}
-            onClick={() => setTab("appts")}
-          >
-            Appointments ({appts.length})
-          </button>
-        </div>
-      )}
+      <main className="console-main">
+        {error && <div className="dash-error">{error}</div>}
 
-      {tab === "users" && users.length > 0 && (
-        <div className="dash-table-wrap">
-          <table className="dash-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Joined</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u) => (
-                <tr key={u._id}>
-                  <td>{u.name}</td>
-                  <td>{u.email}</td>
-                  <td>
-                    <span className={`pill pill-role-${u.role}`}>{u.role}</span>
-                  </td>
-                  <td>{new Date(u.createdAt).toLocaleDateString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+        {/* ---------- Overview ---------- */}
+        {tab === "overview" && (
+          <>
+            <h1 className="console-title">Platform Overview</h1>
+            {loading && <div className="dash-skeleton" />}
+            {stats && (
+              <div className="cstat-grid">
+                <div className="cstat">
+                  <span className="cstat-ic ic-blue">👥</span>
+                  <div>
+                    <strong>{stats.patients}</strong>
+                    <span>Patients</span>
+                  </div>
+                </div>
+                <div className="cstat">
+                  <span className="cstat-ic ic-green">🩺</span>
+                  <div>
+                    <strong>{stats.doctors}</strong>
+                    <span>Doctors</span>
+                  </div>
+                </div>
+                <div className="cstat">
+                  <span className="cstat-ic ic-amber">🏥</span>
+                  <div>
+                    <strong>{stats.hospitals}</strong>
+                    <span>Hospitals</span>
+                  </div>
+                </div>
+                <div className="cstat">
+                  <span className="cstat-ic ic-violet">📅</span>
+                  <div>
+                    <strong>{stats.appointments}</strong>
+                    <span>Appointments</span>
+                  </div>
+                </div>
+              </div>
+            )}
+            {stats && (
+              <div className="cstat-sub">
+                <div>
+                  <strong>{stats.booked}</strong> booked
+                </div>
+                <div>
+                  <strong>{stats.cancelled}</strong> cancelled
+                </div>
+              </div>
+            )}
+          </>
+        )}
 
-      {tab === "appts" && (
-        <div className="dash-table-wrap">
-          {appts.length === 0 ? (
-            <p className="dash-empty">No appointments booked yet.</p>
-          ) : (
-            <table className="dash-table">
-              <thead>
-                <tr>
-                  <th>Patient</th>
-                  <th>Provider</th>
-                  <th>Speciality</th>
-                  <th>City</th>
-                  <th>When</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {appts.map((a) => (
-                  <tr key={a._id}>
-                    <td>{a.patientName}</td>
-                    <td>{a.provider || "—"}</td>
-                    <td>{a.speciality || "—"}</td>
-                    <td>{a.city || "—"}</td>
-                    <td>{new Date(a.datetime).toLocaleString()}</td>
-                    <td>
-                      <span className={`pill pill-${a.status}`}>{a.status}</span>
-                    </td>
-                  </tr>
+        {/* ---------- Users ---------- */}
+        {tab === "users" && (
+          <>
+            <div className="console-head">
+              <h1 className="console-title">Users</h1>
+              <div className="console-actions">
+                <input
+                  className="console-search"
+                  placeholder="🔍 Search name, email, role…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+                <button className="cbtn cbtn-primary" onClick={openCreate}>
+                  + Add User
+                </button>
+              </div>
+            </div>
+
+            {loading && <div className="dash-skeleton" />}
+            {!loading && (
+              <div className="ctable-wrap">
+                <table className="ctable">
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Joined</th>
+                      <th className="ta-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((u) => (
+                      <tr key={u._id}>
+                        <td>
+                          <div className="ucell">
+                            <span className={`uavatar av-${u.role}`}>
+                              {initials(u.name)}
+                            </span>
+                            <div>
+                              <div className="uname">{u.name}</div>
+                              {u.providerName && (
+                                <div className="usub">{u.providerName}</div>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td>{u.email}</td>
+                        <td>
+                          <span className={`pill pill-role-${u.role}`}>
+                            {u.role}
+                          </span>
+                        </td>
+                        <td>{fmtDate(u.createdAt)}</td>
+                        <td className="ta-right">
+                          <button className="rbtn" onClick={() => openEdit(u)}>
+                            Edit
+                          </button>
+                          <button
+                            className="rbtn rbtn-danger"
+                            onClick={() => deleteUser(u)}
+                            disabled={u._id === me?.id}
+                            title={u._id === me?.id ? "You can't delete yourself" : ""}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {filtered.length === 0 && (
+                      <tr>
+                        <td colSpan={5} className="ctable-empty">
+                          No users match.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ---------- Appointments ---------- */}
+        {tab === "appointments" && (
+          <>
+            <h1 className="console-title">Appointments</h1>
+            {loading && <div className="dash-skeleton" />}
+            {!loading && (
+              <div className="ctable-wrap">
+                {appts.length === 0 ? (
+                  <p className="ctable-empty">No appointments booked yet.</p>
+                ) : (
+                  <table className="ctable">
+                    <thead>
+                      <tr>
+                        <th>Patient</th>
+                        <th>Provider</th>
+                        <th>Speciality</th>
+                        <th>City</th>
+                        <th>When</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {appts.map((a) => (
+                        <tr key={a._id}>
+                          <td>{a.patientName}</td>
+                          <td>{a.provider || "—"}</td>
+                          <td>{a.speciality || "—"}</td>
+                          <td>{a.city || "—"}</td>
+                          <td>{new Date(a.datetime).toLocaleString()}</td>
+                          <td>
+                            <span className={`pill pill-${a.status}`}>
+                              {a.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            )}
+          </>
+        )}
+      </main>
+
+      {/* ---------- Create / Edit modal ---------- */}
+      {modal && (
+        <div className="modal-backdrop" onClick={closeModal}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <h2>{modal === "create" ? "Add User" : "Edit User"}</h2>
+            {formError && <div className="dash-error">{formError}</div>}
+            <form onSubmit={saveUser} className="modal-form">
+              <label>Full name</label>
+              <input name="name" value={form.name} onChange={onForm} required />
+
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={onForm}
+                required
+              />
+
+              <label>Role</label>
+              <select name="role" value={form.role} onChange={onForm}>
+                {ROLES.map((r) => (
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
                 ))}
-              </tbody>
-            </table>
-          )}
+              </select>
+
+              {(form.role === "doctor" || form.role === "hospital") && (
+                <>
+                  <label>
+                    {form.role === "hospital" ? "Hospital name" : "Display name"}
+                  </label>
+                  <input
+                    name="providerName"
+                    value={form.providerName}
+                    onChange={onForm}
+                    placeholder={form.role === "hospital" ? "City Care Hospital" : "Dr. Jane Doe"}
+                  />
+                  <label>City</label>
+                  <select name="city" value={form.city} onChange={onForm}>
+                    {locations.map((c) => (
+                      <option key={c}>{c}</option>
+                    ))}
+                  </select>
+                </>
+              )}
+              {form.role === "doctor" && (
+                <>
+                  <label>Speciality</label>
+                  <select name="speciality" value={form.speciality} onChange={onForm}>
+                    {specialities.map((s) => (
+                      <option key={s}>{s}</option>
+                    ))}
+                  </select>
+                </>
+              )}
+
+              <label>Phone</label>
+              <input name="phone" value={form.phone} onChange={onForm} />
+
+              <label>
+                Password{" "}
+                {modal !== "create" && (
+                  <span className="modal-hint">(leave blank to keep current)</span>
+                )}
+              </label>
+              <input
+                type="password"
+                name="password"
+                value={form.password}
+                onChange={onForm}
+                placeholder={modal === "create" ? "Min 6 characters" : "••••••"}
+                {...(modal === "create" ? { required: true } : {})}
+              />
+
+              <div className="modal-actions">
+                <button type="button" className="cbtn cbtn-ghost" onClick={closeModal}>
+                  Cancel
+                </button>
+                <button type="submit" className="cbtn cbtn-primary" disabled={saving}>
+                  {saving ? "Saving…" : modal === "create" ? "Create User" : "Save Changes"}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>
