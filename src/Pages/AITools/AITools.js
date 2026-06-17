@@ -36,7 +36,7 @@ const VoiceControls = ({ lang, setLang, onMic, listening }) => (
         className={`mic-btn ${listening ? "on" : ""}`}
         onClick={onMic}
       >
-        🎤 {listening ? "Listening…" : "Speak"}
+        🎤 {listening ? "Recording…" : "Record"}
       </button>
     )}
   </div>
@@ -179,28 +179,31 @@ const SymptomChecker = () => {
   const [voiceMode, setVoiceMode] = useState(false);
   const { listening, start } = useSpeechInput();
 
-  const onMic = () => {
-    setVoiceMode(true);
-    start(speechCodeFor(lang), (t) =>
-      setSymptoms((prev) => (prev ? `${prev} ${t}` : t))
-    );
-  };
-
-  const check = async () => {
-    if (!symptoms.trim()) return;
+  const runCheck = async (override, spoken) => {
+    const text = (override ?? symptoms).trim();
+    if (!text) return;
     setLoading(true);
     setError("");
     setRes(null);
     try {
-      const r = await api.post("/ai/symptom-check", { symptoms, lang });
+      const r = await api.post("/ai/symptom-check", { symptoms: text, lang });
       setRes(r.data);
-      // Voice in → voice out: speak the guidance back in the chosen language.
-      if (voiceMode) speak(r.data.advice || "", speechCodeFor(lang));
+      // Recorded by voice → speak the guidance back through the speaker.
+      if (spoken || voiceMode) speak(r.data.advice || "", speechCodeFor(lang));
     } catch (e) {
       setError(e.response?.data?.error || "Couldn't analyze right now.");
     } finally {
       setLoading(false);
     }
+  };
+
+  // One-tap recorder: record the problem, then auto-analyze and speak the answer.
+  const onRecord = () => {
+    setVoiceMode(true);
+    start(speechCodeFor(lang), (t) => {
+      setSymptoms(t);
+      runCheck(t, true);
+    });
   };
 
   return (
@@ -212,9 +215,13 @@ const SymptomChecker = () => {
       <VoiceControls
         lang={lang}
         setLang={setLang}
-        onMic={onMic}
+        onMic={onRecord}
         listening={listening}
       />
+      <p className="ait-record-hint">
+        Tap <strong>🎤 Record</strong>, describe your problem out loud, and the
+        assistant will answer through your speaker — or type below.
+      </p>
       <textarea
         className="ait-input"
         rows={3}
@@ -222,7 +229,7 @@ const SymptomChecker = () => {
         value={symptoms}
         onChange={(e) => setSymptoms(e.target.value)}
       />
-      <button className="ait-btn" onClick={check} disabled={loading}>
+      <button className="ait-btn" onClick={() => runCheck()} disabled={loading}>
         {loading ? "Analyzing…" : "Check Symptoms"}
       </button>
       {error && <div className="ait-error">{error}</div>}

@@ -348,6 +348,11 @@
   justify-content: space-between;
   gap: 10px;
 }
+.ait-record-hint {
+  font-size: 13px;
+  color: #6b7a90;
+  margin: 0 0 12px;
+}
 .listen-btn {
   border: 1px solid #cdd9ee;
   background: #fff;
