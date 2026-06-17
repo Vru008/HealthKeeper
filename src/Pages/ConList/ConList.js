@@ -44,6 +44,7 @@ const ConList = () => {
     const list = baseDoctors.filter(common);
     const sorters = {
       rating: (a, b) => b.rating - a.rating,
+      success: (a, b) => b.successRate - a.successRate,
       experience: (a, b) => b.experience - a.experience,
       feeLow: (a, b) => a.fee - b.fee,
       feeHigh: (a, b) => b.fee - a.fee,
@@ -54,10 +55,11 @@ const ConList = () => {
 
   const hospitalList = useMemo(() => {
     const list = baseHospitals.filter(common);
-    return [...list].sort((a, b) =>
-      sort === "feeLow" || sort === "feeHigh"
-        ? b.reviews - a.reviews
-        : b.rating - a.rating
+    // Ranking engine: order by this speciality's success rate.
+    return [...list].sort(
+      (a, b) =>
+        (b.specialityRates?.[speciality] || 0) -
+        (a.specialityRates?.[speciality] || 0)
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [baseHospitals, query, city, minRating, sort]);
@@ -137,6 +139,7 @@ const ConList = () => {
         </select>
         <select value={sort} onChange={(e) => setSort(e.target.value)}>
           <option value="rating">Top rated</option>
+          <option value="success">Highest success rate</option>
           <option value="experience">Most experienced</option>
           <option value="feeLow">Fee: low to high</option>
           <option value="feeHigh">Fee: high to low</option>
@@ -167,11 +170,11 @@ const ConList = () => {
                 <p className="doc-spec">{d.speciality}</p>
                 <p className="doc-qual">{d.qualifications}</p>
                 <div className="doc-meta">
-                  <span>{d.experience} yrs exp</span>
+                  <span className="doc-success">✓ {d.successRate}% success</span>
                   <span>·</span>
-                  <span>₹{d.fee} fee</span>
+                  <span>{d.experience} yrs</span>
                   <span>·</span>
-                  <span>{d.location}</span>
+                  <span>₹{d.fee}</span>
                 </div>
                 <div className="doc-tags">
                   {d.focus.map((f) => (
@@ -180,9 +183,17 @@ const ConList = () => {
                     </span>
                   ))}
                 </div>
-                <button className="cl-btn cl-btn-block" onClick={() => book(d)}>
-                  Book Appointment
-                </button>
+                <div className="doc-actions">
+                  <button
+                    className="cl-btn cl-btn-ghost"
+                    onClick={() => navigate(`/doctor-profile/${d.id}`)}
+                  >
+                    View profile
+                  </button>
+                  <button className="cl-btn" onClick={() => book(d)}>
+                    Book
+                  </button>
+                </div>
               </div>
             </article>
           ))}
@@ -207,7 +218,7 @@ const ConList = () => {
       <section className="cl-section">
         <h2 className="cl-section-title">Hospitals ({hospitalList.length})</h2>
         <div className="cl-grid cl-grid-wide">
-          {hospitalList.slice(0, hospLimit).map((h) => (
+          {hospitalList.slice(0, hospLimit).map((h, idx) => (
             <article className="hosp-card" key={h.id}>
               <div className="hosp-imgwrap">
                 <img
@@ -216,18 +227,16 @@ const ConList = () => {
                   loading="lazy"
                   onError={imgFallback}
                 />
+                {idx < 3 && <span className="hosp-rank">#{idx + 1}</span>}
                 <span className="hosp-rating">★ {h.rating}</span>
               </div>
               <div className="hosp-body">
                 <h3>{h.name}</h3>
-                <p className="hosp-addr">📍 {h.address}</p>
-                <div className="hosp-tags">
-                  {h.specialities.slice(0, 4).map((s) => (
-                    <span key={s} className="hosp-tag">
-                      {s}
-                    </span>
-                  ))}
-                </div>
+                <p className="hosp-success">
+                  ✓ {h.specialityRates?.[speciality] ?? h.successRate}%{" "}
+                  {speciality} success rate
+                </p>
+                <p className="hosp-addr">📍 {h.address} · {h.waitingTime}</p>
                 <div className="hosp-fac">
                   {h.facilities.slice(0, 4).map((f) => (
                     <span key={f}>✓ {f}</span>
@@ -235,19 +244,17 @@ const ConList = () => {
                 </div>
                 <div className="hosp-actions">
                   <button
+                    className="cl-btn cl-btn-ghost"
+                    onClick={() => navigate(`/hospital-profile/${h.id}`)}
+                  >
+                    View profile
+                  </button>
+                  <button
                     className="cl-btn"
                     onClick={() => book({ ...h, speciality })}
                   >
-                    Book Appointment
+                    Book
                   </button>
-                  <a
-                    className="cl-btn cl-btn-ghost"
-                    href={h.url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    View on map
-                  </a>
                 </div>
               </div>
             </article>

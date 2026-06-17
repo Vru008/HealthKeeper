@@ -278,6 +278,37 @@
   margin-top: 22px;
 }
 
+/* Outcome / ranking accents */
+.doc-success {
+  color: #1f9d55;
+  font-weight: 700;
+}
+.doc-actions {
+  display: flex;
+  gap: 8px;
+}
+.doc-actions .cl-btn {
+  flex: 1;
+}
+.hosp-rank {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #2a487f;
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  padding: 3px 11px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(42, 72, 127, 0.35);
+}
+.hosp-success {
+  color: #1f9d55;
+  font-weight: 700;
+  font-size: 13.5px;
+  margin: 2px 0 6px;
+}
+
 .cl-empty-page {
   text-align: center;
   padding: 100px 20px;

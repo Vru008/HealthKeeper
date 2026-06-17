@@ -7,6 +7,8 @@ import Department from "./Pages/Department/Department";
 import Contact from "./Pages/Contact/Contact";
 import ConList from "./Pages/ConList/ConList";
 import AITools from "./Pages/AITools/AITools";
+import DoctorProfile from "./Pages/Profile/DoctorProfile";
+import HospitalProfile from "./Pages/Profile/HospitalProfile";
 import NotFound from "./Pages/NotFound/NotFound";
 import Appointments from "./Pages/Appointments/Appointments";
 import Login from "./Pages/Auth/Login";
@@ -34,6 +36,8 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/form" element={<Form />} />
         <Route path="/list" element={<ConList />} />
+        <Route path="/doctor-profile/:id" element={<DoctorProfile />} />
+        <Route path="/hospital-profile/:id" element={<HospitalProfile />} />
         <Route
           path="/ai-tools"
           element={

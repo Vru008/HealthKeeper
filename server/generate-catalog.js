@@ -98,6 +98,41 @@ const cityAddress = (city) => {
 };
 const facilitiesPool = ["24x7 Emergency", "Pharmacy", "ICU", "Ambulance", "Cafeteria", "Free WiFi", "Insurance Desk", "Diagnostic Lab", "Blood Bank", "Parking"];
 
+// ---- achievement / outcome pools ----
+const awardsPool = [
+  "National Excellence Award",
+  "State Best Doctor Award",
+  "Healthcare Innovation Award",
+  "Young Achiever Award",
+  "Lifetime Service Award",
+  "Patient Choice Award",
+];
+const certPool = [
+  "Board Certified",
+  "Fellowship (UK)",
+  "Fellowship (USA)",
+  "Member, Indian Medical Association",
+  "Advanced Laparoscopy Certified",
+  "ACLS / BLS Certified",
+];
+const collegePool = [
+  "AIIMS Delhi",
+  "CMC Vellore",
+  "KEM Hospital, Mumbai",
+  "PGIMER Chandigarh",
+  "JIPMER Puducherry",
+  "Grant Medical College",
+  "B.J. Medical College",
+  "Maulana Azad Medical College",
+];
+const langExtra = ["Gujarati", "Marathi", "Bengali", "Tamil", "Telugu", "Kannada", "Punjabi", "Malayalam"];
+const doctorLangs = () => {
+  const base = ["English", "Hindi"];
+  if (r() > 0.35) base.push(pick(langExtra));
+  return base;
+};
+const sample = (arr, n) => [...arr].sort(() => r() - 0.5).slice(0, n);
+
 // Hospital photos (reliable Unsplash CDN, building/medical imagery)
 const hospitalImgs = [
   "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&q=80",
@@ -139,6 +174,18 @@ for (const city of cities) {
         focus: sp.focus.slice(0, 3),
         location: city,
         img: doctorImg(gender, dIdx),
+        // Treatment Success Intelligence + Achievement Engine
+        successRate: round1(88 + r() * 11),
+        procedures: int(200, 6000),
+        complicationRate: round1(0.8 + r() * 4),
+        recoveryDays: int(4, 28),
+        satisfaction: round1(4 + r() * 0.99),
+        publications: int(0, 24),
+        totalConsultations: int(1500, 42000),
+        languages: doctorLangs(),
+        awards: r() > 0.45 ? [pick(awardsPool)] : [],
+        certifications: sample(certPool, int(1, 3)),
+        education: `MBBS — ${pick(collegePool)} · ${sp.deg} — ${pick(collegePool)}`,
         about: `${name} is a ${sp.key.toLowerCase()} specialist in ${city} with ${exp} years of experience, known for patient-first, evidence-based care.`,
       });
       dIdx++;
@@ -172,6 +219,11 @@ for (const city of cities) {
       insurance: facilities.includes("Insurance Desk") || r() > 0.4,
       facilities,
       specialities: [],
+      specialityRates: {},
+      successRate: round1(90 + r() * 9),
+      waitingTime: pick(["No wait", "~15 min", "~30 min", "~45 min"]),
+      beds: { total: int(80, 900), icu: int(8, 90) },
+      established: int(1975, 2018),
       img: hospitalImgs[hIdx % hospitalImgs.length],
       url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
         name + " " + city
@@ -182,7 +234,10 @@ for (const city of cities) {
   // Ensure every speciality is offered by 3 hospitals in this city
   for (const sp of specialities) {
     const shuffled = [...cityHospitals].sort(() => r() - 0.5).slice(0, 3);
-    for (const hosp of shuffled) hosp.specialities.push(sp.key);
+    for (const hosp of shuffled) {
+      hosp.specialities.push(sp.key);
+      hosp.specialityRates[sp.key] = round1(89 + r() * 10); // per-speciality success %
+    }
   }
   hospitals.push(...cityHospitals);
 }
