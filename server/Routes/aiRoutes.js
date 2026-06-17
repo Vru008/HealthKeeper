@@ -8,7 +8,9 @@ const router = express.Router();
    Key lives in server/.env as GEMINI_API_KEY and never reaches the browser.
 ========================= */
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-const MODEL = "gemini-2.5-flash";
+// flash-lite has a much higher FREE daily quota than gemini-2.5-flash (which is
+// only ~20 requests/day on the free tier). Override with GEMINI_MODEL if needed.
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
 
 const SPECIALITIES =
   "Cardiology, Neurology, Oncology, Orthopedics, Pediatrics, Dermatology, " +

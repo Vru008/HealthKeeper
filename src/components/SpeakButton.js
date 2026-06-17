@@ -18,31 +18,47 @@ export default function SpeakButton({ text, lang = "en", autoPlay = false }) {
       String(text)
         .replace(/\s+/g, " ")
         .match(/[^.!?।]+[.!?।]*/g) || [String(text)];
-    const voices = synth.getVoices();
-    const base = code.split("-")[0].toLowerCase();
-    const voice =
-      voices.find((v) => v.lang === code) ||
-      voices.find((v) => v.lang && v.lang.toLowerCase().startsWith(base)) ||
-      null;
 
-    let i = 0;
-    const next = () => {
-      if (i >= chunks.length) {
-        setStatus("idle");
-        return;
-      }
-      const piece = chunks[i].trim();
-      i += 1;
-      if (!piece) return next();
-      const u = new SpeechSynthesisUtterance(piece);
-      u.lang = code;
-      if (voice) u.voice = voice;
-      u.onend = next;
-      u.onerror = () => setStatus("idle");
-      synth.speak(u);
+    const startSpeaking = () => {
+      const voices = synth.getVoices();
+      const base = code.split("-")[0].toLowerCase();
+      const voice =
+        voices.find((v) => v.lang === code) ||
+        voices.find((v) => v.lang && v.lang.toLowerCase().startsWith(base)) ||
+        null;
+      let i = 0;
+      const next = () => {
+        if (i >= chunks.length) {
+          setStatus("idle");
+          return;
+        }
+        const piece = chunks[i].trim();
+        i += 1;
+        if (!piece) return next();
+        const u = new SpeechSynthesisUtterance(piece);
+        u.lang = code;
+        if (voice) u.voice = voice;
+        u.onend = next;
+        u.onerror = () => setStatus("idle");
+        synth.speak(u);
+      };
+      next();
     };
+
     setStatus("playing");
-    setTimeout(next, 60);
+    // Speak immediately if voices are ready; otherwise wait briefly for them.
+    if (synth.getVoices().length === 0) {
+      let done = false;
+      const go = () => {
+        if (done) return;
+        done = true;
+        startSpeaking();
+      };
+      synth.onvoiceschanged = go;
+      setTimeout(go, 300);
+    } else {
+      setTimeout(startSpeaking, 40);
+    }
   };
 
   const pause = () => {

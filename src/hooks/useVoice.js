@@ -20,6 +20,15 @@ export const sttSupported = !!SR;
 export const ttsSupported =
   typeof window !== "undefined" && "speechSynthesis" in window;
 
+// Warm up the voice list at load so the first read-aloud isn't delayed.
+if (ttsSupported) {
+  try {
+    window.speechSynthesis.getVoices();
+  } catch {
+    /* ignore */
+  }
+}
+
 const pickVoice = (speechCode) => {
   const voices = window.speechSynthesis.getVoices();
   const base = speechCode.split("-")[0].toLowerCase();
