@@ -4,6 +4,7 @@ import api from "../../api";
 import { specialities, locations } from "../../data/lists";
 import { useCatalog } from "../../context/CatalogContext";
 import { downloadICS, googleCalendarUrl } from "../../utils/calendar";
+import { nearestErUrl, hospitalMapsUrl } from "../../utils/maps";
 import {
   LANGUAGES,
   speechCodeFor,
@@ -168,6 +169,7 @@ const Disclaimer = ({ text }) => (
 /* ---------- 1. Symptom Checker ---------- */
 const SymptomChecker = () => {
   const navigate = useNavigate();
+  const { hospitals: ALL_HOSPITALS } = useCatalog();
   const [symptoms, setSymptoms] = useState("");
   const [res, setRes] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -261,17 +263,40 @@ const SymptomChecker = () => {
                 <a href="tel:108" className="emerg-btn">
                   📞 Call 108 (Ambulance)
                 </a>
-                <button
+                <a
+                  href={nearestErUrl()}
+                  target="_blank"
+                  rel="noreferrer"
                   className="emerg-btn emerg-ghost"
-                  onClick={() =>
-                    navigate("/list", {
-                      state: { loc: "", speciality: res.speciality },
-                    })
-                  }
                 >
-                  Nearest hospitals
-                </button>
+                  📍 Nearest ER on Google Maps
+                </a>
               </div>
+              {ALL_HOSPITALS.length > 0 && (
+                <div className="emerg-hosps">
+                  <span className="emerg-hosps-title">
+                    Top-rated hospitals you can head to:
+                  </span>
+                  {[...ALL_HOSPITALS]
+                    .sort((a, b) => b.rating - a.rating)
+                    .slice(0, 3)
+                    .map((h) => (
+                      <a
+                        key={h.id}
+                        href={h.url || hospitalMapsUrl(h)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="emerg-hosp"
+                      >
+                        <span>
+                          <strong>{h.name}</strong>
+                          <small>📍 {h.address}</small>
+                        </span>
+                        <span className="emerg-hosp-map">Directions →</span>
+                      </a>
+                    ))}
+                </div>
+              )}
             </div>
           )}
           <div className="ait-result-head">

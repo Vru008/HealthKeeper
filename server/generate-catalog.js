@@ -208,11 +208,12 @@ for (const city of cities) {
       .sort(() => r() - 0.5)
       .slice(0, int(4, 7));
     const priceTier = pick(["Budget", "Mid-range", "Premium"]);
+    const address = cityAddress(city);
     cityHospitals.push({
       id: `h${hIdx + 1}`,
       name,
       location: city,
-      address: cityAddress(city),
+      address,
       rating: round1(4.0 + r() * 0.9),
       reviews: int(120, 4200),
       priceTier,
@@ -226,7 +227,7 @@ for (const city of cities) {
       established: int(1975, 2018),
       img: hospitalImgs[hIdx % hospitalImgs.length],
       url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-        name + " " + city
+        name + ", " + address
       )}`,
     });
     hIdx++;

@@ -131,12 +131,31 @@ router.post("/chat", async (req, res) => {
    POST /api/ai/symptom-check  { symptoms }
 ========================= */
 router.post("/symptom-check", async (req, res) => {
-  if (!ensureKey(res)) return;
   const { symptoms } = req.body;
   if (!symptoms || !symptoms.trim()) {
     return res.status(400).json({ error: "Please describe your symptoms" });
   }
   const emergency = isEmergency(symptoms);
+
+  // A red-flag emergency must surface even if the AI key is missing or the
+  // free quota is exhausted. This rule-based result is the safety net.
+  const emergencyPayload = {
+    emergency: true,
+    urgency: "emergency",
+    possibleCauses: [
+      "Your symptoms match recognised warning signs that need urgent, in-person assessment.",
+    ],
+    speciality: "Cardiology",
+    advice:
+      "Do not wait and do not drive yourself. Call 108 for an ambulance now, or get to the nearest emergency room immediately.",
+    disclaimer: DISCLAIMER,
+  };
+
+  // If the AI isn't configured at all, still return the emergency safety net.
+  if (!process.env.GEMINI_API_KEY) {
+    if (emergency) return res.json(emergencyPayload);
+    return ensureKey(res); // responds with the standard "not configured" error
+  }
 
   try {
     const model = genAI.getGenerativeModel({
@@ -175,6 +194,8 @@ router.post("/symptom-check", async (req, res) => {
     return res.json(data);
   } catch (err) {
     console.log("symptom-check error:", err.message);
+    // Even when the AI call fails (e.g. quota), never hide an emergency.
+    if (emergency) return res.json(emergencyPayload);
     return aiError(res, err);
   }
 });

@@ -515,3 +515,45 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Emergency: nearest hospital quick links */
+.emerg-hosps {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.emerg-hosps-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #7a1c12;
+}
+.emerg-hosp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #fff;
+  border: 1px solid #f3c9c2;
+  border-radius: 10px;
+  padding: 10px 13px;
+  text-decoration: none;
+}
+.emerg-hosp:hover {
+  background: #fff5f3;
+}
+.emerg-hosp strong {
+  display: block;
+  color: #1e293b;
+  font-size: 14.5px;
+}
+.emerg-hosp small {
+  color: #6b7a90;
+  font-size: 12.5px;
+}
+.emerg-hosp-map {
+  color: #c0392b;
+  font-weight: 700;
+  font-size: 13px;
+  white-space: nowrap;
+}
