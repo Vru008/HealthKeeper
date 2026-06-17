@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useCatalog } from "../../context/CatalogContext";
 import { specialities, locations } from "../../data/lists";
+import SearchableSelect from "../../components/SearchableSelect";
 import "./auth.css";
 
 const ROLES = [
@@ -14,6 +16,7 @@ const ROLES = [
 const Register = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { doctors, hospitals, loading: catLoading } = useCatalog();
 
   const [role, setRole] = useState("patient");
   const [form, setForm] = useState({
@@ -21,6 +24,7 @@ const Register = () => {
     email: "",
     phone: "",
     password: "",
+    providerId: "",
     providerName: "",
     speciality: specialities[0],
     city: locations[0],
@@ -32,11 +36,57 @@ const Register = () => {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  // Searchable option lists from the catalog (search by name / dept / city).
+  const doctorOptions = useMemo(
+    () =>
+      doctors.map((d) => ({
+        value: d.id,
+        label: d.name,
+        sub: `${d.speciality} · ${d.location}`,
+        keywords: `${d.name} ${d.speciality} ${d.location}`,
+        raw: d,
+      })),
+    [doctors]
+  );
+  const hospitalOptions = useMemo(
+    () =>
+      hospitals.map((h) => ({
+        value: h.id,
+        label: h.name,
+        sub: `${(h.specialities || []).slice(0, 3).join(", ")} · ${h.location}`,
+        keywords: `${h.name} ${(h.specialities || []).join(" ")} ${h.location}`,
+        raw: h,
+      })),
+    [hospitals]
+  );
+
+  // Picking a catalog entry locks the account to that provider so messages and
+  // appointments route correctly (they match on provider name).
+  const pickDoctor = (o) =>
+    setForm((f) => ({
+      ...f,
+      providerId: o.raw.id,
+      providerName: o.raw.name,
+      speciality: o.raw.speciality,
+      city: o.raw.location,
+    }));
+  const pickHospital = (o) =>
+    setForm((f) => ({
+      ...f,
+      providerId: o.raw.id,
+      providerName: o.raw.name,
+      city: o.raw.location,
+    }));
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     if (form.password.length < 6) {
       setError("Password must be at least 6 characters.");
+      return;
+    }
+    if ((role === "doctor" || role === "hospital") && !form.providerName) {
+      setError(`Please select your ${role} listing from the dropdown.`);
       return;
     }
     setLoading(true);
@@ -89,62 +139,45 @@ const Register = () => {
 
           {role === "doctor" && (
             <>
-              <label htmlFor="providerName">
-                Display name (as patients see you)
-              </label>
-              <input
-                id="providerName"
-                name="providerName"
-                value={form.providerName}
-                onChange={handleChange}
-                placeholder="Dr. Jane Doe"
+              <label>Select your doctor profile</label>
+              <SearchableSelect
+                options={doctorOptions}
+                value={form.providerId}
+                onChange={pickDoctor}
+                placeholder={
+                  catLoading
+                    ? "Loading doctors…"
+                    : "Search your name, speciality or city"
+                }
               />
-              <label htmlFor="speciality">Speciality</label>
-              <select
-                id="speciality"
-                name="speciality"
-                value={form.speciality}
-                onChange={handleChange}
-              >
-                {specialities.map((s) => (
-                  <option key={s}>{s}</option>
-                ))}
-              </select>
-              <label htmlFor="city">City</label>
-              <select
-                id="city"
-                name="city"
-                value={form.city}
-                onChange={handleChange}
-              >
-                {locations.map((c) => (
-                  <option key={c}>{c}</option>
-                ))}
-              </select>
+              {form.providerName && (
+                <p className="auth-pick-note">
+                  Registering as <strong>{form.providerName}</strong> —{" "}
+                  {form.speciality} · {form.city}
+                </p>
+              )}
             </>
           )}
 
           {role === "hospital" && (
             <>
-              <label htmlFor="providerName">Hospital name</label>
-              <input
-                id="providerName"
-                name="providerName"
-                value={form.providerName}
-                onChange={handleChange}
-                placeholder="City Care Hospital"
+              <label>Select your hospital</label>
+              <SearchableSelect
+                options={hospitalOptions}
+                value={form.providerId}
+                onChange={pickHospital}
+                placeholder={
+                  catLoading
+                    ? "Loading hospitals…"
+                    : "Search hospital name, department or city"
+                }
               />
-              <label htmlFor="city">City</label>
-              <select
-                id="city"
-                name="city"
-                value={form.city}
-                onChange={handleChange}
-              >
-                {locations.map((c) => (
-                  <option key={c}>{c}</option>
-                ))}
-              </select>
+              {form.providerName && (
+                <p className="auth-pick-note">
+                  Registering as <strong>{form.providerName}</strong> —{" "}
+                  {form.city}
+                </p>
+              )}
             </>
           )}
 
