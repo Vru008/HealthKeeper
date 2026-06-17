@@ -107,11 +107,32 @@ export function useSpeechInput() {
       const rec = new SR();
       rec.lang = speechCode || "en-IN";
       rec.interimResults = true; // show words as they're spoken
-      rec.continuous = false; // auto-stop shortly after the user stops speaking
+      rec.continuous = true; // keep listening; we auto-stop after a pause
       rec.maxAlternatives = 1;
 
       let finalText = "";
+      let gotSpeech = false;
+      let silenceTimer = null;
+      const clearSilence = () => {
+        if (silenceTimer) {
+          clearTimeout(silenceTimer);
+          silenceTimer = null;
+        }
+      };
+      const armSilence = () => {
+        clearSilence();
+        // Stop ~2s after the user stops speaking.
+        silenceTimer = setTimeout(() => {
+          try {
+            rec.stop();
+          } catch {
+            /* ignore */
+          }
+        }, 2000);
+      };
+
       rec.onresult = (e) => {
+        gotSpeech = true;
         let interim = "";
         for (let i = e.resultIndex; i < e.results.length; i++) {
           const r = e.results[i];
@@ -119,12 +140,17 @@ export function useSpeechInput() {
           else interim += r[0].transcript;
         }
         if (onText) onText((finalText + interim).trim());
+        armSilence();
       };
       rec.onend = () => {
+        clearSilence();
         setListening(false);
         if (onDone) onDone(finalText.trim());
       };
       rec.onerror = (e) => {
+        // "no-speech" after we already captured words is harmless — onend handles it.
+        if (e.error === "no-speech" && gotSpeech) return;
+        clearSilence();
         setError(e.error || "error");
         setListening(false);
       };
