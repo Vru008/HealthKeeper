@@ -4,8 +4,54 @@ import api from "../../api";
 import { specialities, locations } from "../../data/lists";
 import { useCatalog } from "../../context/CatalogContext";
 import { downloadICS, googleCalendarUrl } from "../../utils/calendar";
+import {
+  LANGUAGES,
+  speechCodeFor,
+  useSpeechInput,
+  speak,
+  sttSupported,
+  ttsSupported,
+} from "../../hooks/useVoice";
 import "../ConList/conlist.css";
 import "./aitools.css";
+
+// Language picker + mic button (shared by the voice-enabled tools).
+const VoiceControls = ({ lang, setLang, onMic, listening }) => (
+  <div className="voice-bar">
+    <select
+      className="voice-lang"
+      value={lang}
+      onChange={(e) => setLang(e.target.value)}
+      title="Language"
+    >
+      {LANGUAGES.map((l) => (
+        <option key={l.code} value={l.code}>
+          {l.label}
+        </option>
+      ))}
+    </select>
+    {sttSupported && onMic && (
+      <button
+        type="button"
+        className={`mic-btn ${listening ? "on" : ""}`}
+        onClick={onMic}
+      >
+        🎤 {listening ? "Listening…" : "Speak"}
+      </button>
+    )}
+  </div>
+);
+
+const ListenBtn = ({ text, lang }) =>
+  ttsSupported && text ? (
+    <button
+      type="button"
+      className="listen-btn"
+      onClick={() => speak(text, speechCodeFor(lang))}
+    >
+      🔊 Listen
+    </button>
+  ) : null;
 
 const TABS = [
   { key: "symptom", label: "🩺 Symptom Checker" },
@@ -129,6 +175,16 @@ const SymptomChecker = () => {
   const [res, setRes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [lang, setLang] = useState("en");
+  const [voiceMode, setVoiceMode] = useState(false);
+  const { listening, start } = useSpeechInput();
+
+  const onMic = () => {
+    setVoiceMode(true);
+    start(speechCodeFor(lang), (t) =>
+      setSymptoms((prev) => (prev ? `${prev} ${t}` : t))
+    );
+  };
 
   const check = async () => {
     if (!symptoms.trim()) return;
@@ -136,8 +192,10 @@ const SymptomChecker = () => {
     setError("");
     setRes(null);
     try {
-      const r = await api.post("/ai/symptom-check", { symptoms });
+      const r = await api.post("/ai/symptom-check", { symptoms, lang });
       setRes(r.data);
+      // Voice in → voice out: speak the guidance back in the chosen language.
+      if (voiceMode) speak(r.data.advice || "", speechCodeFor(lang));
     } catch (e) {
       setError(e.response?.data?.error || "Couldn't analyze right now.");
     } finally {
@@ -148,9 +206,15 @@ const SymptomChecker = () => {
   return (
     <div className="ait-tool">
       <p className="ait-lead">
-        Describe how you feel and the AI will suggest possible causes, urgency,
-        and the right department.
+        Describe how you feel — by typing or voice, in your language — and the AI
+        suggests possible causes, urgency, and the right department.
       </p>
+      <VoiceControls
+        lang={lang}
+        setLang={setLang}
+        onMic={onMic}
+        listening={listening}
+      />
       <textarea
         className="ait-input"
         rows={3}
@@ -183,7 +247,13 @@ const SymptomChecker = () => {
               <li key={i}>{c}</li>
             ))}
           </ul>
-          <h4>Advice</h4>
+          <div className="ait-advice-head">
+            <h4>Advice</h4>
+            <ListenBtn
+              text={`${res.advice} ${(res.possibleCauses || []).join(". ")}`}
+              lang={lang}
+            />
+          </div>
           <p>{res.advice}</p>
           <button
             className="ait-btn"
@@ -296,6 +366,7 @@ const ReportReader = () => {
   const [res, setRes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [lang, setLang] = useState("en");
 
   const onFile = (e) => {
     const file = e.target.files[0];
@@ -316,7 +387,7 @@ const ReportReader = () => {
     setError("");
     setRes(null);
     try {
-      const payload = fileData ? { fileData, mimeType } : { text };
+      const payload = fileData ? { fileData, mimeType, lang } : { text, lang };
       const r = await api.post("/ai/report", payload);
       setRes(r.data);
     } catch (e) {
@@ -330,8 +401,10 @@ const ReportReader = () => {
     <div className="ait-tool">
       <p className="ait-lead">
         Upload a blood report, X-ray, or prescription (PDF or image), or paste
-        the values — the AI explains it in plain language.
+        the values — the AI explains it in plain language, in your language, and
+        can read it aloud.
       </p>
+      <VoiceControls lang={lang} setLang={setLang} listening={false} />
       <label className="ait-file">
         <input type="file" accept=".pdf,image/*" onChange={onFile} />
         {fileName ? `📎 ${fileName}` : "📎 Upload PDF or image"}
@@ -351,7 +424,15 @@ const ReportReader = () => {
 
       {res && (
         <div className="ait-result">
-          <h4>Summary</h4>
+          <div className="ait-advice-head">
+            <h4>Summary</h4>
+            <ListenBtn
+              text={`${res.summary}. ${(res.findings || [])
+                .map((f) => `${f.label}: ${f.meaning}`)
+                .join(". ")}. ${res.advice}`}
+              lang={lang}
+            />
+          </div>
           <p>{res.summary}</p>
           {res.findings?.length > 0 && (
             <>

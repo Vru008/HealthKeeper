@@ -4,6 +4,14 @@ import api from "../api";
 import { useAuth } from "../context/AuthContext";
 import { useCatalog } from "../context/CatalogContext";
 import { specialities, locations } from "../data/lists";
+import {
+  LANGUAGES,
+  speechCodeFor,
+  useSpeechInput,
+  speak,
+  sttSupported,
+  ttsSupported,
+} from "../hooks/useVoice";
 import "./aichat.css";
 
 const WELCOME = {
@@ -54,7 +62,10 @@ const AIChat = () => {
   const [messages, setMessages] = useState([WELCOME]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [lang, setLang] = useState("en");
+  const { listening, start } = useSpeechInput();
   const endRef = useRef(null);
+  const voiceRef = useRef(false); // true when the pending message came from voice
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -63,18 +74,28 @@ const AIChat = () => {
   // AI assistant is a logged-in perk — hide it from guests.
   if (!user) return null;
 
+  const onMic = () => {
+    voiceRef.current = true;
+    start(speechCodeFor(lang), (t) =>
+      setInput((prev) => (prev ? `${prev} ${t}` : t))
+    );
+  };
+
   const send = async (e) => {
     e.preventDefault();
     const text = input.trim();
     if (!text || loading) return;
+    const spoke = voiceRef.current;
+    voiceRef.current = false;
 
     const next = [...messages, { role: "user", content: text }];
     setMessages(next);
     setInput("");
     setLoading(true);
     try {
-      const res = await api.post("/ai/chat", { messages: next });
+      const res = await api.post("/ai/chat", { messages: next, lang });
       setMessages([...next, { role: "assistant", content: res.data.reply }]);
+      if (spoke) speak(res.data.reply, speechCodeFor(lang));
     } catch (err) {
       const content =
         err.response?.data?.error ||
@@ -130,6 +151,15 @@ const AIChat = () => {
               return (
                 <div key={i} className="ai-row">
                   <div className={`ai-msg ai-${m.role}`}>{m.content}</div>
+                  {m.role === "assistant" && ttsSupported && (
+                    <button
+                      className="ai-listen"
+                      title="Listen"
+                      onClick={() => speak(m.content, speechCodeFor(lang))}
+                    >
+                      🔊 Listen
+                    </button>
+                  )}
                   {spec && count > 0 && (
                     <button
                       className="ai-action"
@@ -152,11 +182,33 @@ const AIChat = () => {
           </div>
 
           <form className="ai-input" onSubmit={send}>
+            <select
+              className="ai-lang"
+              value={lang}
+              onChange={(e) => setLang(e.target.value)}
+              title="Language"
+            >
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>
+                  {l.label}
+                </option>
+              ))}
+            </select>
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about symptoms or specialities…"
+              placeholder="Type or 🎤 speak…"
             />
+            {sttSupported && (
+              <button
+                type="button"
+                className={`ai-mic ${listening ? "on" : ""}`}
+                onClick={onMic}
+                title="Speak"
+              >
+                🎤
+              </button>
+            )}
             <button type="submit" disabled={loading}>
               ➤
             </button>

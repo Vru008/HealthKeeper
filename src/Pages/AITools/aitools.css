@@ -296,3 +296,68 @@
     padding: 22px 16px;
   }
 }
+
+/* ---- Voice + language controls ---- */
+.voice-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.voice-lang {
+  border: 1px solid #d4ddec;
+  border-radius: 9px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #2c3a52;
+  background: #fff;
+  cursor: pointer;
+}
+.mic-btn {
+  border: 1px solid #cdd9ee;
+  background: #eef3fb;
+  color: #2a487f;
+  border-radius: 9px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.mic-btn:hover {
+  background: #e0e9f7;
+}
+.mic-btn.on {
+  background: #b3261e;
+  color: #fff;
+  border-color: #b3261e;
+  animation: micpulse 1.2s infinite;
+}
+@keyframes micpulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(179, 38, 30, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 7px rgba(179, 38, 30, 0);
+  }
+}
+.ait-advice-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.listen-btn {
+  border: 1px solid #cdd9ee;
+  background: #fff;
+  color: #2a487f;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.listen-btn:hover {
+  background: #eef3fb;
+}

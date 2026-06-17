@@ -22,6 +22,27 @@ const DISCLAIMER =
   "This is general information, not a medical diagnosis. Always confirm with a " +
   "qualified doctor, and seek emergency care for severe or sudden symptoms.";
 
+// Multilingual support — respond in the user's language when requested.
+const LANGS = {
+  en: "English",
+  hi: "Hindi",
+  gu: "Gujarati",
+  mr: "Marathi",
+  bn: "Bengali",
+  ta: "Tamil",
+  te: "Telugu",
+  kn: "Kannada",
+  ml: "Malayalam",
+  pa: "Punjabi",
+  ur: "Urdu",
+  or: "Odia",
+  as: "Assamese",
+};
+const langLine = (lang) =>
+  lang && LANGS[lang] && lang !== "en"
+    ? ` IMPORTANT: Write all human-readable text (summaries, advice, messages) entirely in ${LANGS[lang]}. Keep medical/speciality names recognizable.`
+    : "";
+
 function ensureKey(res) {
   if (!process.env.GEMINI_API_KEY) {
     res.status(500).json({ error: "GEMINI_API_KEY is not set in server/.env" });
@@ -80,7 +101,7 @@ router.post("/chat", async (req, res) => {
         "speciality from that list, briefly explain why, and tell them they can view and " +
         "book doctors in that speciality right here on HealthKeeper. Do NOT say you can't " +
         "provide a list — direct them to the matching speciality. Be concise and warm. " +
-        DISCLAIMER,
+        DISCLAIMER + langLine(req.body.lang),
     });
     const result = await model.generateContent({ contents });
     return res.json({ reply: result.response.text() });
@@ -112,7 +133,7 @@ router.post("/symptom-check", async (req, res) => {
         "speciality from: " +
         SPECIALITIES +
         ", and give brief next-step advice. Never state a definitive diagnosis. " +
-        DISCLAIMER,
+        DISCLAIMER + langLine(req.body.lang),
       generationConfig: {
         responseMimeType: "application/json",
         responseSchema: {
@@ -258,7 +279,7 @@ router.post("/report", async (req, res) => {
         "what each means in everyday terms, then gentle next-step advice. NEVER give a " +
         "definitive diagnosis or change/recommend specific medication doses; tell the " +
         "patient to confirm with their doctor. " +
-        DISCLAIMER,
+        DISCLAIMER + langLine(req.body.lang),
       generationConfig: {
         responseMimeType: "application/json",
         responseSchema: {
@@ -307,7 +328,7 @@ router.post("/follow-up", async (req, res) => {
         "in days (integer), 3-5 short general reminders (e.g. rest, hydration, take " +
         "prescribed medicines as directed, warning signs to watch for), and a one-line " +
         "note. Do NOT prescribe specific drugs or doses. " +
-        DISCLAIMER,
+        DISCLAIMER + langLine(req.body.lang),
       generationConfig: {
         responseMimeType: "application/json",
         responseSchema: {
