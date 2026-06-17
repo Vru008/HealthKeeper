@@ -372,4 +372,104 @@ router.post("/follow-up", async (req, res) => {
   }
 });
 
+/* =========================
+   7) COST PREDICTION ENGINE
+   POST /api/ai/cost-estimate  { query, city?, lang? }
+========================= */
+router.post("/cost-estimate", async (req, res) => {
+  if (!ensureKey(res)) return;
+  const { query, city } = req.body;
+  if (!query || !query.trim()) {
+    return res.status(400).json({ error: "Tell us the treatment or procedure" });
+  }
+  try {
+    const model = genAI.getGenerativeModel({
+      model: MODEL,
+      systemInstruction:
+        "You estimate typical healthcare costs in India in Indian Rupees. For the given " +
+        "treatment/procedure, give rough cost RANGES for government, private, and premium " +
+        "hospitals (e.g. '₹30,000 - ₹70,000'), list what the cost typically includes, and a " +
+        "one-line note. These are rough estimates, not quotes. " +
+        DISCLAIMER + langLine(req.body.lang),
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: SchemaType.OBJECT,
+          properties: {
+            treatment: { type: SchemaType.STRING },
+            government: { type: SchemaType.STRING },
+            private: { type: SchemaType.STRING },
+            premium: { type: SchemaType.STRING },
+            includes: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
+            note: { type: SchemaType.STRING },
+          },
+          required: ["treatment", "government", "private", "premium", "includes", "note"],
+        },
+      },
+    });
+    const data = parseJson(
+      await model.generateContent(
+        `Treatment/procedure: ${query}. City: ${city || "India"}.`
+      )
+    );
+    data.disclaimer = DISCLAIMER;
+    return res.json(data);
+  } catch (err) {
+    return aiError(res, err);
+  }
+});
+
+/* =========================
+   8) TREATMENT JOURNEY PLANNER
+   POST /api/ai/journey  { condition, lang? }
+========================= */
+router.post("/journey", async (req, res) => {
+  if (!ensureKey(res)) return;
+  const { condition } = req.body;
+  if (!condition || !condition.trim()) {
+    return res.status(400).json({ error: "Describe the condition" });
+  }
+  try {
+    const model = genAI.getGenerativeModel({
+      model: MODEL,
+      systemInstruction:
+        "Create a clear treatment-journey roadmap for the condition: 4-7 ordered steps " +
+        "(consultation, tests, treatment, follow-up), each with a short detail; an estimated " +
+        "total duration; a rough total cost range in INR; and a one-line note. This is a " +
+        "general roadmap, not a substitute for a doctor's plan. " +
+        DISCLAIMER + langLine(req.body.lang),
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: SchemaType.OBJECT,
+          properties: {
+            steps: {
+              type: SchemaType.ARRAY,
+              items: {
+                type: SchemaType.OBJECT,
+                properties: {
+                  step: { type: SchemaType.STRING },
+                  detail: { type: SchemaType.STRING },
+                },
+                required: ["step", "detail"],
+              },
+            },
+            duration: { type: SchemaType.STRING },
+            costRange: { type: SchemaType.STRING },
+            note: { type: SchemaType.STRING },
+          },
+          required: ["steps", "duration", "costRange", "note"],
+        },
+      },
+    });
+    const data = parseJson(
+      await model.generateContent(`Condition: ${condition}.`)
+    );
+    data.disclaimer = DISCLAIMER;
+    return res.json(data);
+  } catch (err) {
+    return aiError(res, err);
+  }
+});
+
 module.exports = router;

@@ -53,6 +53,8 @@ const TABS = [
   { key: "doctor", label: "🔍 Find a Doctor" },
   { key: "report", label: "📄 Report Reader" },
   { key: "hospital", label: "🏥 Find a Hospital" },
+  { key: "cost", label: "💰 Cost Estimator" },
+  { key: "journey", label: "🗺️ Journey Planner" },
   { key: "followup", label: "⏰ Follow-up Care" },
 ];
 
@@ -251,8 +253,25 @@ const SymptomChecker = () => {
         <div className="ait-result">
           {res.emergency && (
             <div className="ait-emergency">
-              🚨 This may be a medical emergency. Call your local emergency
-              number or go to the nearest ER immediately. Do not wait.
+              <div>
+                🚨 This may be a <strong>medical emergency</strong> — do not
+                wait. Call an ambulance or go to the nearest ER now.
+              </div>
+              <div className="emerg-actions">
+                <a href="tel:108" className="emerg-btn">
+                  📞 Call 108 (Ambulance)
+                </a>
+                <button
+                  className="emerg-btn emerg-ghost"
+                  onClick={() =>
+                    navigate("/list", {
+                      state: { loc: "", speciality: res.speciality },
+                    })
+                  }
+                >
+                  Nearest hospitals
+                </button>
+              </div>
             </div>
           )}
           <div className="ait-result-head">
@@ -663,6 +682,155 @@ const FollowUp = () => {
   );
 };
 
+/* ---------- 6. Cost Estimator ---------- */
+const CostEstimator = () => {
+  const [query, setQuery] = useState("");
+  const [city, setCity] = useState("");
+  const [res, setRes] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const estimate = async () => {
+    if (!query.trim()) return;
+    setLoading(true);
+    setError("");
+    setRes(null);
+    try {
+      const r = await api.post("/ai/cost-estimate", { query, city });
+      setRes(r.data);
+    } catch (e) {
+      setError(e.response?.data?.error || "Couldn't estimate right now.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="ait-tool">
+      <p className="ait-lead">
+        Get rough treatment cost ranges across government, private, and premium
+        hospitals — no more bill-shock surprises.
+      </p>
+      <div className="ait-row-input">
+        <input
+          className="ait-input"
+          placeholder="e.g. knee replacement"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && estimate()}
+        />
+        <select
+          className="ait-input"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          style={{ maxWidth: 160 }}
+        >
+          <option value="">Any city</option>
+          {locations.map((c) => (
+            <option key={c}>{c}</option>
+          ))}
+        </select>
+        <button className="ait-btn" onClick={estimate} disabled={loading}>
+          {loading ? "Estimating…" : "Estimate"}
+        </button>
+      </div>
+      {error && <div className="ait-error">{error}</div>}
+      {res && (
+        <div className="ait-result">
+          <h4>
+            {res.treatment} — estimated cost{city ? ` in ${city}` : ""}
+          </h4>
+          <div className="cost-grid">
+            <div className="cost-card">
+              <span>Government</span>
+              <strong>{res.government}</strong>
+            </div>
+            <div className="cost-card">
+              <span>Private</span>
+              <strong>{res.private}</strong>
+            </div>
+            <div className="cost-card">
+              <span>Premium</span>
+              <strong>{res.premium}</strong>
+            </div>
+          </div>
+          <h4>Typically includes</h4>
+          <ul className="ait-list">
+            {res.includes?.map((x, i) => (
+              <li key={i}>{x}</li>
+            ))}
+          </ul>
+          <p>{res.note}</p>
+          <Disclaimer text={res.disclaimer} />
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ---------- 7. Treatment Journey Planner ---------- */
+const JourneyPlanner = () => {
+  const [condition, setCondition] = useState("");
+  const [res, setRes] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const plan = async () => {
+    if (!condition.trim()) return;
+    setLoading(true);
+    setError("");
+    setRes(null);
+    try {
+      const r = await api.post("/ai/journey", { condition });
+      setRes(r.data);
+    } catch (e) {
+      setError(e.response?.data?.error || "Couldn't plan right now.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="ait-tool">
+      <p className="ait-lead">
+        Get a step-by-step treatment roadmap — the stages, estimated duration,
+        and cost — so you know what to expect.
+      </p>
+      <div className="ait-row-input">
+        <input
+          className="ait-input"
+          placeholder="e.g. early-stage breast cancer"
+          value={condition}
+          onChange={(e) => setCondition(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && plan()}
+        />
+        <button className="ait-btn" onClick={plan} disabled={loading}>
+          {loading ? "Planning…" : "Plan"}
+        </button>
+      </div>
+      {error && <div className="ait-error">{error}</div>}
+      {res && (
+        <div className="ait-result">
+          <div className="ait-result-head">
+            <span className="ait-dept">⏱ {res.duration}</span>
+            <span className="ait-dept">💰 {res.costRange}</span>
+          </div>
+          <ol className="journey">
+            {res.steps?.map((s, i) => (
+              <li key={i}>
+                <strong>{s.step}</strong>
+                <span>{s.detail}</span>
+              </li>
+            ))}
+          </ol>
+          <p>{res.note}</p>
+          <Disclaimer text={res.disclaimer} />
+        </div>
+      )}
+    </div>
+  );
+};
+
 const AITools = () => {
   const [tab, setTab] = useState("symptom");
 
@@ -693,6 +861,8 @@ const AITools = () => {
         {tab === "doctor" && <DoctorMatch />}
         {tab === "report" && <ReportReader />}
         {tab === "hospital" && <HospitalRecommender />}
+        {tab === "cost" && <CostEstimator />}
+        {tab === "journey" && <JourneyPlanner />}
         {tab === "followup" && <FollowUp />}
       </div>
     </div>
