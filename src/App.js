@@ -7,6 +7,7 @@ import Department from "./Pages/Department/Department";
 import Contact from "./Pages/Contact/Contact";
 import ConList from "./Pages/ConList/ConList";
 import AITools from "./Pages/AITools/AITools";
+import HealthCopilot from "./Pages/Health/HealthCopilot";
 import DoctorProfile from "./Pages/Profile/DoctorProfile";
 import HospitalProfile from "./Pages/Profile/HospitalProfile";
 import NotFound from "./Pages/NotFound/NotFound";
@@ -47,6 +48,14 @@ function App() {
           }
         />
         <Route path="/appointments" element={<Appointments />} />
+        <Route
+          path="/health"
+          element={
+            <ProtectedRoute roles={["patient"]}>
+              <HealthCopilot />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/profile"
           element={
