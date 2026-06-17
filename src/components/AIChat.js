@@ -63,7 +63,7 @@ const AIChat = () => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [lang, setLang] = useState("en");
-  const { listening, start } = useSpeechInput();
+  const { listening, start, stop } = useSpeechInput();
   const endRef = useRef(null);
   const voiceRef = useRef(false); // true when the pending message came from voice
 
@@ -75,10 +75,12 @@ const AIChat = () => {
   if (!user) return null;
 
   const onMic = () => {
+    if (listening) {
+      stop();
+      return;
+    }
     voiceRef.current = true;
-    start(speechCodeFor(lang), (t) =>
-      setInput((prev) => (prev ? `${prev} ${t}` : t))
-    );
+    start(speechCodeFor(lang), (live) => setInput(live));
   };
 
   const send = async (e) => {

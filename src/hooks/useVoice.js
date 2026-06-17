@@ -79,24 +79,39 @@ export function stopSpeaking() {
   if (ttsSupported) window.speechSynthesis.cancel();
 }
 
-// Hook for one-shot speech-to-text ("recording").
+// Hook for live (streaming) speech-to-text "recording".
+// start(speechCode, onText, onDone):
+//   onText(fullTranscript)  — fires continuously as you speak (live words)
+//   onDone(finalTranscript) — fires when recording stops
 export function useSpeechInput() {
   const [listening, setListening] = useState(false);
   const recRef = useRef(null);
 
-  const start = useCallback((speechCode, onText) => {
+  const start = useCallback((speechCode, onText, onDone) => {
     if (!SR) return;
     try {
       const rec = new SR();
       rec.lang = speechCode || "en-IN";
-      rec.interimResults = false;
+      rec.interimResults = true; // show words as they're spoken
+      rec.continuous = true; // keep listening until stopped
       rec.maxAlternatives = 1;
+
+      let finalText = "";
       rec.onresult = (e) => {
-        const t = e.results?.[0]?.[0]?.transcript || "";
-        if (t) onText(t);
+        let interim = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const r = e.results[i];
+          if (r.isFinal) finalText += r[0].transcript;
+          else interim += r[0].transcript;
+        }
+        if (onText) onText((finalText + interim).trim());
       };
-      rec.onend = () => setListening(false);
+      rec.onend = () => {
+        setListening(false);
+        if (onDone) onDone(finalText.trim());
+      };
       rec.onerror = () => setListening(false);
+
       recRef.current = rec;
       setListening(true);
       rec.start();
@@ -111,7 +126,6 @@ export function useSpeechInput() {
     } catch {
       /* ignore */
     }
-    setListening(false);
   }, []);
 
   return { supported: sttSupported, listening, start, stop };

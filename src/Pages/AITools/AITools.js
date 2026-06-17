@@ -177,7 +177,7 @@ const SymptomChecker = () => {
   const [error, setError] = useState("");
   const [lang, setLang] = useState("en");
   const [voiceMode, setVoiceMode] = useState(false);
-  const { listening, start } = useSpeechInput();
+  const { listening, start, stop } = useSpeechInput();
 
   const runCheck = async (override, spoken) => {
     const text = (override ?? symptoms).trim();
@@ -197,13 +197,23 @@ const SymptomChecker = () => {
     }
   };
 
-  // One-tap recorder: record the problem, then auto-analyze and speak the answer.
+  // Recorder: tap to start (words appear live in the box), tap again to stop →
+  // it auto-analyzes and speaks the answer.
   const onRecord = () => {
+    if (listening) {
+      stop();
+      return;
+    }
     setVoiceMode(true);
-    start(speechCodeFor(lang), (t) => {
-      setSymptoms(t);
-      runCheck(t, true);
-    });
+    setSymptoms("");
+    setRes(null);
+    start(
+      speechCodeFor(lang),
+      (live) => setSymptoms(live), // live transcription into the box
+      (finalText) => {
+        if (finalText) runCheck(finalText, true);
+      }
+    );
   };
 
   return (
@@ -219,8 +229,10 @@ const SymptomChecker = () => {
         listening={listening}
       />
       <p className="ait-record-hint">
-        Tap <strong>🎤 Record</strong>, describe your problem out loud, and the
-        assistant will answer through your speaker — or type below.
+        Tap <strong>🎤 Record</strong> and describe your problem out loud — the
+        words appear below as you speak. Tap <strong>Recording…</strong> again to
+        stop, and the assistant analyzes it and answers through your speaker. Or
+        just type below.
       </p>
       <textarea
         className="ait-input"
