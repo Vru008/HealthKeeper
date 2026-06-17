@@ -8,10 +8,9 @@ import {
   LANGUAGES,
   speechCodeFor,
   useSpeechInput,
-  speak,
   sttSupported,
-  ttsSupported,
 } from "../../hooks/useVoice";
+import SpeakButton from "../../components/SpeakButton";
 import "../ConList/conlist.css";
 import "./aitools.css";
 
@@ -42,16 +41,6 @@ const VoiceControls = ({ lang, setLang, onMic, listening }) => (
   </div>
 );
 
-const ListenBtn = ({ text, lang }) =>
-  ttsSupported && text ? (
-    <button
-      type="button"
-      className="listen-btn"
-      onClick={() => speak(text, speechCodeFor(lang))}
-    >
-      🔊 Listen
-    </button>
-  ) : null;
 
 const TABS = [
   { key: "symptom", label: "🩺 Symptom Checker" },
@@ -179,7 +168,7 @@ const SymptomChecker = () => {
   const [voiceMode, setVoiceMode] = useState(false);
   const { listening, start, stop } = useSpeechInput();
 
-  const runCheck = async (override, spoken) => {
+  const runCheck = async (override) => {
     const text = (override ?? symptoms).trim();
     if (!text) return;
     setLoading(true);
@@ -188,8 +177,6 @@ const SymptomChecker = () => {
     try {
       const r = await api.post("/ai/symptom-check", { symptoms: text, lang });
       setRes(r.data);
-      // Recorded by voice → speak the guidance back through the speaker.
-      if (spoken || voiceMode) speak(r.data.advice || "", speechCodeFor(lang));
     } catch (e) {
       setError(e.response?.data?.error || "Couldn't analyze right now.");
     } finally {
@@ -211,7 +198,7 @@ const SymptomChecker = () => {
       speechCodeFor(lang),
       (live) => setSymptoms(live), // live transcription into the box
       (finalText) => {
-        if (finalText) runCheck(finalText, true);
+        if (finalText) runCheck(finalText);
       }
     );
   };
@@ -241,7 +228,14 @@ const SymptomChecker = () => {
         value={symptoms}
         onChange={(e) => setSymptoms(e.target.value)}
       />
-      <button className="ait-btn" onClick={() => runCheck()} disabled={loading}>
+      <button
+        className="ait-btn"
+        onClick={() => {
+          setVoiceMode(false);
+          runCheck();
+        }}
+        disabled={loading}
+      >
         {loading ? "Analyzing…" : "Check Symptoms"}
       </button>
       {error && <div className="ait-error">{error}</div>}
@@ -268,9 +262,10 @@ const SymptomChecker = () => {
           </ul>
           <div className="ait-advice-head">
             <h4>Advice</h4>
-            <ListenBtn
+            <SpeakButton
               text={`${res.advice} ${(res.possibleCauses || []).join(". ")}`}
               lang={lang}
+              autoPlay={voiceMode}
             />
           </div>
           <p>{res.advice}</p>
@@ -445,7 +440,7 @@ const ReportReader = () => {
         <div className="ait-result">
           <div className="ait-advice-head">
             <h4>Summary</h4>
-            <ListenBtn
+            <SpeakButton
               text={`${res.summary}. ${(res.findings || [])
                 .map((f) => `${f.label}: ${f.meaning}`)
                 .join(". ")}. ${res.advice}`}

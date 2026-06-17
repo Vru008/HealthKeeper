@@ -93,7 +93,7 @@ export function useSpeechInput() {
       const rec = new SR();
       rec.lang = speechCode || "en-IN";
       rec.interimResults = true; // show words as they're spoken
-      rec.continuous = true; // keep listening until stopped
+      rec.continuous = false; // auto-stop shortly after the user stops speaking
       rec.maxAlternatives = 1;
 
       let finalText = "";

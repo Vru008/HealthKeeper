@@ -366,3 +366,16 @@
 .listen-btn:hover {
   background: #eef3fb;
 }
+.speak-ctrl {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+.listen-stop {
+  color: #b3261e;
+  border-color: #f3c9c4;
+  padding: 5px 10px;
+}
+.listen-stop:hover {
+  background: #fdecea;
+}
