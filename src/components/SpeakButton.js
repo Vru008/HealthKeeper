@@ -1,34 +1,53 @@
 import React, { useEffect, useRef, useState } from "react";
 import { speechCodeFor, ttsSupported } from "../hooks/useVoice";
 
-// Read-aloud with play / pause / resume / stop controls.
-// Pass autoPlay to start speaking as soon as the text appears.
+// Read-aloud with play / pause / resume / stop, robust across browsers:
+// - chunks long text so it doesn't get cut off
+// - keep-alive resume() loop works around Chrome pausing long speech
+// - shows a clear message when the device has no voice for the language
 export default function SpeakButton({ text, lang = "en", autoPlay = false }) {
-  const [status, setStatus] = useState("idle"); // idle | playing | paused
+  const [status, setStatus] = useState("idle"); // idle | playing | paused | novoice
   const synthRef = useRef(
     typeof window !== "undefined" ? window.speechSynthesis : null
   );
+  const keepAlive = useRef(null);
+
+  const clearKeepAlive = () => {
+    if (keepAlive.current) {
+      clearInterval(keepAlive.current);
+      keepAlive.current = null;
+    }
+  };
 
   const play = () => {
     const synth = synthRef.current;
     if (!synth || !text) return;
     synth.cancel();
-    const code = speechCodeFor(lang);
-    const chunks =
-      String(text)
-        .replace(/\s+/g, " ")
-        .match(/[^.!?।]+[.!?।]*/g) || [String(text)];
+    clearKeepAlive();
 
-    const startSpeaking = () => {
+    const code = speechCodeFor(lang);
+    const base = code.split("-")[0].toLowerCase();
+
+    const begin = () => {
       const voices = synth.getVoices();
-      const base = code.split("-")[0].toLowerCase();
       const voice =
         voices.find((v) => v.lang === code) ||
         voices.find((v) => v.lang && v.lang.toLowerCase().startsWith(base)) ||
         null;
+
+      if (!voice) {
+        setStatus("novoice");
+        return;
+      }
+
+      const chunks =
+        String(text)
+          .replace(/\s+/g, " ")
+          .match(/[^.!?।]+[.!?।]*/g) || [String(text)];
       let i = 0;
       const next = () => {
         if (i >= chunks.length) {
+          clearKeepAlive();
           setStatus("idle");
           return;
         }
@@ -37,27 +56,34 @@ export default function SpeakButton({ text, lang = "en", autoPlay = false }) {
         if (!piece) return next();
         const u = new SpeechSynthesisUtterance(piece);
         u.lang = code;
-        if (voice) u.voice = voice;
+        u.voice = voice;
         u.onend = next;
-        u.onerror = () => setStatus("idle");
+        u.onerror = () => {
+          clearKeepAlive();
+          setStatus("idle");
+        };
         synth.speak(u);
       };
+
+      setStatus("playing");
+      // Chrome stops long speech after ~15s; nudging resume keeps it going.
+      keepAlive.current = setInterval(() => {
+        if (synth.speaking && !synth.paused) synth.resume();
+      }, 9000);
       next();
     };
 
-    setStatus("playing");
-    // Speak immediately if voices are ready; otherwise wait briefly for them.
     if (synth.getVoices().length === 0) {
       let done = false;
       const go = () => {
         if (done) return;
         done = true;
-        startSpeaking();
+        begin();
       };
       synth.onvoiceschanged = go;
-      setTimeout(go, 300);
+      setTimeout(go, 400);
     } else {
-      setTimeout(startSpeaking, 40);
+      begin();
     }
   };
 
@@ -71,10 +97,10 @@ export default function SpeakButton({ text, lang = "en", autoPlay = false }) {
   };
   const stop = () => {
     synthRef.current?.cancel();
+    clearKeepAlive();
     setStatus("idle");
   };
 
-  // Auto-play when the text changes (e.g. a fresh voice result), and clean up.
   useEffect(() => {
     const synth = synthRef.current;
     setStatus("idle");
@@ -82,10 +108,14 @@ export default function SpeakButton({ text, lang = "en", autoPlay = false }) {
       const id = setTimeout(play, 150);
       return () => {
         clearTimeout(id);
+        clearKeepAlive();
         synth?.cancel();
       };
     }
-    return () => synth?.cancel();
+    return () => {
+      clearKeepAlive();
+      synth?.cancel();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text]);
 
@@ -108,7 +138,7 @@ export default function SpeakButton({ text, lang = "en", autoPlay = false }) {
           ▶ Resume
         </button>
       )}
-      {status !== "idle" && (
+      {(status === "playing" || status === "paused") && (
         <button
           type="button"
           className="listen-btn listen-stop"
@@ -117,6 +147,11 @@ export default function SpeakButton({ text, lang = "en", autoPlay = false }) {
         >
           ✕
         </button>
+      )}
+      {status === "novoice" && (
+        <span className="listen-novoice">
+          🔇 No read-aloud voice for this language on this device.
+        </span>
       )}
     </span>
   );

@@ -9,6 +9,7 @@ import {
   speechCodeFor,
   useSpeechInput,
   sttSupported,
+  sttErrorText,
 } from "../../hooks/useVoice";
 import SpeakButton from "../../components/SpeakButton";
 import "../ConList/conlist.css";
@@ -37,6 +38,11 @@ const VoiceControls = ({ lang, setLang, onMic, listening }) => (
       >
         🎤 {listening ? "Recording…" : "Record"}
       </button>
+    )}
+    {!sttSupported && onMic && (
+      <span className="voice-unsupported">
+        🎤 Voice input needs Chrome
+      </span>
     )}
   </div>
 );
@@ -166,7 +172,7 @@ const SymptomChecker = () => {
   const [error, setError] = useState("");
   const [lang, setLang] = useState("en");
   const [voiceMode, setVoiceMode] = useState(false);
-  const { listening, start, stop } = useSpeechInput();
+  const { listening, start, stop, error: sttError } = useSpeechInput();
 
   const runCheck = async (override) => {
     const text = (override ?? symptoms).trim();
@@ -238,6 +244,7 @@ const SymptomChecker = () => {
       >
         {loading ? "Analyzing…" : "Check Symptoms"}
       </button>
+      {sttError && <div className="ait-error">{sttErrorText(sttError)}</div>}
       {error && <div className="ait-error">{error}</div>}
 
       {res && (

@@ -94,10 +94,15 @@ export function stopSpeaking() {
 //   onDone(finalTranscript) — fires when recording stops
 export function useSpeechInput() {
   const [listening, setListening] = useState(false);
+  const [error, setError] = useState("");
   const recRef = useRef(null);
 
   const start = useCallback((speechCode, onText, onDone) => {
-    if (!SR) return;
+    if (!SR) {
+      setError("unsupported");
+      return;
+    }
+    setError("");
     try {
       const rec = new SR();
       rec.lang = speechCode || "en-IN";
@@ -119,12 +124,16 @@ export function useSpeechInput() {
         setListening(false);
         if (onDone) onDone(finalText.trim());
       };
-      rec.onerror = () => setListening(false);
+      rec.onerror = (e) => {
+        setError(e.error || "error");
+        setListening(false);
+      };
 
       recRef.current = rec;
       setListening(true);
       rec.start();
     } catch {
+      setError("error");
       setListening(false);
     }
   }, []);
@@ -137,5 +146,18 @@ export function useSpeechInput() {
     }
   }, []);
 
-  return { supported: sttSupported, listening, start, stop };
+  return { supported: sttSupported, listening, error, start, stop };
 }
+
+// Friendly message for a speech-recognition error code.
+export const sttErrorText = (code) => {
+  if (!code) return "";
+  if (code === "unsupported")
+    return "Voice input isn't supported in this browser. Try Google Chrome.";
+  if (code === "not-allowed" || code === "service-not-allowed")
+    return "Microphone access was blocked. Allow the mic and try again.";
+  if (code === "no-speech") return "Didn't catch that — please try again.";
+  if (code === "audio-capture")
+    return "No microphone found on this device.";
+  return "Couldn't record. Please try again.";
+};
