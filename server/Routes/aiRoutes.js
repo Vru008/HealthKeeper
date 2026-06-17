@@ -388,8 +388,10 @@ router.post("/cost-estimate", async (req, res) => {
       systemInstruction:
         "You estimate typical healthcare costs in India in Indian Rupees. For the given " +
         "treatment/procedure, give rough cost RANGES for government, private, and premium " +
-        "hospitals (e.g. '₹30,000 - ₹70,000'), list what the cost typically includes, and a " +
-        "one-line note. These are rough estimates, not quotes. " +
+        "hospitals (e.g. '₹30,000 - ₹70,000'), list what the cost typically includes, name " +
+        "the single most relevant speciality from [" +
+        SPECIALITIES +
+        "], and add a one-line note. These are rough estimates, not quotes. " +
         DISCLAIMER + langLine(req.body.lang),
       generationConfig: {
         responseMimeType: "application/json",
@@ -397,13 +399,14 @@ router.post("/cost-estimate", async (req, res) => {
           type: SchemaType.OBJECT,
           properties: {
             treatment: { type: SchemaType.STRING },
+            speciality: { type: SchemaType.STRING },
             government: { type: SchemaType.STRING },
             private: { type: SchemaType.STRING },
             premium: { type: SchemaType.STRING },
             includes: { type: SchemaType.ARRAY, items: { type: SchemaType.STRING } },
             note: { type: SchemaType.STRING },
           },
-          required: ["treatment", "government", "private", "premium", "includes", "note"],
+          required: ["treatment", "speciality", "government", "private", "premium", "includes", "note"],
         },
       },
     });

@@ -683,12 +683,34 @@ const FollowUp = () => {
 };
 
 /* ---------- 6. Cost Estimator ---------- */
+const COST_TIERS = [
+  { key: "government", label: "Government", tier: "Budget" },
+  { key: "private", label: "Private", tier: "Mid-range" },
+  { key: "premium", label: "Premium", tier: "Premium" },
+];
+
 const CostEstimator = () => {
+  const navigate = useNavigate();
+  const { hospitals: ALL_HOSPITALS } = useCatalog();
   const [query, setQuery] = useState("");
   const [city, setCity] = useState("");
   const [res, setRes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const hospitalsForTier = (priceTier) =>
+    ALL_HOSPITALS.filter(
+      (h) =>
+        h.priceTier === priceTier &&
+        (!city || h.location === city) &&
+        (!res?.speciality || h.specialities.includes(res.speciality))
+    )
+      .sort(
+        (a, b) =>
+          (b.specialityRates?.[res?.speciality] || b.successRate) -
+          (a.specialityRates?.[res?.speciality] || a.successRate)
+      )
+      .slice(0, 3);
 
   const estimate = async () => {
     if (!query.trim()) return;
@@ -741,19 +763,35 @@ const CostEstimator = () => {
             {res.treatment} — estimated cost{city ? ` in ${city}` : ""}
           </h4>
           <div className="cost-grid">
-            <div className="cost-card">
-              <span>Government</span>
-              <strong>{res.government}</strong>
-            </div>
-            <div className="cost-card">
-              <span>Private</span>
-              <strong>{res.private}</strong>
-            </div>
-            <div className="cost-card">
-              <span>Premium</span>
-              <strong>{res.premium}</strong>
-            </div>
+            {COST_TIERS.map((t) => {
+              const hosps = hospitalsForTier(t.tier);
+              return (
+                <div key={t.key} className="cost-card">
+                  <span>{t.label}</span>
+                  <strong>{res[t.key]}</strong>
+                  {hosps.length > 0 && (
+                    <div className="cost-hosps">
+                      {hosps.map((h) => (
+                        <button
+                          key={h.id}
+                          className="cost-hosp"
+                          onClick={() => navigate(`/hospital-profile/${h.id}`)}
+                          title={`${h.specialityRates?.[res.speciality] ?? h.successRate}% success`}
+                        >
+                          🏥 {h.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
+          {city ? null : (
+            <p className="ait-note">
+              Tip: pick a city above to see hospitals near you in each budget.
+            </p>
+          )}
           <h4>Typically includes</h4>
           <ul className="ait-list">
             {res.includes?.map((x, i) => (
