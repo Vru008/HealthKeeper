@@ -100,6 +100,37 @@
   color: #41506a;
   margin-bottom: 6px;
 }
+/* Give the searchable dropdown the same spacing as inputs */
+.contact-form .ss-box {
+  margin-bottom: 16px;
+}
+/* Doctor / Hospital segmented toggle */
+.contact-seg {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.contact-seg .seg {
+  flex: 1;
+  border: 1px solid #d4ddec;
+  background: #fff;
+  border-radius: 10px;
+  padding: 11px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #41506a;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.contact-seg .seg:hover {
+  border-color: #b9c6dd;
+}
+.contact-seg .seg.active {
+  border-color: #2a487f;
+  background: #eef3fb;
+  color: #2a487f;
+  box-shadow: 0 0 0 3px rgba(42, 72, 127, 0.1);
+}
 .contact-form input,
 .contact-form textarea {
   border: 1px solid #d4ddec;
