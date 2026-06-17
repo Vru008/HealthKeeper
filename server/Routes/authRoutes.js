@@ -110,4 +110,56 @@ router.get("/me", protect, (req, res) => {
   return res.json({ user: publicUser(req.user) });
 });
 
+/* UPDATE OWN PROFILE  PATCH /api/auth/me
+   { name?, phone?, providerName?, speciality?, city? } */
+router.patch("/me", protect, async (req, res) => {
+  const { name, phone, providerName, speciality, city } = req.body;
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    if (name !== undefined) {
+      if (!name.trim())
+        return res.status(400).json({ error: "Name can't be empty" });
+      user.name = name;
+    }
+    if (phone !== undefined) user.phone = phone;
+    if (providerName !== undefined) user.providerName = providerName;
+    if (speciality !== undefined) user.speciality = speciality;
+    if (city !== undefined) user.city = city;
+
+    await user.save();
+    return res.json({ user: publicUser(user) });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+/* CHANGE OWN PASSWORD  PATCH /api/auth/password
+   { currentPassword, newPassword } */
+router.patch("/password", protect, async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword) {
+    return res
+      .status(400)
+      .json({ error: "Current and new password are required" });
+  }
+  if (newPassword.length < 6) {
+    return res
+      .status(400)
+      .json({ error: "New password must be at least 6 characters" });
+  }
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user || !(await user.matchPassword(currentPassword))) {
+      return res.status(401).json({ error: "Current password is incorrect" });
+    }
+    user.password = newPassword; // re-hashed by the model's pre-save hook
+    await user.save();
+    return res.json({ ok: true });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

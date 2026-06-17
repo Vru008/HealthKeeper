@@ -13,6 +13,8 @@ import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
 import ProviderDashboard from "./Pages/Dashboard/ProviderDashboard";
 import AdminDashboard from "./Pages/Dashboard/AdminDashboard";
+import Profile from "./Pages/Account/Profile";
+import Settings from "./Pages/Account/Settings";
 import Form from "./components/common/Form";
 import MainHeader from "./components/common/_Header";
 import Footer from "./components/common/Footer";
@@ -41,6 +43,22 @@ function App() {
           }
         />
         <Route path="/appointments" element={<Appointments />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route

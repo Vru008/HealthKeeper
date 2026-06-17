@@ -1,13 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./_header.css";
 
+const initials = (name = "") =>
+  name
+    .split(" ")
+    .filter(Boolean)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase() || "?";
+
+// The role-specific destination shown in menus.
+const roleLink = (role) => {
+  if (role === "doctor") return { to: "/doctor", label: "Dashboard" };
+  if (role === "hospital") return { to: "/hospital", label: "Dashboard" };
+  if (role === "admin") return { to: "/admin", label: "Admin" };
+  return { to: "/appointments", label: "My Appointments" };
+};
+
 const MainHeader = () => {
   const { user, logout } = useAuth();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // mobile menu
+  const [menu, setMenu] = useState(false); // profile dropdown
+  const menuRef = useRef(null);
 
   const close = () => setOpen(false);
+  const closeMenu = () => setMenu(false);
+
+  // Close the profile dropdown on outside click.
+  useEffect(() => {
+    const onClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenu(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  const rl = user ? roleLink(user.role) : null;
 
   const links = (
     <ul className="nav-links" onClick={close}>
@@ -38,59 +69,14 @@ const MainHeader = () => {
           Contact
         </NavLink>
       </li>
-      {user?.role === "patient" && (
+      {user && (
         <li>
-          <NavLink className="link" to="/appointments">
-            My Appointments
-          </NavLink>
-        </li>
-      )}
-      {user?.role === "doctor" && (
-        <li>
-          <NavLink className="link" to="/doctor">
-            Dashboard
-          </NavLink>
-        </li>
-      )}
-      {user?.role === "hospital" && (
-        <li>
-          <NavLink className="link" to="/hospital">
-            Dashboard
-          </NavLink>
-        </li>
-      )}
-      {user?.role === "admin" && (
-        <li>
-          <NavLink className="link" to="/admin">
-            Admin
+          <NavLink className="link" to={rl.to}>
+            {rl.label}
           </NavLink>
         </li>
       )}
     </ul>
-  );
-
-  const authButtons = user ? (
-    <>
-      <span className="nav-hi">Hi, {user.name.split(" ")[0]}</span>
-      <button
-        className="btn-ghost"
-        onClick={() => {
-          logout();
-          close();
-        }}
-      >
-        Log Out
-      </button>
-    </>
-  ) : (
-    <>
-      <Link className="btn-ghost" to="/login" onClick={close}>
-        Log In
-      </Link>
-      <Link className="btn-primary" to="/register" onClick={close}>
-        Sign Up
-      </Link>
-    </>
   );
 
   return (
@@ -103,10 +89,90 @@ const MainHeader = () => {
 
       <div className={`nav-center ${open ? "open" : ""}`}>
         {links}
-        <div className="nav-auth-mobile">{authButtons}</div>
+        {/* Mobile auth block (inside the hamburger menu) */}
+        <div className="nav-auth-mobile" onClick={close}>
+          {user ? (
+            <>
+              <NavLink className="btn-ghost" to="/profile">
+                Profile
+              </NavLink>
+              <NavLink className="btn-ghost" to="/settings">
+                Settings
+              </NavLink>
+              <button className="btn-primary" onClick={logout}>
+                Log Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link className="btn-ghost" to="/login">
+                Log In
+              </Link>
+              <Link className="btn-primary" to="/register">
+                Sign Up
+              </Link>
+            </>
+          )}
+        </div>
       </div>
 
-      <div className="nav-auth">{authButtons}</div>
+      {/* Desktop auth area */}
+      <div className="nav-auth">
+        {user ? (
+          <div className="profile-menu" ref={menuRef}>
+            <button
+              className="profile-trigger"
+              onClick={() => setMenu((m) => !m)}
+              aria-expanded={menu}
+            >
+              <span className={`profile-avatar av-${user.role}`}>
+                {initials(user.name)}
+              </span>
+              <span className="profile-name">{user.name.split(" ")[0]}</span>
+              <span className={`profile-chev ${menu ? "up" : ""}`}>▾</span>
+            </button>
+
+            {menu && (
+              <div className="profile-dropdown" onClick={closeMenu}>
+                <div className="pd-head">
+                  <span className={`profile-avatar av-${user.role}`}>
+                    {initials(user.name)}
+                  </span>
+                  <div className="pd-id">
+                    <strong>{user.name}</strong>
+                    <span>{user.email}</span>
+                    <span className={`pill pill-role-${user.role}`}>
+                      {user.role}
+                    </span>
+                  </div>
+                </div>
+                <NavLink className="pd-item" to="/profile">
+                  👤 Profile
+                </NavLink>
+                <NavLink className="pd-item" to="/settings">
+                  ⚙️ Settings
+                </NavLink>
+                <NavLink className="pd-item" to={rl.to}>
+                  📋 {rl.label}
+                </NavLink>
+                <div className="pd-divider" />
+                <button className="pd-item pd-logout" onClick={logout}>
+                  ⎋ Log Out
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
+            <Link className="btn-ghost" to="/login">
+              Log In
+            </Link>
+            <Link className="btn-primary" to="/register">
+              Sign Up
+            </Link>
+          </>
+        )}
+      </div>
 
       <button
         className="hamburger"

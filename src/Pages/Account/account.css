@@ -1,0 +1,230 @@
+.account-page {
+  min-height: calc(100vh - 70px);
+  background: #f4f6fb;
+  padding: 36px 20px 70px;
+}
+.account-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.account-title {
+  color: #1e293b;
+  font-weight: 800;
+  font-size: 26px;
+  margin: 0 0 18px;
+}
+
+.account-subnav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.acc-tab {
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: #475569;
+  background: #fff;
+  border: 1px solid #e6eaf2;
+  border-radius: 30px;
+  padding: 9px 18px;
+  transition: all 0.18s;
+}
+.acc-tab:hover {
+  background: #eef3fb;
+  color: #2a487f;
+}
+.acc-tab.active {
+  background: #2a487f;
+  color: #fff;
+  border-color: #2a487f;
+}
+
+.account-card {
+  background: #fff;
+  border: 1px solid #e6eaf2;
+  border-radius: 16px;
+  padding: 26px;
+  margin-bottom: 18px;
+  box-shadow: 0 6px 18px rgba(30, 41, 59, 0.05);
+}
+
+.account-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid #eef1f6;
+}
+.account-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.account-head h2 {
+  margin: 0 0 6px;
+  color: #1e293b;
+  font-size: 20px;
+}
+
+/* role colors + pill (account pages don't load dashboard.css) */
+.av-patient { background: #2a487f; }
+.av-doctor { background: #1f9d55; }
+.av-hospital { background: #b9770e; }
+.av-admin { background: #b3261e; }
+.pill {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.pill-role-patient { background: #eef3fb; color: #2a487f; }
+.pill-role-doctor { background: #e7f6ec; color: #1f9d55; }
+.pill-role-hospital { background: #fff3e0; color: #b9770e; }
+.pill-role-admin { background: #fdecea; color: #b3261e; }
+
+.acc-section-title {
+  color: #1e293b;
+  font-weight: 700;
+  font-size: 17px;
+  margin: 0 0 18px;
+}
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+}
+.account-form label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+.account-form input,
+.account-form select {
+  border: 1px solid #d4ddec;
+  border-radius: 10px;
+  padding: 11px 13px;
+  font-size: 15px;
+  margin-bottom: 16px;
+  font-family: inherit;
+  color: #1e293b;
+  background: #fff;
+}
+.account-form input:focus,
+.account-form select:focus {
+  outline: none;
+  border-color: #2a487f;
+  box-shadow: 0 0 0 3px rgba(42, 72, 127, 0.12);
+}
+.acc-readonly {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  cursor: not-allowed;
+  margin-bottom: 4px !important;
+}
+.acc-hint {
+  font-size: 12.5px;
+  color: #94a3b8;
+  margin-bottom: 16px;
+}
+
+.acc-btn {
+  align-self: flex-start;
+  background: #2a487f;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.acc-btn:hover {
+  background: #1d3360;
+}
+.acc-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+.acc-btn-sm {
+  background: #2a487f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.acc-btn-sm:hover {
+  background: #1d3360;
+}
+.acc-btn-danger {
+  margin-top: 18px;
+  background: #fff;
+  color: #b3261e;
+  border: 1px solid #f3c9c4;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.acc-btn-danger:hover {
+  background: #fdecea;
+}
+
+.acc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.acc-row-sub {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 13.5px;
+}
+.acc-status {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+.acc-on {
+  background: #e7f6ec;
+  color: #1f9d55;
+}
+
+.acc-info {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.acc-info li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f2f5fa;
+  color: #1e293b;
+  font-weight: 600;
+}
+.acc-info li:last-child {
+  border-bottom: none;
+}
+.acc-info li span:first-child {
+  color: #94a3b8;
+  font-weight: 500;
+}
