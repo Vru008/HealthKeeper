@@ -55,6 +55,19 @@ function ensureKey(res) {
 
 const parseJson = (result) => JSON.parse(result.response.text());
 
+// Turn raw Gemini errors into clean, user-friendly responses.
+function aiError(res, err) {
+  const msg = err?.message || "AI request failed";
+  console.log("ai error:", msg.split("\n")[0]);
+  if (/429|quota|rate.?limit|too many requests/i.test(msg)) {
+    return res.status(429).json({
+      error:
+        "The AI assistant is busy right now (free usage limit reached). Please try again in a minute.",
+    });
+  }
+  return res.status(500).json({ error: msg });
+}
+
 // Fast, rule-based red-flag detector — a safety net independent of the model.
 const EMERGENCY_PATTERNS = [
   /chest pain/i,
@@ -109,7 +122,7 @@ router.post("/chat", async (req, res) => {
     return res.json({ reply: result.response.text() });
   } catch (err) {
     console.log("chat error:", err.message);
-    return res.status(500).json({ error: err.message });
+    return aiError(res, err);
   }
 });
 
@@ -162,7 +175,7 @@ router.post("/symptom-check", async (req, res) => {
     return res.json(data);
   } catch (err) {
     console.log("symptom-check error:", err.message);
-    return res.status(500).json({ error: err.message });
+    return aiError(res, err);
   }
 });
 
@@ -205,7 +218,7 @@ router.post("/match-doctor", async (req, res) => {
     return res.json(parseJson(await model.generateContent(query)));
   } catch (err) {
     console.log("match-doctor error:", err.message);
-    return res.status(500).json({ error: err.message });
+    return aiError(res, err);
   }
 });
 
@@ -247,7 +260,7 @@ router.post("/recommend-hospital", async (req, res) => {
     return res.json(parseJson(await model.generateContent(query)));
   } catch (err) {
     console.log("recommend-hospital error:", err.message);
-    return res.status(500).json({ error: err.message });
+    return aiError(res, err);
   }
 });
 
@@ -310,7 +323,7 @@ router.post("/report", async (req, res) => {
     return res.json(data);
   } catch (err) {
     console.log("report error:", err.message);
-    return res.status(500).json({ error: err.message });
+    return aiError(res, err);
   }
 });
 
@@ -355,7 +368,7 @@ router.post("/follow-up", async (req, res) => {
     return res.json(data);
   } catch (err) {
     console.log("follow-up error:", err.message);
-    return res.status(500).json({ error: err.message });
+    return aiError(res, err);
   }
 });
 
