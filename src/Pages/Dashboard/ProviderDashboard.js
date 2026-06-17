@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import api from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import Messages from "./Messages";
+import VerifyProvider from "../Verification/VerifyProvider";
 import "./dashboard.css";
 
 const ProviderDashboard = () => {
@@ -11,6 +12,7 @@ const ProviderDashboard = () => {
   const [error, setError] = useState("");
   const [view, setView] = useState("appointments");
   const [unread, setUnread] = useState(0);
+  const [verifStatus, setVerifStatus] = useState(null);
 
   useEffect(() => {
     api
@@ -35,6 +37,14 @@ const ProviderDashboard = () => {
     return () => clearInterval(t);
   }, [pollUnread]);
 
+  // Verification status for the header badge / tab pill.
+  useEffect(() => {
+    api
+      .get("/verification/me")
+      .then((r) => setVerifStatus(r.data.status))
+      .catch(() => {});
+  }, []);
+
   const now = new Date();
   const upcoming = appts.filter(
     (a) => new Date(a.datetime) >= now && a.status === "booked"
@@ -49,7 +59,14 @@ const ProviderDashboard = () => {
           <span className="portal-badge">
             {isHospital ? "🏥 Hospital portal" : "🩺 Doctor portal"}
           </span>
-          <h1>{user.providerName || user.name}</h1>
+          <h1>
+            {user.providerName || user.name}
+            {verifStatus === "verified" && (
+              <span className="portal-verified" title="Verified provider">
+                ✔ Verified
+              </span>
+            )}
+          </h1>
           <p>{[user.speciality, user.city].filter(Boolean).join(" · ") || "Provider dashboard"}</p>
         </div>
       </header>
@@ -70,9 +87,24 @@ const ProviderDashboard = () => {
             Messages
             {unread > 0 && <span className="ptab-badge">{unread}</span>}
           </button>
+          <button
+            className={`ptab ${view === "verification" ? "active" : ""}`}
+            onClick={() => setView("verification")}
+          >
+            Verification
+            {verifStatus && verifStatus !== "verified" && (
+              <span
+                className={`ptab-dot ${
+                  verifStatus === "pending" ? "dot-amber" : "dot-red"
+                }`}
+              />
+            )}
+          </button>
         </div>
 
-        {view === "appointments" ? (
+        {view === "verification" ? (
+          <VerifyProvider role={user.role} onStatus={setVerifStatus} />
+        ) : view === "appointments" ? (
           <>
             <div className="cstat-grid cstat-3">
               <div className="cstat">

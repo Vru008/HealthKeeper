@@ -43,20 +43,78 @@ const AdminDashboard = () => {
   const [confirmUser, setConfirmUser] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
+  // Verification review state
+  const [pending, setPending] = useState([]);
+  const [review, setReview] = useState(null); // full submission incl. docs
+  const [rejectReason, setRejectReason] = useState("");
+  const [reviewing, setReviewing] = useState(false);
+
   const loadAll = () => {
     setLoading(true);
     Promise.all([
       api.get("/admin/stats"),
       api.get("/admin/users"),
       api.get("/admin/appointments"),
+      api.get("/verification/pending"),
     ])
-      .then(([s, u, a]) => {
+      .then(([s, u, a, v]) => {
         setStats(s.data);
         setUsers(u.data);
         setAppts(a.data);
+        setPending(v.data);
       })
       .catch((e) => setError(e.response?.data?.error || "Could not load admin data."))
       .finally(() => setLoading(false));
+  };
+
+  // Open a stored base64 document in a new tab via a blob URL (reliable for
+  // both images and PDFs).
+  const openDoc = (doc) => {
+    try {
+      const b64 = doc.data.split(",")[1];
+      const mime =
+        (doc.data.match(/data:(.*?);base64/) || [])[1] ||
+        doc.mime ||
+        "application/octet-stream";
+      const bin = atob(b64);
+      const arr = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      const url = URL.createObjectURL(new Blob([arr], { type: mime }));
+      window.open(url, "_blank");
+    } catch {
+      show("Couldn't open document", "error");
+    }
+  };
+
+  const openReview = async (userId) => {
+    setRejectReason("");
+    try {
+      const r = await api.get(`/verification/${userId}`);
+      setReview(r.data);
+    } catch {
+      show("Couldn't load submission", "error");
+    }
+  };
+
+  const decide = async (decision) => {
+    if (decision === "rejected" && !rejectReason.trim()) {
+      show("Add a reason so they know what to fix", "error");
+      return;
+    }
+    setReviewing(true);
+    try {
+      await api.patch(`/verification/${review._id}/review`, {
+        decision,
+        reason: rejectReason,
+      });
+      show(decision === "verified" ? "Provider verified ✓" : "Sent back for changes");
+      setReview(null);
+      loadAll();
+    } catch (err) {
+      show(err.response?.data?.error || "Couldn't save decision", "error");
+    } finally {
+      setReviewing(false);
+    }
   };
 
   useEffect(loadAll, []);
@@ -134,6 +192,7 @@ const AdminDashboard = () => {
   const NAV = [
     { key: "overview", label: "Overview", icon: "▦" },
     { key: "users", label: "Users", icon: "👤" },
+    { key: "verifications", label: "Verifications", icon: "🛡️" },
     { key: "appointments", label: "Appointments", icon: "📅" },
   ];
 
@@ -152,6 +211,9 @@ const AdminDashboard = () => {
             >
               <span className="cs-ic">{n.icon}</span> {n.label}
               {n.key === "users" && <span className="cs-count">{users.length}</span>}
+              {n.key === "verifications" && pending.length > 0 && (
+                <span className="cs-count cs-count-alert">{pending.length}</span>
+              )}
               {n.key === "appointments" && (
                 <span className="cs-count">{appts.length}</span>
               )}
@@ -295,6 +357,75 @@ const AdminDashboard = () => {
                     )}
                   </tbody>
                 </table>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ---------- Verifications ---------- */}
+        {tab === "verifications" && (
+          <>
+            <h1 className="console-title">Provider verifications</h1>
+            <p className="console-sub">
+              Review credentials and documents submitted by doctors and
+              hospitals, then approve or request changes.
+            </p>
+            {loading && <div className="dash-skeleton" />}
+            {!loading && (
+              <div className="ctable-wrap">
+                {pending.length === 0 ? (
+                  <p className="ctable-empty">No submissions awaiting review.</p>
+                ) : (
+                  <table className="ctable">
+                    <thead>
+                      <tr>
+                        <th>Applicant</th>
+                        <th>Type</th>
+                        <th>Submitted</th>
+                        <th>Docs</th>
+                        <th className="ta-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pending.map((p) => (
+                        <tr key={p._id}>
+                          <td>
+                            <div className="ucell">
+                              <span className={`uavatar av-${p.role}`}>
+                                {initials(p.providerName || p.name)}
+                              </span>
+                              <div>
+                                <div className="uname">
+                                  {p.providerName || p.name}
+                                </div>
+                                <div className="usub">{p.email}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <span className={`pill pill-role-${p.role}`}>
+                              {p.role}
+                            </span>
+                          </td>
+                          <td>
+                            {p.verification.submittedAt
+                              ? fmtDate(p.verification.submittedAt)
+                              : "—"}
+                          </td>
+                          <td>{p.verification.documents?.length || 0}</td>
+                          <td className="ta-right">
+                            <button
+                              className="rbtn"
+                              onClick={() => openReview(p._id)}
+                            >
+                              Review
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             )}
           </>
@@ -460,6 +591,91 @@ const AdminDashboard = () => {
                 disabled={deleting}
               >
                 {deleting ? "Deleting…" : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ---------- Verification review modal ---------- */}
+      {review && (
+        <div className="modal-backdrop" onClick={() => setReview(null)}>
+          <div
+            className="modal-card modal-wide"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2>
+              Review · {review.providerName || review.name}{" "}
+              <span className={`pill pill-role-${review.role}`}>{review.role}</span>
+            </h2>
+
+            <h3 className="vr-h">Submitted details</h3>
+            <div className="vr-fields">
+              {Object.entries(review.verification?.fields || {}).map(
+                ([k, v]) =>
+                  v && (
+                    <div key={k} className="vr-field">
+                      <span className="vr-key">{k}</span>
+                      <span className="vr-val">{String(v)}</span>
+                    </div>
+                  )
+              )}
+            </div>
+
+            <h3 className="vr-h">Documents</h3>
+            <div className="vr-docs">
+              {(review.verification?.documents || []).map((d, i) => (
+                <button
+                  key={i}
+                  className="vr-doc"
+                  onClick={() => openDoc(d)}
+                  title="Open in new tab"
+                >
+                  <span className="vr-doc-ic">
+                    {d.mime?.startsWith("image/") ? "🖼️" : "📄"}
+                  </span>
+                  <span className="vr-doc-meta">
+                    <strong>{d.kind}</strong>
+                    <small>
+                      {d.name} · {Math.round((d.size || 0) / 1024)} KB
+                    </small>
+                  </span>
+                  <span className="vr-doc-open">Open →</span>
+                </button>
+              ))}
+              {(review.verification?.documents || []).length === 0 && (
+                <p className="ctable-empty">No documents.</p>
+              )}
+            </div>
+
+            <h3 className="vr-h">Decision</h3>
+            <textarea
+              className="vr-reason"
+              rows={2}
+              placeholder="Reason (required only when requesting changes)"
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+            />
+            <div className="modal-actions">
+              <button
+                className="cbtn cbtn-ghost"
+                onClick={() => setReview(null)}
+              >
+                Close
+              </button>
+              <button
+                className="cbtn cbtn-danger"
+                onClick={() => decide("rejected")}
+                disabled={reviewing}
+              >
+                Request changes
+              </button>
+              <button
+                className="cbtn cbtn-primary"
+                onClick={() => decide("verified")}
+                disabled={reviewing}
+              >
+                {reviewing ? "Saving…" : "✔ Approve"}
               </button>
             </div>
           </div>

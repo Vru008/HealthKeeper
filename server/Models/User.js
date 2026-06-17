@@ -1,6 +1,21 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
+// An uploaded credential document, stored inline as a base64 data URL. This
+// keeps the app on free-tier hosting (no external object store) — submissions
+// are size-capped on both the client and the /submit route.
+const verifDocSchema = new mongoose.Schema(
+  {
+    kind: String, // e.g. "Medical degree certificate"
+    name: String, // original filename
+    mime: String,
+    size: Number,
+    data: String, // base64 data URL
+    uploadedAt: { type: Date, default: Date.now },
+  },
+  { _id: false }
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
@@ -17,6 +32,22 @@ const userSchema = new mongoose.Schema(
     providerName: String,
     speciality: String,
     city: String,
+
+    // Provider verification ("KYC") — doctors and hospitals submit credentials
+    // and documents, an admin reviews and approves/rejects.
+    verification: {
+      status: {
+        type: String,
+        enum: ["unverified", "pending", "verified", "rejected"],
+        default: "unverified",
+      },
+      fields: { type: mongoose.Schema.Types.Mixed, default: {} },
+      documents: [verifDocSchema],
+      submittedAt: Date,
+      reviewedAt: Date,
+      reviewedBy: String,
+      rejectionReason: String,
+    },
   },
   { timestamps: true }
 );
