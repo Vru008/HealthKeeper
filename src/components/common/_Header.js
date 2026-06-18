@@ -64,6 +64,13 @@ const MainHeader = () => {
           </NavLink>
         </li>
       )}
+      {user && user.role === "patient" && (
+        <li>
+          <NavLink className="link" to="/records">
+            My Records
+          </NavLink>
+        </li>
+      )}
       {user && (
         <li>
           <NavLink className="link ai-link" to="/ai-tools">

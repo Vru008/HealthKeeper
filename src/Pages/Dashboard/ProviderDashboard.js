@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import api from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import Messages from "./Messages";
+import PatientsPanel from "./PatientsPanel";
 import VerifyProvider from "../Verification/VerifyProvider";
 import "./dashboard.css";
 
@@ -88,6 +89,12 @@ const ProviderDashboard = () => {
             {unread > 0 && <span className="ptab-badge">{unread}</span>}
           </button>
           <button
+            className={`ptab ${view === "patients" ? "active" : ""}`}
+            onClick={() => setView("patients")}
+          >
+            Patients
+          </button>
+          <button
             className={`ptab ${view === "verification" ? "active" : ""}`}
             onClick={() => setView("verification")}
           >
@@ -104,6 +111,13 @@ const ProviderDashboard = () => {
 
         {view === "verification" ? (
           <VerifyProvider role={user.role} onStatus={setVerifStatus} />
+        ) : view === "patients" ? (
+          <>
+            <h2 className="console-title" style={{ fontSize: "20px" }}>
+              Patient records shared with you
+            </h2>
+            <PatientsPanel />
+          </>
         ) : view === "appointments" ? (
           <>
             <div className="cstat-grid cstat-3">
