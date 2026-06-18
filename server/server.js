@@ -10,6 +10,8 @@ const vitalRoutes = require("./Routes/vitalRoutes");
 const messageRoutes = require("./Routes/messageRoutes");
 const verificationRoutes = require("./Routes/verificationRoutes");
 const recordRoutes = require("./Routes/recordRoutes");
+const treatmentRoutes = require("./Routes/treatmentRoutes");
+const notificationRoutes = require("./Routes/notificationRoutes");
 const adminRoutes = require("./Routes/adminRoutes");
 const aiRoutes = require("./Routes/aiRoutes");
 const { protect } = require("./middleware/auth");
@@ -62,6 +64,8 @@ app.use("/api/vitals", requireDB, vitalRoutes);
 app.use("/api/messages", requireDB, messageRoutes); // /send is public; rest are protected
 app.use("/api/verification", requireDB, verificationRoutes);
 app.use("/api/records", requireDB, recordRoutes);
+app.use("/api/treatments", requireDB, treatmentRoutes);
+app.use("/api/notifications", requireDB, notificationRoutes);
 app.use("/api/admin", requireDB, adminRoutes);
 app.use("/api/ai", requireDB, protect, aiRoutes); // logged-in users only
 

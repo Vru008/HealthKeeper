@@ -31,6 +31,8 @@ const HealthRecords = () => {
   const [records, setRecords] = useState([]);
   const [consents, setConsents] = useState([]);
   const [audit, setAudit] = useState([]);
+  const [treatments, setTreatments] = useState([]);
+  const [notifs, setNotifs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // add-record form
@@ -48,11 +50,15 @@ const HealthRecords = () => {
       api.get("/records/mine"),
       api.get("/records/consents"),
       api.get("/records/audit"),
+      api.get("/treatments/mine"),
+      api.get("/notifications"),
     ])
-      .then(([r, c, a]) => {
+      .then(([r, c, a, t, n]) => {
         setRecords(r.data);
         setConsents(c.data);
         setAudit(a.data);
+        setTreatments(t.data);
+        setNotifs(n.data);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -150,7 +156,27 @@ const HealthRecords = () => {
     }
   };
 
+  const markRead = async (n) => {
+    if (n.read) return;
+    try {
+      await api.patch(`/notifications/${n._id}/read`);
+      load();
+    } catch {
+      /* ignore */
+    }
+  };
+  const markAllRead = async () => {
+    try {
+      await api.patch("/notifications/read-all");
+      show("All caught up");
+      load();
+    } catch {
+      /* ignore */
+    }
+  };
+
   const activeGrants = consents.filter((c) => c.status === "active");
+  const unreadAlerts = notifs.filter((n) => !n.read).length;
 
   return (
     <div className="rec-page">
@@ -163,7 +189,9 @@ const HealthRecords = () => {
         <div className="rec-tabs">
           {[
             ["records", `Records (${records.length})`],
+            ["care", `Care Plans (${treatments.length})`],
             ["sharing", `Sharing (${activeGrants.length})`],
+            ["alerts", unreadAlerts ? `Alerts (${unreadAlerts})` : "Alerts"],
             ["audit", "Access log"],
           ].map(([k, label]) => (
             <button
@@ -363,6 +391,84 @@ const HealthRecords = () => {
               )}
             </div>
           </>
+        )}
+
+        {/* ---- Care Plans ---- */}
+        {!loading && tab === "care" && (
+          treatments.length === 0 ? (
+            <div className="rec-card">
+              <p className="rec-empty">
+                No care plans yet. When a doctor or hospital you've shared with
+                starts a treatment plan, it appears here with a progress timeline.
+              </p>
+            </div>
+          ) : (
+            <div className="tr-list">
+              {treatments.map((t) => (
+                <div key={t._id} className="rec-card tr-card">
+                  <div className="tr-head">
+                    <div>
+                      <strong>{t.title}</strong>
+                      {t.description && <p className="tr-desc">{t.description}</p>}
+                      <span className="rec-meta">
+                        {t.providerName} · started{" "}
+                        {new Date(t.startDate).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <span className={`tr-status st-${t.status}`}>{t.status}</span>
+                  </div>
+                  <div className="tr-timeline">
+                    {[...t.updates].reverse().map((u, i) => (
+                      <div key={i} className="tr-update">
+                        <span className="tr-dot" />
+                        <div>
+                          <p>{u.note}</p>
+                          <span className="tr-when">
+                            {u.byName ? `${u.byName} · ` : ""}
+                            {new Date(u.at).toLocaleString()}
+                            {u.status ? ` · marked ${u.status}` : ""}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        )}
+
+        {/* ---- Alerts ---- */}
+        {!loading && tab === "alerts" && (
+          <div className="rec-card">
+            <div className="al-head">
+              <h3>Alerts</h3>
+              {unreadAlerts > 0 && (
+                <button className="rec-link" onClick={markAllRead}>
+                  Mark all read
+                </button>
+              )}
+            </div>
+            {notifs.length === 0 ? (
+              <p className="rec-empty">No alerts yet.</p>
+            ) : (
+              <div className="al-list">
+                {notifs.map((n) => (
+                  <div
+                    key={n._id}
+                    className={`al-item ${n.read ? "" : "unread"}`}
+                    onClick={() => markRead(n)}
+                  >
+                    <strong>{n.title}</strong>
+                    <p>{n.body}</p>
+                    <span className="al-when">
+                      {new Date(n.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         )}
 
         {/* ---- Access log ---- */}

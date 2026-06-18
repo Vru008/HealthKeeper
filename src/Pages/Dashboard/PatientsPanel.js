@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import api from "../../api";
 import { useToast } from "../../context/ToastContext";
+import "../Records/records.css"; // care-plan timeline styles (tr-*)
 
 const REC_TYPES = [
   { key: "diagnosis", label: "Diagnosis" },
@@ -20,6 +21,9 @@ const PatientsPanel = () => {
   const [active, setActive] = useState(null); // { patient, records, scopes }
   const [adding, setAdding] = useState(false);
   const [form, setForm] = useState({ type: "diagnosis", title: "", details: "" });
+  const [treatments, setTreatments] = useState([]);
+  const [planForm, setPlanForm] = useState({ title: "", description: "" });
+  const [updateDrafts, setUpdateDrafts] = useState({});
   const debounce = useRef();
 
   const search = useCallback((q) => {
@@ -42,17 +46,57 @@ const PatientsPanel = () => {
     debounce.current = setTimeout(() => search(v), 300);
   };
 
+  const loadTreatments = async (patientId) => {
+    try {
+      const r = await api.get(`/treatments/patient/${patientId}`);
+      setTreatments(r.data);
+    } catch {
+      setTreatments([]);
+    }
+  };
+
   const openPatient = async (p) => {
     try {
       const r = await api.get(`/records/patient/${p._id}`);
       setActive(r.data);
       setForm({ type: "diagnosis", title: "", details: "" });
+      setPlanForm({ title: "", description: "" });
+      loadTreatments(p._id);
     } catch (err) {
       show(err.response?.data?.error || "Couldn't open records", "error");
     }
   };
 
   const canAdd = active?.scopes?.includes("add");
+
+  const createPlan = async (e) => {
+    e.preventDefault();
+    if (!planForm.title.trim()) return show("Add a plan title", "error");
+    try {
+      await api.post(`/treatments/patient/${active.patient._id}`, planForm);
+      setPlanForm({ title: "", description: "" });
+      show("Care plan started ✓");
+      loadTreatments(active.patient._id);
+    } catch (err) {
+      show(err.response?.data?.error || "Couldn't start plan", "error");
+    }
+  };
+
+  const addUpdate = async (t) => {
+    const draft = updateDrafts[t._id] || {};
+    if (!draft.note || !draft.note.trim()) return show("Write an update", "error");
+    try {
+      await api.post(`/treatments/${t._id}/update`, {
+        note: draft.note,
+        status: draft.status || undefined,
+      });
+      setUpdateDrafts((d) => ({ ...d, [t._id]: { note: "", status: "" } }));
+      show("Update posted ✓");
+      loadTreatments(active.patient._id);
+    } catch (err) {
+      show(err.response?.data?.error || "Couldn't post update", "error");
+    }
+  };
 
   const addRecord = async (e) => {
     e.preventDefault();
@@ -201,6 +245,100 @@ const PatientsPanel = () => {
                       <a className="rec-link" href={r.file.data} download={r.file.name}>
                         Download
                       </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Care plans */}
+            <h3 className="vr-h">Care plans ({treatments.length})</h3>
+            {canAdd && (
+              <form className="pp-addform" onSubmit={createPlan}>
+                <div className="pp-addrow">
+                  <input
+                    placeholder="Plan title (e.g. Diabetes management)"
+                    value={planForm.title}
+                    onChange={(e) =>
+                      setPlanForm({ ...planForm, title: e.target.value })
+                    }
+                  />
+                  <button className="cbtn cbtn-primary" type="submit">
+                    Start plan
+                  </button>
+                </div>
+                <textarea
+                  rows={2}
+                  placeholder="Description (optional)"
+                  value={planForm.description}
+                  onChange={(e) =>
+                    setPlanForm({ ...planForm, description: e.target.value })
+                  }
+                />
+              </form>
+            )}
+            {treatments.length === 0 ? (
+              <p className="ctable-empty">No care plans yet.</p>
+            ) : (
+              <div className="tr-list">
+                {treatments.map((t) => (
+                  <div key={t._id} className="rec-card tr-card">
+                    <div className="tr-head">
+                      <div>
+                        <strong>{t.title}</strong>
+                        {t.description && <p className="tr-desc">{t.description}</p>}
+                      </div>
+                      <span className={`tr-status st-${t.status}`}>{t.status}</span>
+                    </div>
+                    <div className="tr-timeline">
+                      {[...t.updates].reverse().map((u, i) => (
+                        <div key={i} className="tr-update">
+                          <span className="tr-dot" />
+                          <div>
+                            <p>{u.note}</p>
+                            <span className="tr-when">
+                              {u.byName ? `${u.byName} · ` : ""}
+                              {new Date(u.at).toLocaleString()}
+                              {u.status ? ` · ${u.status}` : ""}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {canAdd && (
+                      <div className="pp-update">
+                        <input
+                          placeholder="Add progress update…"
+                          value={updateDrafts[t._id]?.note || ""}
+                          onChange={(e) =>
+                            setUpdateDrafts((d) => ({
+                              ...d,
+                              [t._id]: { ...d[t._id], note: e.target.value },
+                            }))
+                          }
+                        />
+                        <select
+                          value={updateDrafts[t._id]?.status || ""}
+                          onChange={(e) =>
+                            setUpdateDrafts((d) => ({
+                              ...d,
+                              [t._id]: { ...d[t._id], status: e.target.value },
+                            }))
+                          }
+                        >
+                          <option value="">No status change</option>
+                          <option value="active">Active</option>
+                          <option value="paused">Paused</option>
+                          <option value="completed">Completed</option>
+                        </select>
+                        <button
+                          className="cbtn cbtn-primary"
+                          type="button"
+                          onClick={() => addUpdate(t)}
+                        >
+                          Post
+                        </button>
+                      </div>
                     )}
                   </div>
                 ))}

@@ -318,3 +318,108 @@
     gap: 3px;
   }
 }
+
+/* ===== Care plans (treatments) ===== */
+.tr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.tr-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.tr-head strong {
+  font-size: 16px;
+  color: #1e293b;
+}
+.tr-desc {
+  margin: 3px 0 4px;
+  color: #51607a;
+  font-size: 14px;
+}
+.tr-status {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 11px;
+  border-radius: 20px;
+}
+.tr-status.st-active { background: #e7f5ec; color: #1f8a4c; }
+.tr-status.st-paused { background: #fff3e0; color: #b5780b; }
+.tr-status.st-completed { background: #eef2f8; color: #5b6b85; }
+
+.tr-timeline {
+  border-left: 2px solid #e6eaf2;
+  margin-left: 6px;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.tr-update {
+  position: relative;
+}
+.tr-dot {
+  position: absolute;
+  left: -23px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2a487f;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #cdd9ec;
+}
+.tr-update p {
+  margin: 0 0 2px;
+  color: #41506a;
+  font-size: 14px;
+}
+.tr-when {
+  color: #98a4b8;
+  font-size: 12px;
+}
+
+/* ===== Alerts ===== */
+.al-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.al-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+.al-item {
+  border: 1px solid #e6eaf2;
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+}
+.al-item:hover {
+  background: #f7f9fd;
+}
+.al-item.unread {
+  border-left: 3px solid #2a487f;
+  background: #f3f7ff;
+}
+.al-item strong {
+  color: #1e293b;
+  font-size: 14.5px;
+}
+.al-item p {
+  margin: 3px 0;
+  color: #51607a;
+  font-size: 13.5px;
+}
+.al-when {
+  color: #98a4b8;
+  font-size: 12px;
+}

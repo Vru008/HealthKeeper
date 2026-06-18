@@ -1192,3 +1192,31 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Care-plan update row in the patient drawer */
+.pp-update {
+  display: grid;
+  grid-template-columns: 1fr 150px auto;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f3f9;
+}
+.pp-update input,
+.pp-update select {
+  border: 1px solid #d4ddec;
+  border-radius: 8px;
+  padding: 8px 11px;
+  font-size: 13.5px;
+  font-family: inherit;
+}
+.pp-update input:focus,
+.pp-update select:focus {
+  outline: none;
+  border-color: #2a487f;
+}
+@media (max-width: 640px) {
+  .pp-update {
+    grid-template-columns: 1fr;
+  }
+}
