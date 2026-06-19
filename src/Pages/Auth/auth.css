@@ -180,3 +180,19 @@
 .auth-switch a:hover {
   text-decoration: underline;
 }
+
+/* Demo-mode reset link (shown when email isn't configured) */
+.auth-demo {
+  background: #fff8e6;
+  border: 1px solid #f3e2b3;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13.5px;
+  color: #6b5310;
+  margin: 4px 0 14px;
+  line-height: 1.5;
+}
+.auth-demo a {
+  color: #2a487f;
+  font-weight: 700;
+}

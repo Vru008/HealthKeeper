@@ -15,6 +15,8 @@ import NotFound from "./Pages/NotFound/NotFound";
 import Appointments from "./Pages/Appointments/Appointments";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
+import ForgotPassword from "./Pages/Auth/ForgotPassword";
+import ResetPassword from "./Pages/Auth/ResetPassword";
 import ProviderDashboard from "./Pages/Dashboard/ProviderDashboard";
 import AdminDashboard from "./Pages/Dashboard/AdminDashboard";
 import Profile from "./Pages/Account/Profile";
@@ -83,6 +85,8 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route
           path="/doctor"
           element={

@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema(
     speciality: String,
     city: String,
 
+    // Password reset: a sha256 hash of the emailed token + its expiry.
+    resetTokenHash: String,
+    resetTokenExp: Date,
+
     // Provider verification ("KYC") — doctors and hospitals submit credentials
     // and documents, an admin reviews and approves/rejects.
     verification: {
