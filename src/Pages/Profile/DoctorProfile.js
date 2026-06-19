@@ -46,6 +46,11 @@ const DoctorProfile = () => {
   return (
     <div className="pp-page">
       <div className="pp-wrap">
+        <div className="pp-demo" role="note">
+          ⓘ <strong>Illustrative demo data.</strong> Doctor details and outcome
+          statistics on this portfolio project are synthetic, not real medical
+          information.
+        </div>
         {/* Header */}
         <div className="pp-header doc">
           <img

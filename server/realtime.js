@@ -18,8 +18,28 @@ function broadcastPresence() {
 // same JWT used by the REST API, and route each socket into its rooms:
 //   - user:<id>                  → personal alerts (patients)
 //   - provider:<role>:<name>     → messages routed by provider name
+const allowList = [
+  process.env.CLIENT_URL,
+  "https://health-keeper-fmq4.vercel.app",
+  "http://localhost:3000",
+].filter(Boolean);
+
 function init(server) {
-  io = new Server(server, { cors: { origin: "*" } });
+  io = new Server(server, {
+    cors: {
+      origin(origin, cb) {
+        if (!origin) return cb(null, true);
+        try {
+          const ok =
+            allowList.includes(origin) ||
+            /\.vercel\.app$/.test(new URL(origin).hostname);
+          return cb(null, ok);
+        } catch {
+          return cb(null, false);
+        }
+      },
+    },
+  });
 
   io.use(async (socket, next) => {
     try {

@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const mongoose = require("mongoose");
 
 const authRoutes = require("./Routes/authRoutes");
@@ -18,9 +20,44 @@ const { protect } = require("./middleware/auth");
 
 const app = express();
 
-// Middlewares
-app.use(cors());
+// We sit behind Render's proxy — trust it so rate-limiting sees the real IP.
+app.set("trust proxy", 1);
+
+// Security headers.
+app.use(helmet());
+
+// CORS — allow the deployed frontend, any Vercel preview, and local dev only.
+const allowList = [
+  process.env.CLIENT_URL,
+  "https://health-keeper-fmq4.vercel.app",
+  "http://localhost:3000",
+].filter(Boolean);
+app.use(
+  cors({
+    origin(origin, cb) {
+      // Non-browser requests (curl, health checks, server-to-server) have no Origin.
+      if (!origin) return cb(null, true);
+      try {
+        const ok =
+          allowList.includes(origin) ||
+          /\.vercel\.app$/.test(new URL(origin).hostname);
+        return cb(null, ok);
+      } catch {
+        return cb(null, false);
+      }
+    },
+  })
+);
 app.use(express.json({ limit: "10mb" }));
+
+// Throttle auth endpoints to blunt brute-force / credential-stuffing.
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 50,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many attempts. Please try again in a few minutes." },
+});
 
 // ---- MongoDB connection ----
 // The catalog (/api/data) and AI assistant work without a database; login and
@@ -57,7 +94,7 @@ const requireDB = (req, res, next) => {
 };
 
 // Routes
-app.use("/api/auth", requireDB, authRoutes);
+app.use("/api/auth", authLimiter, requireDB, authRoutes);
 app.use("/api/data", dataRoutes); // static catalog — no DB needed
 app.use("/api/appointments", requireDB, appointmentRoutes);
 app.use("/api/vitals", requireDB, vitalRoutes);

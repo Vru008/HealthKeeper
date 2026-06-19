@@ -46,6 +46,11 @@ const HospitalProfile = () => {
   return (
     <div className="pp-page">
       <div className="pp-wrap">
+        <div className="pp-demo" role="note">
+          ⓘ <strong>Illustrative demo data.</strong> Hospital details and success
+          statistics on this portfolio project are synthetic, not real medical
+          information.
+        </div>
         <div className="pp-hosp-banner">
           <img src={h.img} alt={h.name} onError={imgFallback} />
           <span className="pp-hosp-rate">★ {h.rating}</span>
