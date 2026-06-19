@@ -20,7 +20,7 @@ const PatientsPanel = () => {
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState(null); // { patient, records, scopes }
   const [adding, setAdding] = useState(false);
-  const [form, setForm] = useState({ type: "diagnosis", title: "", details: "" });
+  const [form, setForm] = useState({ type: "diagnosis", title: "", details: "", memberId: "" });
   const [treatments, setTreatments] = useState([]);
   const [planForm, setPlanForm] = useState({ title: "", description: "" });
   const [updateDrafts, setUpdateDrafts] = useState({});
@@ -59,7 +59,7 @@ const PatientsPanel = () => {
     try {
       const r = await api.get(`/records/patient/${p._id}`);
       setActive(r.data);
-      setForm({ type: "diagnosis", title: "", details: "" });
+      setForm({ type: "diagnosis", title: "", details: "", memberId: "" });
       setPlanForm({ title: "", description: "" });
       loadTreatments(p._id);
     } catch (err) {
@@ -107,7 +107,7 @@ const PatientsPanel = () => {
       show("Record added ✓");
       const r = await api.get(`/records/patient/${active.patient._id}`);
       setActive(r.data);
-      setForm({ type: "diagnosis", title: "", details: "" });
+      setForm({ type: "diagnosis", title: "", details: "", memberId: "" });
     } catch (err) {
       show(err.response?.data?.error || "Couldn't add record", "error");
     } finally {
@@ -211,6 +211,25 @@ const PatientsPanel = () => {
                     {adding ? "Adding…" : "Add record"}
                   </button>
                 </div>
+                {active.family?.length > 0 && (
+                  <div className="pp-forrow">
+                    <label>File under:</label>
+                    <select
+                      value={form.memberId}
+                      onChange={(e) =>
+                        setForm({ ...form, memberId: e.target.value })
+                      }
+                    >
+                      <option value="">{active.patient?.name} (account holder)</option>
+                      {active.family.map((m) => (
+                        <option key={m._id} value={m._id}>
+                          {m.name}
+                          {m.relation ? ` (${m.relation})` : ""}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
                 <textarea
                   rows={2}
                   placeholder="Details (optional)"
@@ -232,6 +251,9 @@ const PatientsPanel = () => {
                     </span>
                     <div className="rec-item-body">
                       <strong>{r.title}</strong>
+                      {r.memberName && (
+                        <span className="rec-member-tag">for {r.memberName}</span>
+                      )}
                       {r.details && <p>{r.details}</p>}
                       <span className="rec-meta">
                         {new Date(r.date).toLocaleDateString()} · by{" "}

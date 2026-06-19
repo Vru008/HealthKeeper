@@ -1227,3 +1227,28 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Provider "file under family member" row */
+.pp-forrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.pp-forrow label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #51607a;
+}
+.pp-forrow select {
+  flex: 1;
+  border: 1px solid #d4ddec;
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-size: 14px;
+  font-family: inherit;
+}
+.pp-forrow select:focus {
+  outline: none;
+  border-color: #2a487f;
+}

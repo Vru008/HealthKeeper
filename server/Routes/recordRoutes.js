@@ -295,6 +295,10 @@ router.get("/patient/:patientId", allow("doctor", "hospital"), async (req, res) 
       date: -1,
     });
     const patient = await User.findById(req.params.patientId).select("name email phone city");
+    // The patient's family members, so the provider can file under a dependent.
+    const family = await FamilyMember.find({ owner: req.params.patientId }).select(
+      "name relation"
+    );
     writeAudit({
       actor: req.user._id,
       actorName: providerName(req.user),
@@ -304,7 +308,7 @@ router.get("/patient/:patientId", allow("doctor", "hospital"), async (req, res) 
       patientName: patient?.name,
       meta: `${records.length} record(s)`,
     });
-    return res.json({ patient, records, scopes: consent.scopes });
+    return res.json({ patient, records, scopes: consent.scopes, family });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -312,7 +316,7 @@ router.get("/patient/:patientId", allow("doctor", "hospital"), async (req, res) 
 
 /* POST /api/records/patient/:patientId — provider adds a record (needs add consent) */
 router.post("/patient/:patientId", allow("doctor", "hospital"), async (req, res) => {
-  const { type, title, details, date, file } = req.body;
+  const { type, title, details, date, file, memberId } = req.body;
   if (!type || !title) {
     return res.status(400).json({ error: "Type and title are required" });
   }
@@ -324,9 +328,20 @@ router.post("/patient/:patientId", allow("doctor", "hospital"), async (req, res)
     if (!consent) {
       return res.status(403).json({ error: "You don't have permission to add records for this patient" });
     }
+    // If filing under a dependent, confirm the member belongs to this patient.
+    let member;
+    if (memberId) {
+      member = await FamilyMember.findOne({
+        _id: memberId,
+        owner: req.params.patientId,
+      });
+      if (!member) return res.status(400).json({ error: "Unknown family member" });
+    }
     const patient = await User.findById(req.params.patientId).select("name");
     const rec = await HealthRecord.create({
       patient: req.params.patientId,
+      member: member?._id,
+      memberName: member?.name,
       type,
       title,
       details,
