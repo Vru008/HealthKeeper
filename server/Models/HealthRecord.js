@@ -12,6 +12,9 @@ const recordSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    // Optional: which family member this record is for (unset = the account holder).
+    member: { type: mongoose.Schema.Types.ObjectId, ref: "FamilyMember" },
+    memberName: String,
     type: {
       type: String,
       enum: ["diagnosis", "prescription", "lab-report", "imaging", "note", "vaccination"],

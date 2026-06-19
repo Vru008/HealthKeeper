@@ -1,5 +1,6 @@
 const express = require("express");
 const HealthRecord = require("../Models/HealthRecord");
+const FamilyMember = require("../Models/FamilyMember");
 const Consent = require("../Models/Consent");
 const AuditLog = require("../Models/AuditLog");
 const User = require("../Models/User");
@@ -44,7 +45,8 @@ router.get("/mine", allow("patient"), async (req, res) => {
 
 /* POST /api/records  — patient self-adds a record */
 router.post("/", allow("patient"), async (req, res) => {
-  const { type, title, details, date, file, doctorName, hospitalName } = req.body;
+  const { type, title, details, date, file, doctorName, hospitalName, memberId } =
+    req.body;
   if (!type || !title) {
     return res.status(400).json({ error: "Type and title are required" });
   }
@@ -52,8 +54,16 @@ router.post("/", allow("patient"), async (req, res) => {
     return res.status(400).json({ error: "Attachment too large (max 3 MB)" });
   }
   try {
+    // If tagged to a family member, confirm it belongs to this account.
+    let member;
+    if (memberId) {
+      member = await FamilyMember.findOne({ _id: memberId, owner: req.user._id });
+      if (!member) return res.status(400).json({ error: "Unknown family member" });
+    }
     const rec = await HealthRecord.create({
       patient: req.user._id,
+      member: member?._id,
+      memberName: member?.name,
       type,
       title,
       details,
@@ -66,6 +76,54 @@ router.post("/", allow("patient"), async (req, res) => {
       createdByRole: "patient",
     });
     return res.status(201).json(rec);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+/* ============ PATIENT: family members ============ */
+
+/* GET /api/records/family — my dependents */
+router.get("/family", allow("patient"), async (req, res) => {
+  try {
+    const members = await FamilyMember.find({ owner: req.user._id }).sort({
+      createdAt: 1,
+    });
+    return res.json(members);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+/* POST /api/records/family  { name, relation, gender, dob } */
+router.post("/family", allow("patient"), async (req, res) => {
+  const { name, relation, gender, dob } = req.body;
+  if (!name || !name.trim()) {
+    return res.status(400).json({ error: "Member name is required" });
+  }
+  try {
+    const member = await FamilyMember.create({
+      owner: req.user._id,
+      name: name.trim(),
+      relation,
+      gender,
+      dob: dob || undefined,
+    });
+    return res.status(201).json(member);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+/* DELETE /api/records/family/:id — remove a member (their records stay,
+   still labelled with the member's name) */
+router.delete("/family/:id", allow("patient"), async (req, res) => {
+  try {
+    await FamilyMember.findOneAndDelete({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
+    return res.json({ ok: true });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }

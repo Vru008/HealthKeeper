@@ -42,6 +42,17 @@ const HealthRecords = () => {
   const [file, setFile] = useState(null);
   const [saving, setSaving] = useState(false);
 
+  // family members
+  const [members, setMembers] = useState([]);
+  const [selMember, setSelMember] = useState("self"); // "self" | member._id
+  const [showAddMember, setShowAddMember] = useState(false);
+  const [memberForm, setMemberForm] = useState({
+    name: "",
+    relation: "Child",
+    gender: "",
+    dob: "",
+  });
+
   // sharing form
   const [shareType, setShareType] = useState("doctor");
   const [shareProvider, setShareProvider] = useState(null);
@@ -54,13 +65,15 @@ const HealthRecords = () => {
       api.get("/records/audit"),
       api.get("/treatments/mine"),
       api.get("/notifications"),
+      api.get("/records/family"),
     ])
-      .then(([r, c, a, t, n]) => {
+      .then(([r, c, a, t, n, f]) => {
         setRecords(r.data);
         setConsents(c.data);
         setAudit(a.data);
         setTreatments(t.data);
         setNotifs(n.data);
+        setMembers(f.data);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -115,7 +128,11 @@ const HealthRecords = () => {
     if (!form.title.trim()) return show("Add a title", "error");
     setSaving(true);
     try {
-      await api.post("/records", { ...form, file: file || undefined });
+      await api.post("/records", {
+        ...form,
+        memberId: selMember === "self" ? undefined : selMember,
+        file: file || undefined,
+      });
       setForm({ type: "diagnosis", title: "", details: "", date: "" });
       setFile(null);
       show("Record added ✓");
@@ -124,6 +141,34 @@ const HealthRecords = () => {
       show(err.response?.data?.error || "Couldn't add record", "error");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const addMember = async (e) => {
+    e.preventDefault();
+    if (!memberForm.name.trim()) return show("Add a name", "error");
+    try {
+      const r = await api.post("/records/family", memberForm);
+      setMemberForm({ name: "", relation: "Child", gender: "", dob: "" });
+      setShowAddMember(false);
+      show("Family member added ✓");
+      setSelMember(r.data._id);
+      load();
+    } catch (err) {
+      show(err.response?.data?.error || "Couldn't add member", "error");
+    }
+  };
+
+  const removeMember = async (id) => {
+    if (!window.confirm("Remove this family member? Their records stay in your account."))
+      return;
+    try {
+      await api.delete(`/records/family/${id}`);
+      if (selMember === id) setSelMember("self");
+      show("Family member removed");
+      load();
+    } catch {
+      show("Couldn't remove member", "error");
     }
   };
 
@@ -191,6 +236,15 @@ const HealthRecords = () => {
   const activeGrants = consents.filter((c) => c.status === "active");
   const unreadAlerts = notifs.filter((n) => !n.read).length;
 
+  // Records belonging to the currently selected person (self = untagged).
+  const visibleRecords = records.filter((r) =>
+    selMember === "self" ? !r.member : r.member === selMember
+  );
+  const selName =
+    selMember === "self"
+      ? "yourself"
+      : members.find((m) => m._id === selMember)?.name || "this member";
+
   return (
     <div className="rec-page">
       <div className="rec-wrap">
@@ -222,8 +276,88 @@ const HealthRecords = () => {
         {/* ---- Records ---- */}
         {!loading && tab === "records" && (
           <>
+            {/* Family member selector */}
+            <div className="rec-card fam-bar">
+              <span className="fam-label">Records for:</span>
+              <div className="fam-pills">
+                <button
+                  className={`fam-pill ${selMember === "self" ? "active" : ""}`}
+                  onClick={() => setSelMember("self")}
+                >
+                  👤 Me
+                </button>
+                {members.map((m) => (
+                  <button
+                    key={m._id}
+                    className={`fam-pill ${selMember === m._id ? "active" : ""}`}
+                    onClick={() => setSelMember(m._id)}
+                  >
+                    {m.name}
+                    <small> · {m.relation}</small>
+                  </button>
+                ))}
+                <button
+                  className="fam-pill fam-add"
+                  onClick={() => setShowAddMember((s) => !s)}
+                >
+                  ＋ Family member
+                </button>
+                {selMember !== "self" && (
+                  <button
+                    className="fam-remove"
+                    onClick={() => removeMember(selMember)}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+
+              {showAddMember && (
+                <form className="fam-form" onSubmit={addMember}>
+                  <input
+                    placeholder="Name"
+                    value={memberForm.name}
+                    onChange={(e) =>
+                      setMemberForm({ ...memberForm, name: e.target.value })
+                    }
+                  />
+                  <select
+                    value={memberForm.relation}
+                    onChange={(e) =>
+                      setMemberForm({ ...memberForm, relation: e.target.value })
+                    }
+                  >
+                    {["Child", "Spouse", "Parent", "Sibling", "Other"].map((r) => (
+                      <option key={r}>{r}</option>
+                    ))}
+                  </select>
+                  <select
+                    value={memberForm.gender}
+                    onChange={(e) =>
+                      setMemberForm({ ...memberForm, gender: e.target.value })
+                    }
+                  >
+                    <option value="">Gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                  </select>
+                  <input
+                    type="date"
+                    value={memberForm.dob}
+                    onChange={(e) =>
+                      setMemberForm({ ...memberForm, dob: e.target.value })
+                    }
+                  />
+                  <button className="rec-btn" type="submit">
+                    Add
+                  </button>
+                </form>
+              )}
+            </div>
+
             <form className="rec-card rec-form" onSubmit={addRecord}>
-              <h3>Add a record</h3>
+              <h3>Add a record for {selName}</h3>
               <div className="rec-form-grid">
                 <select
                   value={form.type}
@@ -267,13 +401,15 @@ const HealthRecords = () => {
               </div>
             </form>
 
-            {records.length === 0 ? (
+            {visibleRecords.length === 0 ? (
               <div className="rec-card">
-                <p className="rec-empty">No records yet. Add your first above.</p>
+                <p className="rec-empty">
+                  No records for {selName} yet. Add the first one above.
+                </p>
               </div>
             ) : (
               <div className="rec-list">
-                {records.map((r) => (
+                {visibleRecords.map((r) => (
                   <div key={r._id} className="rec-item">
                     <span className={`rec-type t-${r.type}`}>{typeLabel(r.type)}</span>
                     <div className="rec-item-body">
