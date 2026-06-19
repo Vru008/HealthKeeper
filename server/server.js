@@ -74,5 +74,11 @@ app.get("/", (req, res) => {
   res.send("HealthKeeper API running 🩺");
 });
 
+// Wrap Express in an HTTP server so Socket.io can share the same port.
+const http = require("http");
+const { init: initRealtime } = require("./realtime");
+const server = http.createServer(app);
+initRealtime(server);
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

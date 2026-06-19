@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import api from "../../api";
 import { useCatalog } from "../../context/CatalogContext";
 import { useToast } from "../../context/ToastContext";
+import { useSocket } from "../../context/SocketContext";
 import SearchableSelect from "../../components/SearchableSelect";
 import "./records.css";
 
@@ -27,6 +28,7 @@ const readFile = (file) =>
 const HealthRecords = () => {
   const { doctors, hospitals } = useCatalog();
   const { show } = useToast();
+  const { socket, refreshAlerts } = useSocket();
   const [tab, setTab] = useState("records");
   const [records, setRecords] = useState([]);
   const [consents, setConsents] = useState([]);
@@ -64,6 +66,15 @@ const HealthRecords = () => {
       .finally(() => setLoading(false));
   };
   useEffect(load, []);
+
+  // Live: reload when a new alert arrives (e.g. a care-plan update).
+  useEffect(() => {
+    if (!socket) return;
+    const onNotif = () => load();
+    socket.on("notification:new", onNotif);
+    return () => socket.off("notification:new", onNotif);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket]);
 
   const doctorOptions = useMemo(
     () =>
@@ -161,6 +172,7 @@ const HealthRecords = () => {
     try {
       await api.patch(`/notifications/${n._id}/read`);
       load();
+      refreshAlerts();
     } catch {
       /* ignore */
     }
@@ -170,6 +182,7 @@ const HealthRecords = () => {
       await api.patch("/notifications/read-all");
       show("All caught up");
       load();
+      refreshAlerts();
     } catch {
       /* ignore */
     }

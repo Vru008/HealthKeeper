@@ -1,6 +1,7 @@
 const express = require("express");
 const Message = require("../Models/Message");
 const { protect, allow } = require("../middleware/auth");
+const { emitToProvider } = require("../realtime");
 
 const router = express.Router();
 
@@ -68,6 +69,12 @@ router.post("/send", async (req, res) => {
       receiverSpeciality,
       receiverCity,
       senderType: senderType === "patient" ? "patient" : "guest",
+    });
+    // Push a live ping to the provider's dashboard (if they're connected).
+    emitToProvider(receiverType, receiverName, "message:new", {
+      id: msg._id,
+      subject: msg.subject,
+      senderName: msg.senderName,
     });
     return res.status(201).json({ ok: true, id: msg._id });
   } catch (err) {

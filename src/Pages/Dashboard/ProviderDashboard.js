@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import api from "../../api";
 import { useAuth } from "../../context/AuthContext";
+import { useSocket } from "../../context/SocketContext";
+import { useToast } from "../../context/ToastContext";
 import Messages from "./Messages";
 import PatientsPanel from "./PatientsPanel";
 import VerifyProvider from "../Verification/VerifyProvider";
@@ -8,6 +10,8 @@ import "./dashboard.css";
 
 const ProviderDashboard = () => {
   const { user } = useAuth();
+  const { socket } = useSocket();
+  const { show } = useToast();
   const [appts, setAppts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -37,6 +41,17 @@ const ProviderDashboard = () => {
     const t = setInterval(pollUnread, 30000);
     return () => clearInterval(t);
   }, [pollUnread]);
+
+  // Live: a new message bumps the badge instantly (no 30s wait).
+  useEffect(() => {
+    if (!socket) return;
+    const onMsg = (m) => {
+      setUnread((u) => u + 1);
+      show(`📨 New message from ${m?.senderName || "a patient"}`, "info");
+    };
+    socket.on("message:new", onMsg);
+    return () => socket.off("message:new", onMsg);
+  }, [socket, show]);
 
   // Verification status for the header badge / tab pill.
   useEffect(() => {

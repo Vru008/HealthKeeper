@@ -5,13 +5,22 @@ const AuditLog = require("../Models/AuditLog");
 const Notification = require("../Models/Notification");
 const User = require("../Models/User");
 const { protect, allow } = require("../middleware/auth");
+const { emitToUser } = require("../realtime");
 
 const router = express.Router();
 router.use(protect);
 
 const providerName = (u) => u.providerName || u.name;
 const writeAudit = (e) => AuditLog.create(e).catch(() => {});
-const notify = (e) => Notification.create(e).catch(() => {});
+// Persist the alert, then push it live to the recipient if they're connected.
+const notify = async (e) => {
+  try {
+    const n = await Notification.create(e);
+    emitToUser(e.user, "notification:new", n);
+  } catch {
+    /* ignore */
+  }
+};
 
 // Does the logged-in provider currently have `scope` on this patient?
 async function consentFor(reqUser, patientId, scope) {

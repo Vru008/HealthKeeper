@@ -338,3 +338,36 @@
     gap: 12px;
   }
 }
+
+/* Realtime: nav alert badge + live presence dot */
+.link-badge {
+  position: relative;
+}
+.nav-badge {
+  display: inline-block;
+  margin-left: 6px;
+  background: #d92d20;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 17px;
+  height: 17px;
+  line-height: 17px;
+  text-align: center;
+  border-radius: 9px;
+  padding: 0 5px;
+  vertical-align: middle;
+}
+.profile-avatar {
+  position: relative;
+}
+.live-dot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 9px;
+  height: 9px;
+  background: #22c55e;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}

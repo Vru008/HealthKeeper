@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useSocket } from "../../context/SocketContext";
 import "./_header.css";
 
 const initials = (name = "") =>
@@ -22,6 +23,7 @@ const roleLink = (role) => {
 
 const MainHeader = () => {
   const { user, logout } = useAuth();
+  const { alerts, connected } = useSocket();
   const [open, setOpen] = useState(false); // mobile menu
   const [menu, setMenu] = useState(false); // profile dropdown
   const menuRef = useRef(null);
@@ -66,8 +68,9 @@ const MainHeader = () => {
       )}
       {user && user.role === "patient" && (
         <li>
-          <NavLink className="link" to="/records">
+          <NavLink className="link link-badge" to="/records">
             My Records
+            {alerts > 0 && <span className="nav-badge">{alerts}</span>}
           </NavLink>
         </li>
       )}
@@ -141,6 +144,7 @@ const MainHeader = () => {
             >
               <span className={`profile-avatar av-${user.role}`}>
                 {initials(user.name)}
+                {connected && <span className="live-dot" title="Live — connected" />}
               </span>
               <span className="profile-name">{user.name.split(" ")[0]}</span>
               <span className={`profile-chev ${menu ? "up" : ""}`}>▾</span>
